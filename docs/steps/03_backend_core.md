@@ -112,6 +112,8 @@ Methods (all JSON-encode `data`/`params`/`card` columns):
 * `@pytest.mark.db test_connect_live`, `test_render_sql_quotes` (a string with `'` is escaped).
 
 ## 3.8 Done checklist
-- [ ] `make test` green; `@pytest.mark.db` tests green with `make up`
-- [ ] `mypy app` passes for these modules
+- [x] `make test` green; `@pytest.mark.db` tests green with `make up`
+- [x] `mypy app` passes for these modules
 - [ ] Commit `step 03: backend core`
+
+Implementation note: committing waits for the user's chosen message.

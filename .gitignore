@@ -27,3 +27,6 @@ experiments/results/*.tmp
 *.swp
 *.swo
 *~
+
+# Reproducible detailed inventory; keep the analysis script and report in Git.
+experiments/results/dataset_inventory.json

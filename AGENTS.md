@@ -6,7 +6,7 @@
 
 ## 1. What this project is (one paragraph)
 
-**DB Performance Advisor** (research acronym **MARS** — *Make AI Recommendations Safe*) is an
+**DB Performance Advisor** is an
 LLM-driven **verification framework** for slow-query tuning on **quick-commerce (dark-store) PostgreSQL
 databases** that face **flash-sale** load. An LLM proposes fixes for a slow recurring **report query**
 (rewrite the SQL, add an index, or refresh statistics). The system does **not trust** the LLM. Every
@@ -39,7 +39,7 @@ Plus: the **rewrite-or-index decision** (`decide.py`) and the **flash-sale verdi
 | RQ | Question | Primary output |
 |---|---|---|
 | RQ1 | How often can a verified rewrite replace an index, and what order-processing cost does that save? | table + chart |
-| RQ2 | Wrong-result rate of each equivalence tier **and** false-apply/false-block rate of the guard at 0/5/10 % injected noise vs simple rules | the **RQ2 chart** (noise vs false-apply, MARS flat) |
+| RQ2 | Wrong-result rate of each equivalence tier **and** false-apply/false-block rate of the guard at 0/5/10 % injected noise vs simple rules | the **RQ2 chart** (noise vs false-apply, DB Performance Advisor flat) |
 | RQ3 | Are buffer reads steadier decision signals than wall-clock time? | verdict-flip counts |
 | RQ4 | How many query shapes does the (text-to-SQL) workload produce, how stable, and how does best verified speedup grow with LLM samples k? | shape stats + speedup-vs-k curve |
 | RQ5 | How often does a change that passes on a normal day fail under a flash-sale profile, at what spike size? | verdict-flip rate vs multiplier |
@@ -157,7 +157,7 @@ Databases on one server: `qc_golden` (seeded; **no connections ever**, used as t
 | 03 | `03_backend_core.md` | config/pg/store/models/errors done; event store works; unit tests green |
 | 04 | `04_shapes_and_transactions.md` | 8 report shapes + 5 order transactions run on `qc_live`; sampler + as_of tested |
 | 05 | `05_stats_engine.md` | `stats.py` passes type-I-error and power tests |
-| 06 | `06_simulation_rq2.md` | `python -m app.simulate` writes the RQ2 result JSON; MARS flat vs rules |
+| 06 | `06_simulation_rq2.md` | `python -m app.simulate` writes the RQ2 result JSON; DB Performance Advisor flat vs rules |
 | 07 | `07_sandbox_measure_noise.md` | Clones, paired measurement, A/A noise report, noise injector all work |
 | 08 | `08_plans_and_filter.md` | Plan fingerprinting + HypoPG filter drop duplicates/no-op candidates |
 | 09 | `09_llm_safety_propose.md` | Providers, safety allowlist, plan-saturation proposer work with the mock |

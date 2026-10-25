@@ -29,7 +29,7 @@ Script (time-boxed):
 4. (2:00) Race + guard: show a CI bar crossing the δ line on a flash profile; the verdict-flip banner ("passes on a normal day, fails at 10×").
 5. (3:00) Decision: selected index/rewrite with evidence card; click **Approve and apply**; show `CREATE INDEX CONCURRENTLY`.
 6. (3:30) Applied page: start flash traffic; (pre-staged) planted bad index auto-reverted — show the window table.
-7. (4:15) Experiments: RQ2 chart — MARS flat while single-run climbs; one sentence on the cost (false blocks).
+7. (4:15) Experiments: RQ2 chart — DB Performance Advisor flat while single-run climbs; one sentence on the cost (false blocks).
 8. (4:45) Close: three novelties + what it does not claim.
 Rehearse twice; keep the backup video under 3 minutes.
 

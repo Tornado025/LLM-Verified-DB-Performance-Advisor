@@ -1,10 +1,13 @@
-.PHONY: up down seed test test-db lint api web experiments clean
+.PHONY: up down seed reset-live test test-db lint api web experiments clean
+SCALE ?= 1
 up:
 	docker compose up -d db
 down:
 	docker compose down
 seed:
-	cd backend && python scripts/seed.py --scale 1
+	cd backend && python scripts/seed.py --scale $(SCALE)
+reset-live:
+	cd backend && python scripts/seed.py --live-only
 test:
 	cd backend && pytest -m "not db and not llm"
 test-db:

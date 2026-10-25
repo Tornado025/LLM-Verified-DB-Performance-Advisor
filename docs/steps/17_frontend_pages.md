@@ -81,7 +81,7 @@ Approve flow: `Approve and apply` ⇒ confirm dialog (focus-trapped) showing the
 
 **Applied** — table of applied changes (kind, DDL/rewrite, applied at, state badge, last window); detail drawer with baseline vs current mean per statement group (Recharts line chart of window means with a δ band) and Revert button (confirm). Live traffic controls (start/stop generator, profile select) with a warning banner when running.
 
-**Experiments** — tabs: RQ2 (line chart: x = noise 0/5/10 %, y = false-apply %, one line per decider, MARS highlighted; second chart false-block and mean runs; toggle "simulation / real"), RQ5 (bar chart: verdict-flip rate by multiplier; table by candidate kind), RQ4 (shape counts per day, speedup vs k with saturation marker), Equivalence (table: false-accept per tier). Each chart has a text table alternative and download-CSV button. If a result file is missing show an `EmptyState` explaining which command creates it.
+**Experiments** — tabs: RQ2 (line chart: x = noise 0/5/10 %, y = false-apply %, one line per decider, DB Performance Advisor highlighted; second chart false-block and mean runs; toggle "simulation / real"), RQ5 (bar chart: verdict-flip rate by multiplier; table by candidate kind), RQ4 (shape counts per day, speedup vs k with saturation marker), Equivalence (table: false-accept per tier). Each chart has a text table alternative and download-CSV button. If a result file is missing show an `EmptyState` explaining which command creates it.
 
 ## 17.10 Copy and microcopy rules
 Sentence case; specific verbs ("Start verification", "Approve and apply", "Revert change"); errors say what failed and what to try ("Could not reach PostgreSQL. Start it with `make up` and reload."); never "Oops"; units always shown (ms, %, tps).

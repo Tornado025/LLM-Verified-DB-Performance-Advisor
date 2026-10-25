@@ -168,9 +168,9 @@ Print the database size (`pg_database_size`) for golden. Report seed duration. E
 * `test_row_counts`, `test_status_mix`, `test_no_secondary_indexes`, `test_meta_as_of_present`, `test_golden_idle`.
 
 ## 2.10 Done checklist
-- [ ] `make up && make seed` succeeds, report printed and saved to `docs/PROGRESS.md`
-- [ ] All verification checks pass
-- [ ] `make test-db` for `test_seed.py` green
+- [x] `make up && make seed` succeeds, report printed and saved to `docs/PROGRESS.md`
+- [x] All verification checks pass
+- [x] `make test-db` for `test_seed.py` green
 - [ ] Commit `step 02: schema and seeding`
 
 ## 2.11 Pitfalls
@@ -178,3 +178,16 @@ Print the database size (`pg_database_size`) for golden. Report seed duration. E
 * Do not run `ANALYZE` only on `public` implicitly — run `VACUUM (ANALYZE)` explicitly; clones copy statistics from the template's pg_statistic.
   (Statistics are stored in the database, so a template copy **does** carry them; the "no statistics" gotcha applies to **dump/restore**. Still run `ANALYZE` on every clone as a defensive rule.)
 * `random()` is session-seeded; calling `setseed` on a different connection than the inserts has no effect.
+
+## Implementation clarifications
+
+- Materialize one item-count draw per order before the lateral series. The sample
+  uncorrelated `LATERAL generate_series(... random() ...)` may evaluate its count
+  only once, giving every order the same item count.
+- Derive delivered_at from the classified status so recent delivered orders also
+  have a delivery timestamp, while active and cancelled orders have NULL.
+- Golden disables direct connections after seeding; CREATE DATABASE TEMPLATE
+  still clones it from the maintenance connection. Analyze every live clone.
+- Scale 1 measured about 120 MiB in the initial run, below shared_buffers. Use
+  `make seed SCALE=3` or higher and check the measured size for performance work.
+- Per the user's instruction, wait for their commit message before committing.

@@ -2,7 +2,7 @@
 
 **Goal (end state):** `python -m app.simulate --trials 400 --seed 1234 --out ../experiments/results/rq2_sim.json`
 runs a database-free Monte-Carlo and writes the RQ2 data: false-apply rate, false-block rate and mean runs
-per decider at noise 0 / 5 / 10 %. The MARS guard's false-apply stays low and roughly flat while simple
+per decider at noise 0 / 5 / 10 %. The DB Performance Advisor guard's false-apply stays low and roughly flat while simple
 rules climb. `GET /api/experiments/rq2` (step 15) will serve this file.
 
 **Prerequisites:** step 05.
@@ -72,7 +72,7 @@ JSON shape:
 * `test_runtime`: 400 trials × 3 noise levels finishes in < 60 s (use cached t-quantiles).
 
 ## 6.6 Interpreting results (write into `docs/PROGRESS.md`)
-* The headline claim is **not** "MARS never errs"; it is: false-apply stays flat as noise rises, at a measured cost in false blocks and runs. Include that cost.
+* The headline claim is **not** "DB Performance Advisor never errs"; it is: false-apply stays flat as noise rises, at a measured cost in false blocks and runs. Include that cost.
 * Report borderline θ separately (no method can reliably decide θ ≈ δ).
 
 ## 6.7 Done checklist
