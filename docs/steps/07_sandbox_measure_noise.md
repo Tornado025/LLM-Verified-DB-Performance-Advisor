@@ -95,12 +95,25 @@ class NoiseInjector:
 * `test_noise_injector_increases_variance` (slow): sd(d) at 10 % > sd(d) at 0 % (soft assertion with 3 repetitions; mark xfail-able if the host is noisy).
 
 ## 7.6 Done checklist
-- [ ] Clone cost (seconds, bytes) recorded for your scale in `docs/PROGRESS.md`
-- [ ] `noise_report.json` created; chosen default metric justified (time vs buffers)
-- [ ] No leaked `qc_sbx_*` databases after the test run (`python -m app.sandbox --cleanup` prints 0)
+- [x] Clone cost (seconds, bytes) recorded for your scale in `docs/PROGRESS.md`
+- [x] `noise_report.json` created; chosen default metric justified (time vs buffers)
+- [x] No leaked `qc_sbx_*` databases after the test run (`python -m app.sandbox --cleanup` prints 0)
 - [ ] Commit `step 07: sandbox, measure, noise`
 
 ## 7.7 Pitfalls
 * `CREATE DATABASE ... TEMPLATE` blocks while anything is connected to golden. Keep the API/workers away from golden.
 * `EXPLAIN ANALYZE` of DML executes it; only `SELECT` is allowed in `run_once`.
 * Warm caches differ between A and B if one clone was just created (cold). That is why warm-up and counter-balanced ordering exist.
+
+
+Implementation clarifications:
+- Timeout raises QueryTimeout(timeout_ms, side); it is censored evidence, never
+  an ordinary metric sample. Downstream callers reject candidate timeouts and
+  block baseline timeouts. Budget exhaustion may return CONTINUE for caller BLOCK.
+- Atexit cleans this process's owned clones; explicit CLI cleanup removes all
+  project clones. Names require the configured prefix plus eight hex characters.
+- Buffer screening is metric-specific, never a latency-safety certificate.
+- Docker Desktop host-noise variance test is xfailed when inconclusive, as allowed
+  by section 7.5. Real measurements and mixed effects are retained without forcing
+  a monotonic variance claim.
+- Commit awaits user's chosen message.

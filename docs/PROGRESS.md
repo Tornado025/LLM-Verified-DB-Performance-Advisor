@@ -425,3 +425,336 @@
 - No hidden network/LLM calls in unit tests. PostgreSQL tests explicitly marked db.
   No changes to commerce records or research downloads. Step 04 has not started.
 - Implementation and checks complete; commit deferred until user supplies message.
+
+## 2026-10-25 step 04 — reports and protected transactions
+
+- Implemented eight exact report templates (whitespace wrapping only), seeded
+  parameter samplers, per-database cached clock/pools, and explicit cache invalidation
+  after reseeding. Pool block sampling uses REPEATABLE(1234), ordered IDs and a
+  fallback for small databases so initial cache population is reproducible.
+- Five protected transactions have specified mix weights and statement tags.
+  A runner requires an idle connection, commits one transaction, locks status rows
+  before advancing exactly one state, and rolls back the whole order on out of
+  stock. It raises OutOfStock(code=oos) for step 11 to count and time. Positive
+  quantities and 2–4 order lines are required; stock locks use stable product order.
+- Candidate fixture expectations remain hypotheses, never measured verdicts or
+  authorization. All supplied candidates are present. Added deliberate bad rewrites
+  for hourly_sales/top_products_store to satisfy the per-shape bad-candidate check.
+- Resolved reference ambiguity: payout ±2-day jitter around as_of minus 8 days
+  otherwise allows a window ending one day in the future. Clamp its start at
+  as_of minus 7 days so every complete seven-day window stays inside the past 30
+  days. Documented this rather than weakening the bounded-window check.
+- Counterexample SQL checks cover duplicate-producing joins, dropped payout status,
+  and UTC calendar-day mismatch. Correct rewrites agree on planted rows in UTC,
+  Asia/Kolkata and America/New_York. Explicit ::timestamp casts are necessary for
+  the deliberately UTC-bound rewrite to actually use UTC midnight; confirmed by
+  PostgreSQL experiments. These are fixture checks, not the later equivalence engine.
+- Verification: make test: 33 passed; make lint: Ruff check/format and mypy (9
+  modules) pass. make test-db: 19 passed, 33 unit tests deselected. Database suite
+  includes all seed/core tests and step 04 checks.
+  Transaction writes and invalid index experiment use session-local temporary
+  tables shadowing public names; seeded commerce records were not changed.
+- No LLM or external dataset access. Step 05 not started. Commit waits for user's
+  chosen message, per their standing instruction.
+
+### Single-run report baseline (scale 3)
+
+Measured using EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON), seed 1234, UTC,
+as_of 2026-10-25T12:00:00+00:00. Each report measured once after acceptance queries;
+these are warm/mixed-cache observations, not confidence estimates. Shared block
+counts are the plan-root inclusive totals (not sums of child nodes). No temp blocks
+were read or written. Under-50 ms reports are fast controls at this scale; do not
+claim their hypothetical index speedups are established.
+
+| Shape | Execution ms | Top node | Shared hits | Shared reads | Role at this scale |
+|---|---:|---|---:|---:|---|
+| recent_orders | 16.571 | Limit | 6551 | 3751 | fast control |
+| delivered_yesterday | 29.779 | Aggregate | 6645 | 3655 | fast control |
+| stockouts_15m | 2.955 | Sort | 1782 | 0 | fast control |
+| hourly_sales | 17.815 | Aggregate | 6757 | 3559 | fast control |
+| open_order_customers | 16.311 | Sort | 7332 | 3463 | fast control |
+| payout_report | 70.759 | Sort | 6963 | 3367 | tuning target |
+| top_products_store | 86.388 | Limit | 10227 | 19943 | tuning target |
+| picker_queue | 16.09 | Limit | 7127 | 3175 | fast control |
+
+Measured sampler inputs and row counts:
+
+```json
+{
+  "seed": 1234,
+  "as_of": "2026-10-25T12:00:00+00:00",
+  "scale": "3",
+  "timezone": "UTC",
+  "shapes": [
+    {
+      "id": "recent_orders",
+      "params": {
+        "as_of": "2026-10-25T12:00:00+00:00",
+        "customer_id": 1
+      },
+      "execution_ms": 16.571,
+      "node": "Limit",
+      "shared_hit_blocks": 6551,
+      "shared_read_blocks": 3751,
+      "temp_read_blocks": 0,
+      "temp_written_blocks": 0,
+      "rows": 20
+    },
+    {
+      "id": "delivered_yesterday",
+      "params": {
+        "as_of": "2026-10-25T12:00:00+00:00"
+      },
+      "execution_ms": 29.779,
+      "node": "Aggregate",
+      "shared_hit_blocks": 6645,
+      "shared_read_blocks": 3655,
+      "temp_read_blocks": 0,
+      "temp_written_blocks": 0,
+      "rows": 50
+    },
+    {
+      "id": "stockouts_15m",
+      "params": {
+        "as_of": "2026-10-25T12:00:00+00:00"
+      },
+      "execution_ms": 2.955,
+      "node": "Sort",
+      "shared_hit_blocks": 1782,
+      "shared_read_blocks": 0,
+      "temp_read_blocks": 0,
+      "temp_written_blocks": 0,
+      "rows": 423
+    },
+    {
+      "id": "hourly_sales",
+      "params": {
+        "as_of": "2026-10-25T12:00:00+00:00"
+      },
+      "execution_ms": 17.815,
+      "node": "Aggregate",
+      "shared_hit_blocks": 6757,
+      "shared_read_blocks": 3559,
+      "temp_read_blocks": 0,
+      "temp_written_blocks": 0,
+      "rows": 1200
+    },
+    {
+      "id": "open_order_customers",
+      "params": {
+        "city": "Pune"
+      },
+      "execution_ms": 16.311,
+      "node": "Sort",
+      "shared_hit_blocks": 7332,
+      "shared_read_blocks": 3463,
+      "temp_read_blocks": 0,
+      "temp_written_blocks": 0,
+      "rows": 367
+    },
+    {
+      "id": "payout_report",
+      "params": {
+        "start": "2026-10-18T12:00:00+00:00",
+        "end": "2026-10-25T12:00:00+00:00"
+      },
+      "execution_ms": 70.759,
+      "node": "Sort",
+      "shared_hit_blocks": 6963,
+      "shared_read_blocks": 3367,
+      "temp_read_blocks": 0,
+      "temp_written_blocks": 0,
+      "rows": 50
+    },
+    {
+      "id": "top_products_store",
+      "params": {
+        "as_of": "2026-10-25T12:00:00+00:00",
+        "store_id": 20
+      },
+      "execution_ms": 86.388,
+      "node": "Limit",
+      "shared_hit_blocks": 10227,
+      "shared_read_blocks": 19943,
+      "temp_read_blocks": 0,
+      "temp_written_blocks": 0,
+      "rows": 20
+    },
+    {
+      "id": "picker_queue",
+      "params": {
+        "as_of": "2026-10-25T12:00:00+00:00",
+        "store_id": 9
+      },
+      "execution_ms": 16.09,
+      "node": "Limit",
+      "shared_hit_blocks": 7127,
+      "shared_read_blocks": 3175,
+      "temp_read_blocks": 0,
+      "temp_written_blocks": 0,
+      "rows": 37
+    }
+  ]
+}
+```
+
+## 2026-10-25 step 05 — statistics engine verified
+
+- Implemented positive paired log ratios, geometric-mean relative change, one-sided
+  Student-t bounds, alpha allocation across looks and tests, strict non-inferiority
+  and improvement decisions, summaries, racing helpers and SequentialTest.
+- Fail-closed edges: finite one-dimensional inputs only, validated budgets, infinite
+  bounds with fewer than two pairs, sample deviation floor 1e-6, terminal-state
+  latch, and no extra looks beyond the declared budget. Missing mean/SD estimates
+  in empty/one-pair summaries are NaN, never invented zeros. Overflowing moment
+  calculations yield unbounded intervals and cannot authorize PASS.
+- The t-quantile cache uses rounded probability/df keys and the conservative upper
+  probability-bucket edge. Ratios use log(b)-log(a) to avoid intermediate overflow.
+- Seed 5001: 2000 sequential boundary trials, true geometric change +5%, log SD
+  0.05, delta/alpha 0.05, family 1, min_n 6, max_n 60, batch 3, looks 19:
+  PASS 34 (1.7%), FAIL 34 (1.7%), BLOCK 1932 (96.6%). False-accept rate is below
+  alpha in this simulation. Boundary is unsafe for strict non-inferiority.
+- Seed 5002: 400 trials, true geometric change 0%, same noise/policy: PASS 400
+  (100%), FAIL 0, BLOCK 0. This is observed power, not a universal guarantee.
+- Cached 60-pair verdict benchmark: mean 0.007694 ms over 1000 calls, seed 1234;
+  below the 0.2 ms target and 5 ms test ceiling. Raw run log:
+  /tmp/dpa-step05-stats.log (local temporary artifact).
+- Commands: pytest tests/test_stats.py -s -q; make test (66 passed, 19 DB tests
+  deselected); make lint (Ruff check/format and mypy, 10 modules); git diff --check.
+  All pass. Step 05 adds 33 unit cases and requires no DB/network/LLM calls.
+- Added paper method notes on assumptions, geometric vs arithmetic ratios,
+  Bonferroni allocation, optional peeking, and conservative false-block cost.
+- No database records changed. Step 06 has not started. Commit pending user's
+  message; step 04's uncommitted work remains intact.
+
+## 2026-10-25 step 06 — RQ2 noise simulation
+
+- Implemented database-free paired multiplicative-noise trials, six pure decision
+  rules, common random pairs across methods, Wilson 95% intervals, per-theta rates,
+  error counts/denominators, measurement costs and atomic strict-JSON CLI output.
+- Uses advisor_guard / DB Performance Advisor rather than the retired name, per
+  user instruction. The fixed t-test is a one-sided paired test of raw differences
+  b-(1+delta)*a; non-significance approves (deliberate fail-open comparator).
+- Command (from backend): python -m app.simulate --trials 400 --seed 1234
+  --out ../experiments/results/rq2_sim.json --borderline.
+- 400 trials per theta per noise, four harmful and three harmless thetas: 1600
+  harmful and 1200 harmless cases per noise. Headline mean/p90 costs pool these
+  2800 cases. Borderline 0.04/0.05/0.06 are separate, using independent streams,
+  and never enter headline error denominators. SeedSequence child streams preserve
+  existing results when levels are appended; enabling borderline leaves them intact.
+- Results are measured, not preset to a desired curve. Advisor false apply rises
+  from 0/1600 to 1/1600 at 10% noise; zero observed errors do not establish zero risk.
+  Wilson confidence intervals and counts are in the result file. At 10% noise the
+  safe-case false-block cost is 65.75% and mean cost 42.121 pairs, p90 60.
+- Wide fixed-threshold rules already accept some harmful cases without noise:
+  threshold10 accepts 50%, threshold2x 100%. Their curves need not monotonically
+  climb; the meaningful comparison includes that baseline permissiveness.
+- Commands passed: focused simulation tests (9); make test (75 passed, 19 DB
+  deselected); make lint (Ruff check/format and mypy, 11 modules). Full headline
+  400-trial/3-noise run measured 1.318 seconds in the runtime test (<60 seconds).
+- Corrected Wilson endpoint floating-point cancellation to return exact zero/one
+  at k=0/n. No database, network or LLM calls. Step 07 not started. Commit pending
+  the user's message, with steps 04–05 changes preserved.
+
+### Measured RQ2 simulation summary
+
+| Noise | Method | False apply % | False block % | Mean pairs | P90 pairs |
+|---:|---|---:|---:|---:|---:|
+| 0% | single_run | 0.0000 | 0.0000 | 1.000 | 1.0 |
+| 0% | median5_band | 0.0000 | 0.0000 | 5.000 | 5.0 |
+| 0% | threshold10 | 50.0000 | 0.0000 | 5.000 | 5.0 |
+| 0% | threshold2x | 100.0000 | 0.0000 | 5.000 | 5.0 |
+| 0% | ttest_fixed | 0.0000 | 0.0000 | 10.000 | 10.0 |
+| 0% | advisor_guard | 0.0000 | 0.0000 | 6.000 | 6.0 |
+| 5% | single_run | 18.8750 | 26.8333 | 1.000 | 1.0 |
+| 5% | median5_band | 9.8125 | 15.5833 | 5.000 | 5.0 |
+| 5% | threshold10 | 33.7500 | 1.5000 | 5.000 | 5.0 |
+| 5% | threshold2x | 100.0000 | 0.0000 | 5.000 | 5.0 |
+| 5% | ttest_fixed | 30.2500 | 0.2500 | 10.000 | 10.0 |
+| 5% | advisor_guard | 0.0000 | 13.9167 | 26.639 | 60.0 |
+| 10% | single_run | 27.6250 | 40.5000 | 1.000 | 1.0 |
+| 10% | median5_band | 18.3125 | 30.0833 | 5.000 | 5.0 |
+| 10% | threshold10 | 36.0625 | 11.9167 | 5.000 | 5.0 |
+| 10% | threshold2x | 100.0000 | 0.0000 | 5.000 | 5.0 |
+| 10% | ttest_fixed | 51.6250 | 0.9167 | 10.000 | 10.0 |
+| 10% | advisor_guard | 0.0625 | 65.7500 | 42.121 | 60.0 |
+
+## 2026-10-25 step 07 — disposable clones and real paired measurements
+
+- Implemented sandbox creation, defensive ANALYZE, safe identifier validation,
+  maintenance-only template access, clone size/timing metrics, bounded local
+  semaphore slots, free-disk hint checks, pair/single contexts and cleanup CLI.
+  Both pair slots are reserved together to avoid concurrent pair deadlocks.
+- Trusted fixture DDL is limited to single nonconcurrent index/statistics commands
+  on sandbox names. Candidate PostgreSQL errors mark rejected_invalid_ddl and raise
+  InvalidDDL; both clones are cleaned. LLM safety filtering remains a step 09 task.
+- Implemented read-only SELECT-only EXPLAIN ANALYZE measurements, local timeout,
+  time/buffer extraction, warmups, alternating order, raw paired results, sequential
+  stopping and wall-time budget handling. Unknown function calls are rejected;
+  pg_sleep is permitted for timeout controls. This does not replace LLM safety.
+- Timeout interpretation clarified: QueryTimeout carries timeout_ms and side.
+  Candidate timeout must FAIL; baseline timeout must BLOCK in downstream callers.
+  Censored timeout values are never inserted as valid buffer/timing samples.
+- Updated the contracts' stale paired_report(..., cfg) signature to match step 07's
+  explicit keyword policy. No existing code used the old cfg signature.
+- Added seeded spawn-based CPU/disk interference with jitter, 64 MiB temporary
+  disk file, measured host CPU utilization, and reliable terminate/join cleanup.
+  Noise runs on macOS; PostgreSQL runs inside Docker Desktop, so interference is
+  indirect. Requested duty cycles are NOT measured latency-noise percentages.
+- Atexit cleans only clones owned by this process (avoids terminating another
+  worker's clones); explicit --cleanup removes all matching project clones.
+- Verification: make test 84 passed, 30 DB cases deselected; make lint Ruff
+  check/format and mypy (14 modules) passed. Database suite: 29 passed, 1 xfailed,
+  82 then-current unit cases deselected. Added two later unit-only controls for
+  counterbalanced ordering and timeout-side propagation; they pass in the 84 run.
+- Inconclusive test is the permitted host-noise variance soft assertion: 3 repeats
+  with 2 CPU workers did not consistently increase paired variance. It is reported
+  xfailed, not presented as a pass. The full noise report below shows mixed effects.
+- Initial A/A query with a parallel LIMIT had unstable buffer counts. Replaced
+  that stability-control query with SELECT count(*) FROM stores (not a relaxed
+  bound); real report measurements retain their observed variability.
+- Clone tests checked writes remain local, B-only indexes, golden idle, failed DDL
+  cleanup, user-exception cleanup, insufficient disk rejection, and slot reuse.
+  Measurement tests cover read-only/DML rejection, positive metrics, stable A/A
+  PASS, planted heavier-query FAIL, timeout recovery and exhausted-budget uncertainty.
+- noise_report.py ran seed 1234, 50 pairs/metric/cell, three report shapes and duties
+  0/0.05/0.10. No sequential early stops in this fixed-sample report. Raw A/B values,
+  log ratios, mean/SD, 80% log-scale detectable effect approximation and ±5% tail
+  fraction are in experiments/results/noise_report.json. Baseline levels were
+  measured first, so temporal host load is an additional experiment limitation.
+- Created/analyzed clone times (seconds): [0.887266, 0.679138, 0.866873].
+  Each source template size was 348404759 bytes at scale 3. No golden connections.
+- Default remains time: latency safety requires elapsed-time evidence. Buffers are
+  steadier here but cannot establish transaction latency safety; screen results
+  retain their metric and only uncertain buffer results trigger timing fallback.
+- Cleanup command: python -m app.sandbox --cleanup returned 0 after report and
+  test contexts cleaned themselves. No leaked clones or noise workers/temp files.
+- No qc_live destructive SQL, no raw research data changes. Step 08 not started.
+  Commit deferred until user supplies a message; earlier uncommitted steps retained.
+
+### Fixed-sample A/A noise report
+
+SD and mean are on paired log ratios. MDE is approximately 2.8 SD / sqrt(50),
+not an independently calibrated power guarantee. Outside is fraction with absolute
+relative change above 5%; CPU is measured whole-host utilization, not worker duty.
+
+| Shape | Duty | Metric | Mean log | SD log | MDE log (80%) | Outside ±5% | Host CPU % |
+|---|---:|---|---:|---:|---:|---:|---:|
+| stockouts_15m | 0.0 | time | -0.026242 | 0.200089 | 0.079231 | 0.600 | 23.3 |
+| stockouts_15m | 0.0 | buffers | 0.000000 | 0.000000 | 0.000000 | 0.000 | 23.3 |
+| stockouts_15m | 0.05 | time | 0.045611 | 0.215056 | 0.085158 | 0.640 | 49.3 |
+| stockouts_15m | 0.05 | buffers | 0.000000 | 0.000000 | 0.000000 | 0.000 | 49.3 |
+| stockouts_15m | 0.1 | time | 0.006162 | 0.226389 | 0.089645 | 0.700 | 48.5 |
+| stockouts_15m | 0.1 | buffers | 0.000000 | 0.000000 | 0.000000 | 0.000 | 48.5 |
+| payout_report | 0.0 | time | -0.017113 | 0.132059 | 0.052293 | 0.140 | 42.0 |
+| payout_report | 0.0 | buffers | -0.000019 | 0.000137 | 0.000054 | 0.000 | 42.0 |
+| payout_report | 0.05 | time | -0.002059 | 0.033960 | 0.013447 | 0.140 | 38.0 |
+| payout_report | 0.05 | buffers | 0.000000 | 0.000000 | 0.000000 | 0.000 | 38.0 |
+| payout_report | 0.1 | time | -0.004099 | 0.059286 | 0.023476 | 0.180 | 39.5 |
+| payout_report | 0.1 | buffers | 0.000000 | 0.000000 | 0.000000 | 0.000 | 39.5 |
+| top_products_store | 0.0 | time | -0.030112 | 0.108920 | 0.043130 | 0.260 | 41.1 |
+| top_products_store | 0.0 | buffers | 0.000000 | 0.000000 | 0.000000 | 0.000 | 41.1 |
+| top_products_store | 0.05 | time | -0.001906 | 0.081190 | 0.032149 | 0.260 | 50.5 |
+| top_products_store | 0.05 | buffers | 0.000000 | 0.000000 | 0.000000 | 0.000 | 50.5 |
+| top_products_store | 0.1 | time | 0.020911 | 0.180813 | 0.071598 | 0.360 | 54.7 |
+| top_products_store | 0.1 | buffers | 0.000000 | 0.000000 | 0.000000 | 0.000 | 54.7 |

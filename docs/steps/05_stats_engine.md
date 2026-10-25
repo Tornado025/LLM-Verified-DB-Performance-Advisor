@@ -89,6 +89,18 @@ State clearly: assumptions (paired differences of log ratios approximately norma
 no peeking inflation), limitation (conservative ⇒ more BLOCKs at high noise; this cost is reported honestly in RQ2).
 
 ## 5.8 Done checklist
-- [ ] All tests above pass; `mypy app/stats.py` clean
-- [ ] Type-I-error and power numbers recorded in `docs/PROGRESS.md`
+- [x] All tests above pass; `mypy app/stats.py` clean
+- [x] Type-I-error and power numbers recorded in `docs/PROGRESS.md`
 - [ ] Commit `step 05: stats engine`
+
+
+Implementation clarifications:
+- SequentialTest counts eligible nonempty additions against the declared look
+  budget, blocks on exhaustion, and latches BLOCK as well as PASS/FAIL. Stateless
+  verdict callers must independently honor their declared look schedule.
+- Improvement mode uses a zero-change threshold; improvement_verdict also supports
+  an explicit minimum gain. Negative relative thresholds are accepted by verdict
+  for this purpose, while application DELTA remains constrained by Settings.
+- Monte Carlo results validate behavior under specified assumptions; they do not
+  prove error control for arbitrary distributions or correlated measurements.
+- Commit awaits the user's chosen message.

@@ -6,10 +6,14 @@ human approval, application, monitoring, and automatic rollback on regression.
 
 ## Status
 
-Steps 01–03 are implemented and verified. Step 02 provides the original
+Steps 01–07 are implemented and verified (host-noise variance test is inconclusive). Step 02 provides the original
 generated quick-commerce schema and deterministic seeder. Research datasets complement later experiments;
 they are not imported into the operational commerce tables. Backend configuration, connection helpers, models, logging and SQLite metadata
-storage are implemented. The tuning pipeline, API and frontend are not implemented.
+storage are implemented, along with eight report shapes and five protected order
+transactions. The statistics engine provides conservative sequential safety and
+improvement tests. A reproducible RQ2 simulation compares decision rules under
+noise. Disposable clones, read-only paired measurements and a real A/A noise
+report are available. The tuning pipeline, API and frontend are not implemented.
 See [project guidance](AGENTS.md), [contracts](docs/steps/00_contracts.md), and the
 [progress log](docs/PROGRESS.md). Implementation follows steps 01–21 in order.
 
@@ -82,3 +86,16 @@ The frozen clock is UTC noon on the seeding date. Identical seed, scale, date,
 and PostgreSQL environment reproduce the data; `seeded_at` records the actual run time.
 
 Licensed under the MIT License.
+
+
+## Run the noise simulation
+
+With the virtual environment active, from `backend/`:
+
+```sh
+python -m app.simulate --trials 400 --seed 1234 --borderline --out ../experiments/results/rq2_sim.json
+```
+
+This uses synthetic measurements and needs no database or LLM. Trials are per
+true-effect value per noise level. The JSON includes error-rate confidence
+intervals and measurement costs; borderline effects are reported separately.

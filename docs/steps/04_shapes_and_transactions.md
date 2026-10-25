@@ -170,6 +170,19 @@ For each shape run `EXPLAIN (ANALYZE, BUFFERS)` once and record time, plan top n
 (≥ 50 ms at scale 1) are the tuning targets. If a shape is fast at your scale, increase scale or document that it is a control.
 
 ## 4.8 Done checklist
-- [ ] 8 shapes + 5 transactions implemented; fixtures list complete
-- [ ] `make test-db` green; baseline table recorded
+- [x] 8 shapes + 5 transactions implemented; fixtures list complete
+- [x] `make test-db` green; baseline table recorded
 - [ ] Commit `step 04: shapes and transactions`
+
+
+## Implementation clarifications
+
+- Parameter pool block sampling uses REPEATABLE(1234) and stable ID ordering.
+  Clear process caches after reseeding or replacing a database.
+- Clamp the payout window start to at most as_of minus seven days; otherwise
+  +2-day jitter puts the window end in the future, conflicting with section 4.2.
+- Added a bad hourly-window rewrite and a bad missing-store-filter rewrite for
+  the two shapes with no bad candidate in the supplied fixture table.
+- Transactions are exercised on temporary tables in the live session, preserving
+  seeded public rows. Full pipeline equivalence/guard verdict tests await later steps.
+- Commit waits for the user's chosen message.

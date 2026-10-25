@@ -1,0 +1,1351 @@
+{
+  "meta": {
+    "trials": 400,
+    "seed": 1234,
+    "delta": 0.05,
+    "alpha": 0.05,
+    "noise_levels": [
+      0.0,
+      0.05,
+      0.1
+    ],
+    "harmful": [
+      0.07,
+      0.1,
+      0.15,
+      0.25
+    ],
+    "harmless": [
+      0.0,
+      0.01,
+      0.02
+    ],
+    "created_at": "2026-10-25T06:04:53.898462+00:00",
+    "trials_unit": "per theta per noise",
+    "guard": {
+      "min_n": 6,
+      "max_n": 60,
+      "batch": 3,
+      "looks": 19,
+      "family": 1
+    },
+    "noise_model": "shared log SD=noise/2; independent log SD=noise; base=100 ms",
+    "decider_labels": {
+      "advisor_guard": "DB Performance Advisor"
+    },
+    "ttest_fixed": "one-sided paired latency difference b-(1+delta)*a; fail open",
+    "seed_scheme": "SeedSequence(seed).spawn(noise_count); append preserves earlier cells"
+  },
+  "results": {
+    "0.0": {
+      "single_run": {
+        "false_apply": 0.0,
+        "false_apply_ci": [
+          0.0,
+          0.0023951611922532253
+        ],
+        "false_block": 0.0,
+        "false_block_ci": [
+          0.0,
+          0.003191000602734924
+        ],
+        "harmful_trials": 1600,
+        "harmless_trials": 1200,
+        "false_apply_count": 0,
+        "false_block_count": 0,
+        "mean_runs": 1.0,
+        "runs_p90": 1.0,
+        "by_theta": {
+          "0.07": {
+            "approve_rate": 0.0,
+            "mean_runs": 1.0,
+            "trials": 400
+          },
+          "0.1": {
+            "approve_rate": 0.0,
+            "mean_runs": 1.0,
+            "trials": 400
+          },
+          "0.15": {
+            "approve_rate": 0.0,
+            "mean_runs": 1.0,
+            "trials": 400
+          },
+          "0.25": {
+            "approve_rate": 0.0,
+            "mean_runs": 1.0,
+            "trials": 400
+          },
+          "0.0": {
+            "approve_rate": 1.0,
+            "mean_runs": 1.0,
+            "trials": 400
+          },
+          "0.01": {
+            "approve_rate": 1.0,
+            "mean_runs": 1.0,
+            "trials": 400
+          },
+          "0.02": {
+            "approve_rate": 1.0,
+            "mean_runs": 1.0,
+            "trials": 400
+          }
+        }
+      },
+      "median5_band": {
+        "false_apply": 0.0,
+        "false_apply_ci": [
+          0.0,
+          0.0023951611922532253
+        ],
+        "false_block": 0.0,
+        "false_block_ci": [
+          0.0,
+          0.003191000602734924
+        ],
+        "harmful_trials": 1600,
+        "harmless_trials": 1200,
+        "false_apply_count": 0,
+        "false_block_count": 0,
+        "mean_runs": 5.0,
+        "runs_p90": 5.0,
+        "by_theta": {
+          "0.07": {
+            "approve_rate": 0.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.1": {
+            "approve_rate": 0.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.15": {
+            "approve_rate": 0.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.25": {
+            "approve_rate": 0.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.0": {
+            "approve_rate": 1.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.01": {
+            "approve_rate": 1.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.02": {
+            "approve_rate": 1.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          }
+        }
+      },
+      "threshold10": {
+        "false_apply": 0.5,
+        "false_apply_ci": [
+          0.4755298079684015,
+          0.5244701920315985
+        ],
+        "false_block": 0.0,
+        "false_block_ci": [
+          0.0,
+          0.003191000602734924
+        ],
+        "harmful_trials": 1600,
+        "harmless_trials": 1200,
+        "false_apply_count": 800,
+        "false_block_count": 0,
+        "mean_runs": 5.0,
+        "runs_p90": 5.0,
+        "by_theta": {
+          "0.07": {
+            "approve_rate": 1.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.1": {
+            "approve_rate": 1.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.15": {
+            "approve_rate": 0.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.25": {
+            "approve_rate": 0.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.0": {
+            "approve_rate": 1.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.01": {
+            "approve_rate": 1.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.02": {
+            "approve_rate": 1.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          }
+        }
+      },
+      "threshold2x": {
+        "false_apply": 1.0,
+        "false_apply_ci": [
+          0.9976048388077468,
+          1.0
+        ],
+        "false_block": 0.0,
+        "false_block_ci": [
+          0.0,
+          0.003191000602734924
+        ],
+        "harmful_trials": 1600,
+        "harmless_trials": 1200,
+        "false_apply_count": 1600,
+        "false_block_count": 0,
+        "mean_runs": 5.0,
+        "runs_p90": 5.0,
+        "by_theta": {
+          "0.07": {
+            "approve_rate": 1.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.1": {
+            "approve_rate": 1.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.15": {
+            "approve_rate": 1.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.25": {
+            "approve_rate": 1.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.0": {
+            "approve_rate": 1.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.01": {
+            "approve_rate": 1.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.02": {
+            "approve_rate": 1.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          }
+        }
+      },
+      "ttest_fixed": {
+        "false_apply": 0.0,
+        "false_apply_ci": [
+          0.0,
+          0.0023951611922532253
+        ],
+        "false_block": 0.0,
+        "false_block_ci": [
+          0.0,
+          0.003191000602734924
+        ],
+        "harmful_trials": 1600,
+        "harmless_trials": 1200,
+        "false_apply_count": 0,
+        "false_block_count": 0,
+        "mean_runs": 10.0,
+        "runs_p90": 10.0,
+        "by_theta": {
+          "0.07": {
+            "approve_rate": 0.0,
+            "mean_runs": 10.0,
+            "trials": 400
+          },
+          "0.1": {
+            "approve_rate": 0.0,
+            "mean_runs": 10.0,
+            "trials": 400
+          },
+          "0.15": {
+            "approve_rate": 0.0,
+            "mean_runs": 10.0,
+            "trials": 400
+          },
+          "0.25": {
+            "approve_rate": 0.0,
+            "mean_runs": 10.0,
+            "trials": 400
+          },
+          "0.0": {
+            "approve_rate": 1.0,
+            "mean_runs": 10.0,
+            "trials": 400
+          },
+          "0.01": {
+            "approve_rate": 1.0,
+            "mean_runs": 10.0,
+            "trials": 400
+          },
+          "0.02": {
+            "approve_rate": 1.0,
+            "mean_runs": 10.0,
+            "trials": 400
+          }
+        }
+      },
+      "advisor_guard": {
+        "false_apply": 0.0,
+        "false_apply_ci": [
+          0.0,
+          0.0023951611922532253
+        ],
+        "false_block": 0.0,
+        "false_block_ci": [
+          0.0,
+          0.003191000602734924
+        ],
+        "harmful_trials": 1600,
+        "harmless_trials": 1200,
+        "false_apply_count": 0,
+        "false_block_count": 0,
+        "mean_runs": 6.0,
+        "runs_p90": 6.0,
+        "by_theta": {
+          "0.07": {
+            "approve_rate": 0.0,
+            "mean_runs": 6.0,
+            "trials": 400
+          },
+          "0.1": {
+            "approve_rate": 0.0,
+            "mean_runs": 6.0,
+            "trials": 400
+          },
+          "0.15": {
+            "approve_rate": 0.0,
+            "mean_runs": 6.0,
+            "trials": 400
+          },
+          "0.25": {
+            "approve_rate": 0.0,
+            "mean_runs": 6.0,
+            "trials": 400
+          },
+          "0.0": {
+            "approve_rate": 1.0,
+            "mean_runs": 6.0,
+            "trials": 400
+          },
+          "0.01": {
+            "approve_rate": 1.0,
+            "mean_runs": 6.0,
+            "trials": 400
+          },
+          "0.02": {
+            "approve_rate": 1.0,
+            "mean_runs": 6.0,
+            "trials": 400
+          }
+        }
+      }
+    },
+    "0.05": {
+      "single_run": {
+        "false_apply": 0.18875,
+        "false_apply_ci": [
+          0.17033013255452983,
+          0.20866085528764783
+        ],
+        "false_block": 0.2683333333333333,
+        "false_block_ci": [
+          0.24403186677222335,
+          0.2941132968403771
+        ],
+        "harmful_trials": 1600,
+        "harmless_trials": 1200,
+        "false_apply_count": 302,
+        "false_block_count": 322,
+        "mean_runs": 1.0,
+        "runs_p90": 1.0,
+        "by_theta": {
+          "0.07": {
+            "approve_rate": 0.4075,
+            "mean_runs": 1.0,
+            "trials": 400
+          },
+          "0.1": {
+            "approve_rate": 0.245,
+            "mean_runs": 1.0,
+            "trials": 400
+          },
+          "0.15": {
+            "approve_rate": 0.0925,
+            "mean_runs": 1.0,
+            "trials": 400
+          },
+          "0.25": {
+            "approve_rate": 0.01,
+            "mean_runs": 1.0,
+            "trials": 400
+          },
+          "0.0": {
+            "approve_rate": 0.7925,
+            "mean_runs": 1.0,
+            "trials": 400
+          },
+          "0.01": {
+            "approve_rate": 0.7225,
+            "mean_runs": 1.0,
+            "trials": 400
+          },
+          "0.02": {
+            "approve_rate": 0.68,
+            "mean_runs": 1.0,
+            "trials": 400
+          }
+        }
+      },
+      "median5_band": {
+        "false_apply": 0.098125,
+        "false_apply_ci": [
+          0.08449680977782018,
+          0.11367830103045337
+        ],
+        "false_block": 0.15583333333333332,
+        "false_block_ci": [
+          0.13641377135096727,
+          0.1774493673972486
+        ],
+        "harmful_trials": 1600,
+        "harmless_trials": 1200,
+        "false_apply_count": 157,
+        "false_block_count": 187,
+        "mean_runs": 5.0,
+        "runs_p90": 5.0,
+        "by_theta": {
+          "0.07": {
+            "approve_rate": 0.285,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.1": {
+            "approve_rate": 0.095,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.15": {
+            "approve_rate": 0.0125,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.25": {
+            "approve_rate": 0.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.0": {
+            "approve_rate": 0.8975,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.01": {
+            "approve_rate": 0.8675,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.02": {
+            "approve_rate": 0.7675,
+            "mean_runs": 5.0,
+            "trials": 400
+          }
+        }
+      },
+      "threshold10": {
+        "false_apply": 0.3375,
+        "false_apply_ci": [
+          0.314744137324678,
+          0.3610342900628043
+        ],
+        "false_block": 0.015,
+        "false_block_ci": [
+          0.009509012635622722,
+          0.02358625794903015
+        ],
+        "harmful_trials": 1600,
+        "harmless_trials": 1200,
+        "false_apply_count": 540,
+        "false_block_count": 18,
+        "mean_runs": 5.0,
+        "runs_p90": 5.0,
+        "by_theta": {
+          "0.07": {
+            "approve_rate": 0.7425,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.1": {
+            "approve_rate": 0.475,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.15": {
+            "approve_rate": 0.1325,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.25": {
+            "approve_rate": 0.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.0": {
+            "approve_rate": 0.995,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.01": {
+            "approve_rate": 0.9875,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.02": {
+            "approve_rate": 0.9725,
+            "mean_runs": 5.0,
+            "trials": 400
+          }
+        }
+      },
+      "threshold2x": {
+        "false_apply": 1.0,
+        "false_apply_ci": [
+          0.9976048388077468,
+          1.0
+        ],
+        "false_block": 0.0,
+        "false_block_ci": [
+          0.0,
+          0.003191000602734924
+        ],
+        "harmful_trials": 1600,
+        "harmless_trials": 1200,
+        "false_apply_count": 1600,
+        "false_block_count": 0,
+        "mean_runs": 5.0,
+        "runs_p90": 5.0,
+        "by_theta": {
+          "0.07": {
+            "approve_rate": 1.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.1": {
+            "approve_rate": 1.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.15": {
+            "approve_rate": 1.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.25": {
+            "approve_rate": 1.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.0": {
+            "approve_rate": 1.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.01": {
+            "approve_rate": 1.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.02": {
+            "approve_rate": 1.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          }
+        }
+      },
+      "ttest_fixed": {
+        "false_apply": 0.3025,
+        "false_apply_ci": [
+          0.28048776442279605,
+          0.32545832424814397
+        ],
+        "false_block": 0.0025,
+        "false_block_ci": [
+          0.0008505818993887718,
+          0.007324463700332479
+        ],
+        "harmful_trials": 1600,
+        "harmless_trials": 1200,
+        "false_apply_count": 484,
+        "false_block_count": 3,
+        "mean_runs": 10.0,
+        "runs_p90": 10.0,
+        "by_theta": {
+          "0.07": {
+            "approve_rate": 0.77,
+            "mean_runs": 10.0,
+            "trials": 400
+          },
+          "0.1": {
+            "approve_rate": 0.41,
+            "mean_runs": 10.0,
+            "trials": 400
+          },
+          "0.15": {
+            "approve_rate": 0.03,
+            "mean_runs": 10.0,
+            "trials": 400
+          },
+          "0.25": {
+            "approve_rate": 0.0,
+            "mean_runs": 10.0,
+            "trials": 400
+          },
+          "0.0": {
+            "approve_rate": 1.0,
+            "mean_runs": 10.0,
+            "trials": 400
+          },
+          "0.01": {
+            "approve_rate": 1.0,
+            "mean_runs": 10.0,
+            "trials": 400
+          },
+          "0.02": {
+            "approve_rate": 0.9925,
+            "mean_runs": 10.0,
+            "trials": 400
+          }
+        }
+      },
+      "advisor_guard": {
+        "false_apply": 0.0,
+        "false_apply_ci": [
+          0.0,
+          0.0023951611922532253
+        ],
+        "false_block": 0.13916666666666666,
+        "false_block_ci": [
+          0.12073223853703596,
+          0.15990393356460442
+        ],
+        "harmful_trials": 1600,
+        "harmless_trials": 1200,
+        "false_apply_count": 0,
+        "false_block_count": 167,
+        "mean_runs": 26.638928571428572,
+        "runs_p90": 60.0,
+        "by_theta": {
+          "0.07": {
+            "approve_rate": 0.0,
+            "mean_runs": 50.8875,
+            "trials": 400
+          },
+          "0.1": {
+            "approve_rate": 0.0,
+            "mean_runs": 23.475,
+            "trials": 400
+          },
+          "0.15": {
+            "approve_rate": 0.0,
+            "mean_runs": 10.2675,
+            "trials": 400
+          },
+          "0.25": {
+            "approve_rate": 0.0,
+            "mean_runs": 6.5625,
+            "trials": 400
+          },
+          "0.0": {
+            "approve_rate": 0.9925,
+            "mean_runs": 21.8625,
+            "trials": 400
+          },
+          "0.01": {
+            "approve_rate": 0.93,
+            "mean_runs": 29.715,
+            "trials": 400
+          },
+          "0.02": {
+            "approve_rate": 0.66,
+            "mean_runs": 43.7025,
+            "trials": 400
+          }
+        }
+      }
+    },
+    "0.1": {
+      "single_run": {
+        "false_apply": 0.27625,
+        "false_apply_ci": [
+          0.2548960565175935,
+          0.2986757781159398
+        ],
+        "false_block": 0.405,
+        "false_block_ci": [
+          0.37757151569348474,
+          0.43303477442103483
+        ],
+        "harmful_trials": 1600,
+        "harmless_trials": 1200,
+        "false_apply_count": 442,
+        "false_block_count": 486,
+        "mean_runs": 1.0,
+        "runs_p90": 1.0,
+        "by_theta": {
+          "0.07": {
+            "approve_rate": 0.4525,
+            "mean_runs": 1.0,
+            "trials": 400
+          },
+          "0.1": {
+            "approve_rate": 0.3075,
+            "mean_runs": 1.0,
+            "trials": 400
+          },
+          "0.15": {
+            "approve_rate": 0.26,
+            "mean_runs": 1.0,
+            "trials": 400
+          },
+          "0.25": {
+            "approve_rate": 0.085,
+            "mean_runs": 1.0,
+            "trials": 400
+          },
+          "0.0": {
+            "approve_rate": 0.6475,
+            "mean_runs": 1.0,
+            "trials": 400
+          },
+          "0.01": {
+            "approve_rate": 0.5775,
+            "mean_runs": 1.0,
+            "trials": 400
+          },
+          "0.02": {
+            "approve_rate": 0.56,
+            "mean_runs": 1.0,
+            "trials": 400
+          }
+        }
+      },
+      "median5_band": {
+        "false_apply": 0.183125,
+        "false_apply_ci": [
+          0.1649401351323073,
+          0.2028277982732832
+        ],
+        "false_block": 0.30083333333333334,
+        "false_block_ci": [
+          0.27555410070536024,
+          0.3273836478680624
+        ],
+        "harmful_trials": 1600,
+        "harmless_trials": 1200,
+        "false_apply_count": 293,
+        "false_block_count": 361,
+        "mean_runs": 5.0,
+        "runs_p90": 5.0,
+        "by_theta": {
+          "0.07": {
+            "approve_rate": 0.395,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.1": {
+            "approve_rate": 0.2425,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.15": {
+            "approve_rate": 0.085,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.25": {
+            "approve_rate": 0.01,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.0": {
+            "approve_rate": 0.7175,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.01": {
+            "approve_rate": 0.695,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.02": {
+            "approve_rate": 0.685,
+            "mean_runs": 5.0,
+            "trials": 400
+          }
+        }
+      },
+      "threshold10": {
+        "false_apply": 0.360625,
+        "false_apply_ci": [
+          0.33745617051096144,
+          0.3844614806713791
+        ],
+        "false_block": 0.11916666666666667,
+        "false_block_ci": [
+          0.10204006080625294,
+          0.13872375131949682
+        ],
+        "harmful_trials": 1600,
+        "harmless_trials": 1200,
+        "false_apply_count": 577,
+        "false_block_count": 143,
+        "mean_runs": 5.0,
+        "runs_p90": 5.0,
+        "by_theta": {
+          "0.07": {
+            "approve_rate": 0.655,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.1": {
+            "approve_rate": 0.4825,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.15": {
+            "approve_rate": 0.26,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.25": {
+            "approve_rate": 0.045,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.0": {
+            "approve_rate": 0.8875,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.01": {
+            "approve_rate": 0.8875,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.02": {
+            "approve_rate": 0.8675,
+            "mean_runs": 5.0,
+            "trials": 400
+          }
+        }
+      },
+      "threshold2x": {
+        "false_apply": 1.0,
+        "false_apply_ci": [
+          0.9976048388077468,
+          1.0
+        ],
+        "false_block": 0.0,
+        "false_block_ci": [
+          0.0,
+          0.003191000602734924
+        ],
+        "harmful_trials": 1600,
+        "harmless_trials": 1200,
+        "false_apply_count": 1600,
+        "false_block_count": 0,
+        "mean_runs": 5.0,
+        "runs_p90": 5.0,
+        "by_theta": {
+          "0.07": {
+            "approve_rate": 1.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.1": {
+            "approve_rate": 1.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.15": {
+            "approve_rate": 1.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.25": {
+            "approve_rate": 1.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.0": {
+            "approve_rate": 1.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.01": {
+            "approve_rate": 1.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          },
+          "0.02": {
+            "approve_rate": 1.0,
+            "mean_runs": 5.0,
+            "trials": 400
+          }
+        }
+      },
+      "ttest_fixed": {
+        "false_apply": 0.51625,
+        "false_apply_ci": [
+          0.4917537823637862,
+          0.5406683748974656
+        ],
+        "false_block": 0.009166666666666667,
+        "false_block_ci": [
+          0.005126148473237232,
+          0.016339683785114217
+        ],
+        "harmful_trials": 1600,
+        "harmless_trials": 1200,
+        "false_apply_count": 826,
+        "false_block_count": 11,
+        "mean_runs": 10.0,
+        "runs_p90": 10.0,
+        "by_theta": {
+          "0.07": {
+            "approve_rate": 0.895,
+            "mean_runs": 10.0,
+            "trials": 400
+          },
+          "0.1": {
+            "approve_rate": 0.7425,
+            "mean_runs": 10.0,
+            "trials": 400
+          },
+          "0.15": {
+            "approve_rate": 0.395,
+            "mean_runs": 10.0,
+            "trials": 400
+          },
+          "0.25": {
+            "approve_rate": 0.0325,
+            "mean_runs": 10.0,
+            "trials": 400
+          },
+          "0.0": {
+            "approve_rate": 0.9975,
+            "mean_runs": 10.0,
+            "trials": 400
+          },
+          "0.01": {
+            "approve_rate": 0.98,
+            "mean_runs": 10.0,
+            "trials": 400
+          },
+          "0.02": {
+            "approve_rate": 0.995,
+            "mean_runs": 10.0,
+            "trials": 400
+          }
+        }
+      },
+      "advisor_guard": {
+        "false_apply": 0.000625,
+        "false_apply_ci": [
+          0.00011033636778615998,
+          0.003531830872976749
+        ],
+        "false_block": 0.6575,
+        "false_block_ci": [
+          0.630186114168433,
+          0.6838087206417055
+        ],
+        "harmful_trials": 1600,
+        "harmless_trials": 1200,
+        "false_apply_count": 1,
+        "false_block_count": 789,
+        "mean_runs": 42.121071428571426,
+        "runs_p90": 60.0,
+        "by_theta": {
+          "0.07": {
+            "approve_rate": 0.0025,
+            "mean_runs": 57.1575,
+            "trials": 400
+          },
+          "0.1": {
+            "approve_rate": 0.0,
+            "mean_runs": 47.9775,
+            "trials": 400
+          },
+          "0.15": {
+            "approve_rate": 0.0,
+            "mean_runs": 24.8325,
+            "trials": 400
+          },
+          "0.25": {
+            "approve_rate": 0.0,
+            "mean_runs": 10.845,
+            "trials": 400
+          },
+          "0.0": {
+            "approve_rate": 0.475,
+            "mean_runs": 48.2325,
+            "trials": 400
+          },
+          "0.01": {
+            "approve_rate": 0.3575,
+            "mean_runs": 50.43,
+            "trials": 400
+          },
+          "0.02": {
+            "approve_rate": 0.195,
+            "mean_runs": 55.3725,
+            "trials": 400
+          }
+        }
+      }
+    }
+  },
+  "borderline": {
+    "0.0": {
+      "single_run": {
+        "0.04": {
+          "approve_rate": 1.0,
+          "mean_runs": 1.0,
+          "trials": 400
+        },
+        "0.05": {
+          "approve_rate": 1.0,
+          "mean_runs": 1.0,
+          "trials": 400
+        },
+        "0.06": {
+          "approve_rate": 0.0,
+          "mean_runs": 1.0,
+          "trials": 400
+        }
+      },
+      "median5_band": {
+        "0.04": {
+          "approve_rate": 1.0,
+          "mean_runs": 5.0,
+          "trials": 400
+        },
+        "0.05": {
+          "approve_rate": 1.0,
+          "mean_runs": 5.0,
+          "trials": 400
+        },
+        "0.06": {
+          "approve_rate": 0.0,
+          "mean_runs": 5.0,
+          "trials": 400
+        }
+      },
+      "threshold10": {
+        "0.04": {
+          "approve_rate": 1.0,
+          "mean_runs": 5.0,
+          "trials": 400
+        },
+        "0.05": {
+          "approve_rate": 1.0,
+          "mean_runs": 5.0,
+          "trials": 400
+        },
+        "0.06": {
+          "approve_rate": 1.0,
+          "mean_runs": 5.0,
+          "trials": 400
+        }
+      },
+      "threshold2x": {
+        "0.04": {
+          "approve_rate": 1.0,
+          "mean_runs": 5.0,
+          "trials": 400
+        },
+        "0.05": {
+          "approve_rate": 1.0,
+          "mean_runs": 5.0,
+          "trials": 400
+        },
+        "0.06": {
+          "approve_rate": 1.0,
+          "mean_runs": 5.0,
+          "trials": 400
+        }
+      },
+      "ttest_fixed": {
+        "0.04": {
+          "approve_rate": 1.0,
+          "mean_runs": 10.0,
+          "trials": 400
+        },
+        "0.05": {
+          "approve_rate": 1.0,
+          "mean_runs": 10.0,
+          "trials": 400
+        },
+        "0.06": {
+          "approve_rate": 0.0,
+          "mean_runs": 10.0,
+          "trials": 400
+        }
+      },
+      "advisor_guard": {
+        "0.04": {
+          "approve_rate": 1.0,
+          "mean_runs": 6.0,
+          "trials": 400
+        },
+        "0.05": {
+          "approve_rate": 0.0,
+          "mean_runs": 60.0,
+          "trials": 400
+        },
+        "0.06": {
+          "approve_rate": 0.0,
+          "mean_runs": 6.0,
+          "trials": 400
+        }
+      }
+    },
+    "0.05": {
+      "single_run": {
+        "0.04": {
+          "approve_rate": 0.57,
+          "mean_runs": 1.0,
+          "trials": 400
+        },
+        "0.05": {
+          "approve_rate": 0.465,
+          "mean_runs": 1.0,
+          "trials": 400
+        },
+        "0.06": {
+          "approve_rate": 0.4575,
+          "mean_runs": 1.0,
+          "trials": 400
+        }
+      },
+      "median5_band": {
+        "0.04": {
+          "approve_rate": 0.605,
+          "mean_runs": 5.0,
+          "trials": 400
+        },
+        "0.05": {
+          "approve_rate": 0.485,
+          "mean_runs": 5.0,
+          "trials": 400
+        },
+        "0.06": {
+          "approve_rate": 0.4075,
+          "mean_runs": 5.0,
+          "trials": 400
+        }
+      },
+      "threshold10": {
+        "0.04": {
+          "approve_rate": 0.9275,
+          "mean_runs": 5.0,
+          "trials": 400
+        },
+        "0.05": {
+          "approve_rate": 0.8925,
+          "mean_runs": 5.0,
+          "trials": 400
+        },
+        "0.06": {
+          "approve_rate": 0.815,
+          "mean_runs": 5.0,
+          "trials": 400
+        }
+      },
+      "threshold2x": {
+        "0.04": {
+          "approve_rate": 1.0,
+          "mean_runs": 5.0,
+          "trials": 400
+        },
+        "0.05": {
+          "approve_rate": 1.0,
+          "mean_runs": 5.0,
+          "trials": 400
+        },
+        "0.06": {
+          "approve_rate": 1.0,
+          "mean_runs": 5.0,
+          "trials": 400
+        }
+      },
+      "ttest_fixed": {
+        "0.04": {
+          "approve_rate": 0.9675,
+          "mean_runs": 10.0,
+          "trials": 400
+        },
+        "0.05": {
+          "approve_rate": 0.9275,
+          "mean_runs": 10.0,
+          "trials": 400
+        },
+        "0.06": {
+          "approve_rate": 0.9,
+          "mean_runs": 10.0,
+          "trials": 400
+        }
+      },
+      "advisor_guard": {
+        "0.04": {
+          "approve_rate": 0.07,
+          "mean_runs": 57.9,
+          "trials": 400
+        },
+        "0.05": {
+          "approve_rate": 0.0175,
+          "mean_runs": 58.5375,
+          "trials": 400
+        },
+        "0.06": {
+          "approve_rate": 0.005,
+          "mean_runs": 57.2925,
+          "trials": 400
+        }
+      }
+    },
+    "0.1": {
+      "single_run": {
+        "0.04": {
+          "approve_rate": 0.5625,
+          "mean_runs": 1.0,
+          "trials": 400
+        },
+        "0.05": {
+          "approve_rate": 0.5,
+          "mean_runs": 1.0,
+          "trials": 400
+        },
+        "0.06": {
+          "approve_rate": 0.465,
+          "mean_runs": 1.0,
+          "trials": 400
+        }
+      },
+      "median5_band": {
+        "0.04": {
+          "approve_rate": 0.525,
+          "mean_runs": 5.0,
+          "trials": 400
+        },
+        "0.05": {
+          "approve_rate": 0.5325,
+          "mean_runs": 5.0,
+          "trials": 400
+        },
+        "0.06": {
+          "approve_rate": 0.4425,
+          "mean_runs": 5.0,
+          "trials": 400
+        }
+      },
+      "threshold10": {
+        "0.04": {
+          "approve_rate": 0.775,
+          "mean_runs": 5.0,
+          "trials": 400
+        },
+        "0.05": {
+          "approve_rate": 0.765,
+          "mean_runs": 5.0,
+          "trials": 400
+        },
+        "0.06": {
+          "approve_rate": 0.7225,
+          "mean_runs": 5.0,
+          "trials": 400
+        }
+      },
+      "threshold2x": {
+        "0.04": {
+          "approve_rate": 1.0,
+          "mean_runs": 5.0,
+          "trials": 400
+        },
+        "0.05": {
+          "approve_rate": 1.0,
+          "mean_runs": 5.0,
+          "trials": 400
+        },
+        "0.06": {
+          "approve_rate": 1.0,
+          "mean_runs": 5.0,
+          "trials": 400
+        }
+      },
+      "ttest_fixed": {
+        "0.04": {
+          "approve_rate": 0.9575,
+          "mean_runs": 10.0,
+          "trials": 400
+        },
+        "0.05": {
+          "approve_rate": 0.9425,
+          "mean_runs": 10.0,
+          "trials": 400
+        },
+        "0.06": {
+          "approve_rate": 0.9225,
+          "mean_runs": 10.0,
+          "trials": 400
+        }
+      },
+      "advisor_guard": {
+        "0.04": {
+          "approve_rate": 0.035,
+          "mean_runs": 58.755,
+          "trials": 400
+        },
+        "0.05": {
+          "approve_rate": 0.0175,
+          "mean_runs": 58.8,
+          "trials": 400
+        },
+        "0.06": {
+          "approve_rate": 0.005,
+          "mean_runs": 58.9125,
+          "trials": 400
+        }
+      }
+    }
+  }
+}

@@ -215,7 +215,7 @@ API error body: `{"error": {"code": "...", "message": "...", "detail": {...}}}`.
 | `plans` | `explain(conn, sql, analyze=False, buffers=False) -> dict`; `fingerprint(plan: dict) -> str`; `hypo_plan(conn, create_index_sql, query_sql) -> dict`; `signature_for(candidate, original_sql, conn) -> str` |
 | `equivalence` | `check_rewrite(conn, original_sql, rewrite_sql, cfg: EquivConfig) -> EquivResult` |
 | `sandbox` | `create_clone(name=None) -> str`; `drop_clone(name)`; `clone_pair(candidate, settings) -> ContextManager[ClonePair(a: str, b: str)]`; `apply_ddl(db, sql)`; `analyze(db)` |
-| `measure` | `run_once(conn, sql, metric) -> float`; `paired_report(conn_a, sql_a, conn_b, sql_b, cfg) -> PairedResult(d: list[float], summary: Summary, seconds: float)` |
+| `measure` | `run_once(conn, sql, metric) -> float`; `paired_report(conn_a, sql_a, conn_b, sql_b, *, metric, delta=None, alpha, looks, family, min_n, max_n, batch, mode="noninferiority", budget_s=None, rng=None) -> PairedResult(d: list[float], summary: Summary, seconds: float)` |
 | `stats` | `verdict(d, delta, alpha, looks, family, min_n, max_n) -> tuple[State, Bounds | None]`; `summarize(d, delta, alpha, looks, family, min_n, max_n) -> Summary`; `SequentialTest` class |
 | `workload` | `build_schedule(profile, seconds, seed, base_rate, pools) -> list[Arrival]`; `run_block(dbname, schedule, workers, stop_event=None) -> BlockResult`; `prepare_clone(dbname, profile, seed)` |
 | `guard` | `run_guard(candidate, profiles, settings, progress) -> GuardResult` |

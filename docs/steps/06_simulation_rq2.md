@@ -28,7 +28,7 @@ rules climb. `GET /api/experiments/rq2` (step 15) will serve this file.
 | `threshold10` | 5 pairs median; approve unless worse than `+10 %` (QUITE-style) | 5 |
 | `threshold2x` | 5 pairs median; approve unless worse than `+100 %` (QO-Verify-style 2×) | 5 |
 | `ttest_fixed` | 10 pairs; one-sided paired t-test; **block only if significantly worse** (p < 0.05); fails open | 10 |
-| `mars_guard` | `SequentialTest` from `stats.py` (min_n 6, max_n 60, batch 3, δ, α, looks computed, family = 1); approve iff state `PASS`; `FAIL` or `BLOCK` ⇒ block | variable |
+| `advisor_guard` | `SequentialTest` from `stats.py` (min_n 6, max_n 60, batch 3, δ, α, looks computed, family = 1); approve iff state `PASS`; `FAIL` or `BLOCK` ⇒ block | variable |
 
 All deciders must use the **same** underlying random draws per trial where possible (generate 60 pairs per trial
 once; each decider consumes the prefix it needs) so comparisons are paired.
@@ -45,7 +45,7 @@ JSON shape:
 {
   "meta": {"trials": 400, "seed": 1234, "delta": 0.05, "alpha": 0.05, "noise_levels": [0.0,0.05,0.10],
            "harmful": [0.07,0.10,0.15,0.25], "harmless": [0.0,0.01,0.02], "created_at": "…"},
-  "results": {"0.05": {"mars_guard": {"false_apply": 0.003, "false_apply_ci": [0.0,0.01],
+  "results": {"0.05": {"advisor_guard": {"false_apply": 0.003, "false_apply_ci": [0.0,0.01],
               "false_block": 0.21, "false_block_ci": [..], "mean_runs": 31.2, "runs_p90": 54,
               "by_theta": {"0.07": {"approve_rate": 0.0, "mean_runs": 28.0}}}}}
 }
@@ -65,10 +65,10 @@ JSON shape:
 
 * `test_reproducible`: same seed ⇒ identical JSON (excluding `created_at`).
 * `test_shapes`: JSON keys present for every noise level and decider.
-* `test_mars_false_apply_bounded`: at noise 0.10 with 300 trials `mars_guard.false_apply < 0.02`.
+* `test_advisor_false_apply_bounded`: at noise 0.10 with 300 trials `advisor_guard.false_apply < 0.02`.
 * `test_simple_rules_climb`: `single_run.false_apply(0.10) > single_run.false_apply(0.0)`.
 * `test_no_noise_sanity`: at noise 0 every decider except `threshold10/2x` rejects θ = 0.25 almost always.
-* `test_false_block_cost_reported`: `mars_guard.false_block(0.10) >= mars_guard.false_block(0.0)` (the price of fail-closed).
+* `test_false_block_cost_reported`: `advisor_guard.false_block(0.10) >= advisor_guard.false_block(0.0)` (the price of fail-closed).
 * `test_runtime`: 400 trials × 3 noise levels finishes in < 60 s (use cached t-quantiles).
 
 ## 6.6 Interpreting results (write into `docs/PROGRESS.md`)
@@ -77,6 +77,19 @@ JSON shape:
 
 ## 6.7 Done checklist
 - [ ] `experiments/results/rq2_sim.json` created and committed
-- [ ] All tests pass
-- [ ] A matplotlib or Recharts-ready summary table printed
+- [x] All tests pass
+- [x] A matplotlib or Recharts-ready summary table printed
 - [ ] Commit `step 06: rq2 simulation`
+
+
+Implementation clarifications:
+- The retired method name is replaced by advisor_guard, labelled DB Performance
+  Advisor, including in the result JSON and tests (user naming instruction).
+- trials is per theta per noise: 400 produces 1600 harmful and 1200 harmless
+  cases per headline noise cell. Mean runs pools all seven equally weighted thetas.
+- The fail-open fixed t-test tests raw paired differences b-(1+delta)*a > 0.
+  Comparator labels describe simplified project rules, not complete reproductions
+  of the external systems mentioned in the original reference.
+- Optional --borderline uses a separate random stream and separate output section.
+  Appending noise levels preserves existing cells; reordering them changes streams.
+- Output file is generated; committing waits for the user's chosen message.
