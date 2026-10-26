@@ -1,0 +1,2658 @@
+{
+  "meta": {
+    "created_at": "2026-10-25T10:25:55.190743+00:00",
+    "config": {
+      "cx_dbs": 50,
+      "rows_per_table": 30,
+      "timezones": [
+        "UTC",
+        "Asia/Kolkata",
+        "America/Los_Angeles"
+      ],
+      "stmt_timeout_ms": 60000,
+      "min_nonvacuous": 0.3,
+      "seed": 1234,
+      "use_llm_veto": false
+    },
+    "scale": 3,
+    "pairs": 22,
+    "seconds": 21.170369625000603,
+    "interpretation": "Prefix-tier trap survival; only final tested is accepted. Not independent tests or deployment approvals.",
+    "set_scope": "Step 10 seed catalogue: T1-T10 and E1-E12. Step 18 expands to >=60.",
+    "pairs_sha256": "a66bf0fd6044fbdcfea58f7b86636adbb4f50d9595086d79f97184ebbff60087"
+  },
+  "tiers": {
+    "0": {
+      "false_accept_count": 10,
+      "trap_count": 10,
+      "false_accept_rate": 1.0,
+      "false_block_count": 0,
+      "equivalent_count": 12,
+      "false_block_rate": 0.0
+    },
+    "1": {
+      "false_accept_count": 6,
+      "trap_count": 10,
+      "false_accept_rate": 0.6,
+      "false_block_count": 0,
+      "equivalent_count": 12,
+      "false_block_rate": 0.0
+    },
+    "2": {
+      "false_accept_count": 0,
+      "trap_count": 10,
+      "false_accept_rate": 0.0,
+      "false_block_count": 0,
+      "equivalent_count": 12,
+      "false_block_rate": 0.0
+    },
+    "3": {
+      "false_accept_count": 0,
+      "trap_count": 10,
+      "false_accept_rate": 0.0,
+      "false_block_count": 0,
+      "equivalent_count": 12,
+      "false_block_rate": 0.0
+    }
+  },
+  "results": [
+    {
+      "id": "T1",
+      "expected": "rejected",
+      "result": {
+        "label": "rejected",
+        "rewrite_class": 1,
+        "tier_reached": 2,
+        "reason": "counterexample mismatch",
+        "counterexample": {
+          "tz": "Asia/Kolkata",
+          "seed": 1234,
+          "case": 0,
+          "tables": {
+            "customers": [
+              {
+                "customer_id": 1,
+                "name": "a",
+                "phone": "a",
+                "city": "Bengaluru",
+                "created_at": "2026-10-23 23:59:59+00:00"
+              },
+              {
+                "customer_id": 2,
+                "name": "b",
+                "phone": "b",
+                "city": "Mumbai",
+                "created_at": "2026-10-24 00:00:00+00:00"
+              },
+              {
+                "customer_id": 3,
+                "name": "c",
+                "phone": "c",
+                "city": "Delhi",
+                "created_at": "2026-10-24 00:00:01+00:00"
+              },
+              {
+                "customer_id": 4,
+                "name": "UTC",
+                "phone": "UTC",
+                "city": "Bengaluru",
+                "created_at": "2026-10-24 23:59:59+00:00"
+              },
+              {
+                "customer_id": 5,
+                "name": "UTC",
+                "phone": null,
+                "city": "Mumbai",
+                "created_at": "2026-10-25 00:00:00+00:00"
+              }
+            ],
+            "stores": [
+              {
+                "store_id": 1,
+                "name": "a",
+                "city": "Bengaluru",
+                "lat": "0",
+                "lon": "0"
+              },
+              {
+                "store_id": 2,
+                "name": "b",
+                "city": "Mumbai",
+                "lat": "1",
+                "lon": "1"
+              },
+              {
+                "store_id": 3,
+                "name": "c",
+                "city": "Delhi",
+                "lat": "2.5",
+                "lon": "2.5"
+              },
+              {
+                "store_id": 4,
+                "name": "c",
+                "city": "Bengaluru",
+                "lat": "10",
+                "lon": "10"
+              },
+              {
+                "store_id": 5,
+                "name": "UTC",
+                "city": "Mumbai",
+                "lat": null,
+                "lon": null
+              }
+            ],
+            "riders": [
+              {
+                "rider_id": 1,
+                "store_id": 1,
+                "name": "a",
+                "status": "placed"
+              },
+              {
+                "rider_id": 2,
+                "store_id": 1,
+                "name": "b",
+                "status": "packing"
+              },
+              {
+                "rider_id": 3,
+                "store_id": 2,
+                "name": "c",
+                "status": "placed"
+              },
+              {
+                "rider_id": 4,
+                "store_id": 1,
+                "name": "b",
+                "status": "cancelled"
+              },
+              {
+                "rider_id": 5,
+                "store_id": 3,
+                "name": "Bengaluru",
+                "status": "out_for_delivery"
+              }
+            ],
+            "orders": [
+              {
+                "order_id": 1,
+                "customer_id": 1,
+                "store_id": 1,
+                "status": "placed",
+                "total": "0",
+                "payment_mode": "upi",
+                "created_at": "2026-10-23 23:59:59+00:00",
+                "delivered_at": "2026-10-23 23:59:59+00:00",
+                "rider_id": 1
+              },
+              {
+                "order_id": 2,
+                "customer_id": 1,
+                "store_id": 1,
+                "status": "packing",
+                "total": "1",
+                "payment_mode": "card",
+                "created_at": "2026-10-24 00:00:00+00:00",
+                "delivered_at": "2026-10-24 00:00:00+00:00",
+                "rider_id": 1
+              },
+              {
+                "order_id": 3,
+                "customer_id": 2,
+                "store_id": 2,
+                "status": "placed",
+                "total": "2.5",
+                "payment_mode": "cod",
+                "created_at": "2026-10-24 00:00:01+00:00",
+                "delivered_at": "2026-10-24 00:00:01+00:00",
+                "rider_id": 2
+              },
+              {
+                "order_id": 4,
+                "customer_id": 1,
+                "store_id": 1,
+                "status": "cancelled",
+                "total": "10",
+                "payment_mode": "wallet",
+                "created_at": "2026-10-24 23:59:59+00:00",
+                "delivered_at": "2026-10-24 23:59:59+00:00",
+                "rider_id": 1
+              },
+              {
+                "order_id": 5,
+                "customer_id": 3,
+                "store_id": 3,
+                "status": "out_for_delivery",
+                "total": "100",
+                "payment_mode": "upi",
+                "created_at": "2026-10-25 00:00:00+00:00",
+                "delivered_at": "2026-10-25 00:00:00+00:00",
+                "rider_id": 3
+              },
+              {
+                "order_id": 6,
+                "customer_id": 4,
+                "store_id": 4,
+                "status": "placed",
+                "total": "0",
+                "payment_mode": "card",
+                "created_at": "2026-10-25 00:00:01+00:00",
+                "delivered_at": "2026-10-25 00:00:01+00:00",
+                "rider_id": 4
+              },
+              {
+                "order_id": 7,
+                "customer_id": 1,
+                "store_id": 1,
+                "status": "packing",
+                "total": "1",
+                "payment_mode": "cod",
+                "created_at": "2026-10-23 18:29:59+00:00",
+                "delivered_at": "2026-10-23 18:29:59+00:00",
+                "rider_id": 1
+              },
+              {
+                "order_id": 8,
+                "customer_id": 3,
+                "store_id": 3,
+                "status": "delivered",
+                "total": "2.5",
+                "payment_mode": "wallet",
+                "created_at": "2026-10-23 18:30:00+00:00",
+                "delivered_at": "2026-10-23 18:30:00+00:00",
+                "rider_id": 3
+              },
+              {
+                "order_id": 9,
+                "customer_id": 4,
+                "store_id": 4,
+                "status": "cancelled",
+                "total": "10",
+                "payment_mode": "upi",
+                "created_at": "2026-10-23 18:30:01+00:00",
+                "delivered_at": "2026-10-23 18:30:01+00:00",
+                "rider_id": 4
+              },
+              {
+                "order_id": 10,
+                "customer_id": 1,
+                "store_id": 1,
+                "status": "out_for_delivery",
+                "total": "100",
+                "payment_mode": "card",
+                "created_at": "2026-10-24 18:29:59+00:00",
+                "delivered_at": "2026-10-24 18:29:59+00:00",
+                "rider_id": 1
+              },
+              {
+                "order_id": 11,
+                "customer_id": 3,
+                "store_id": 3,
+                "status": "placed",
+                "total": "0",
+                "payment_mode": "cod",
+                "created_at": "2026-10-24 18:30:00+00:00",
+                "delivered_at": "2026-10-24 18:30:00+00:00",
+                "rider_id": 3
+              },
+              {
+                "order_id": 12,
+                "customer_id": 4,
+                "store_id": 4,
+                "status": "packing",
+                "total": "1",
+                "payment_mode": "wallet",
+                "created_at": "2026-10-24 18:30:01+00:00",
+                "delivered_at": "2026-10-24 18:30:01+00:00",
+                "rider_id": 4
+              },
+              {
+                "order_id": 13,
+                "customer_id": 1,
+                "store_id": 1,
+                "status": "delivered",
+                "total": "2.5",
+                "payment_mode": "upi",
+                "created_at": "2026-10-24 06:59:59+00:00",
+                "delivered_at": "2026-10-24 06:59:59+00:00",
+                "rider_id": 1
+              },
+              {
+                "order_id": 14,
+                "customer_id": 3,
+                "store_id": 3,
+                "status": "cancelled",
+                "total": "10",
+                "payment_mode": "card",
+                "created_at": "2026-10-24 07:00:00+00:00",
+                "delivered_at": "2026-10-24 07:00:00+00:00",
+                "rider_id": 3
+              },
+              {
+                "order_id": 15,
+                "customer_id": 4,
+                "store_id": 4,
+                "status": "out_for_delivery",
+                "total": "100",
+                "payment_mode": "cod",
+                "created_at": "2026-10-24 07:00:01+00:00",
+                "delivered_at": "2026-10-24 07:00:01+00:00",
+                "rider_id": 4
+              },
+              {
+                "order_id": 16,
+                "customer_id": 1,
+                "store_id": 1,
+                "status": "placed",
+                "total": "0",
+                "payment_mode": "wallet",
+                "created_at": "2026-10-25 06:59:59+00:00",
+                "delivered_at": "2026-10-25 06:59:59+00:00",
+                "rider_id": 1
+              },
+              {
+                "order_id": 17,
+                "customer_id": 3,
+                "store_id": 3,
+                "status": "packing",
+                "total": "1",
+                "payment_mode": "upi",
+                "created_at": "2026-10-25 07:00:00+00:00",
+                "delivered_at": "2026-10-25 07:00:00+00:00",
+                "rider_id": 3
+              },
+              {
+                "order_id": 18,
+                "customer_id": 4,
+                "store_id": 4,
+                "status": "delivered",
+                "total": "2.5",
+                "payment_mode": "card",
+                "created_at": "2026-10-25 07:00:01+00:00",
+                "delivered_at": "2026-10-25 07:00:01+00:00",
+                "rider_id": 4
+              },
+              {
+                "order_id": 19,
+                "customer_id": 1,
+                "store_id": 1,
+                "status": "cancelled",
+                "total": "10",
+                "payment_mode": "cod",
+                "created_at": "2026-10-23 18:29:59+00:00",
+                "delivered_at": null,
+                "rider_id": 1
+              },
+              {
+                "order_id": 20,
+                "customer_id": 3,
+                "store_id": 3,
+                "status": "out_for_delivery",
+                "total": "100",
+                "payment_mode": "wallet",
+                "created_at": "2026-10-25 00:59:00+00:00",
+                "delivered_at": "2026-10-24 07:00:01+00:00",
+                "rider_id": 3
+              }
+            ]
+          },
+          "table_row_counts": {
+            "customers": 5,
+            "stores": 5,
+            "riders": 5,
+            "orders": 30
+          },
+          "orig_rows": [
+            [
+              1,
+              5,
+              "203.50"
+            ],
+            [
+              2,
+              1,
+              "2.50"
+            ],
+            [
+              3,
+              4,
+              "122.50"
+            ],
+            [
+              4,
+              3,
+              "111.00"
+            ]
+          ],
+          "new_rows": [
+            [
+              1,
+              4,
+              "113.50"
+            ],
+            [
+              2,
+              1,
+              "2.50"
+            ],
+            [
+              3,
+              4,
+              "112.50"
+            ],
+            [
+              4,
+              2,
+              "101.00"
+            ]
+          ],
+          "orig_count": 4,
+          "new_count": 4
+        },
+        "cx_dbs": 1,
+        "nonvacuous_fraction": 1.0,
+        "weak": false
+      },
+      "seconds": 0.05515120800191653
+    },
+    {
+      "id": "T2",
+      "expected": "rejected",
+      "result": {
+        "label": "rejected",
+        "rewrite_class": 1,
+        "tier_reached": 2,
+        "reason": "counterexample mismatch",
+        "counterexample": {
+          "tz": "UTC",
+          "seed": 1234,
+          "case": 0,
+          "tables": {
+            "customers": [
+              {
+                "customer_id": 1,
+                "name": "a",
+                "phone": "a",
+                "city": "Bengaluru",
+                "created_at": "2026-10-23 23:59:59+00:00"
+              },
+              {
+                "customer_id": 2,
+                "name": "b",
+                "phone": "b",
+                "city": "Mumbai",
+                "created_at": "2026-10-24 00:00:00+00:00"
+              },
+              {
+                "customer_id": 3,
+                "name": "c",
+                "phone": "c",
+                "city": "Delhi",
+                "created_at": "2026-10-24 00:00:01+00:00"
+              },
+              {
+                "customer_id": 4,
+                "name": "2026-10-25T12:00:00+00:00",
+                "phone": "2026-10-25T12:00:00+00:00",
+                "city": "Bengaluru",
+                "created_at": "2026-10-24 23:59:59+00:00"
+              },
+              {
+                "customer_id": 5,
+                "name": "2026-10-25T12:00:00+00:00",
+                "phone": null,
+                "city": "Mumbai",
+                "created_at": "2026-10-25 00:00:00+00:00"
+              }
+            ],
+            "stores": [
+              {
+                "store_id": 1,
+                "name": "a",
+                "city": "Bengaluru",
+                "lat": "0",
+                "lon": "0"
+              },
+              {
+                "store_id": 2,
+                "name": "b",
+                "city": "Mumbai",
+                "lat": "1",
+                "lon": "1"
+              },
+              {
+                "store_id": 3,
+                "name": "c",
+                "city": "Delhi",
+                "lat": "2.5",
+                "lon": "2.5"
+              },
+              {
+                "store_id": 4,
+                "name": "c",
+                "city": "Bengaluru",
+                "lat": "10",
+                "lon": "10"
+              },
+              {
+                "store_id": 5,
+                "name": "2026-10-25T12:00:00+00:00",
+                "city": "Mumbai",
+                "lat": null,
+                "lon": null
+              }
+            ],
+            "riders": [
+              {
+                "rider_id": 1,
+                "store_id": 1,
+                "name": "a",
+                "status": "placed"
+              },
+              {
+                "rider_id": 2,
+                "store_id": 1,
+                "name": "b",
+                "status": "packing"
+              },
+              {
+                "rider_id": 3,
+                "store_id": 2,
+                "name": "c",
+                "status": "placed"
+              },
+              {
+                "rider_id": 4,
+                "store_id": 1,
+                "name": "b",
+                "status": "cancelled"
+              },
+              {
+                "rider_id": 5,
+                "store_id": 3,
+                "name": "Bengaluru",
+                "status": "out_for_delivery"
+              }
+            ],
+            "orders": [
+              {
+                "order_id": 1,
+                "customer_id": 1,
+                "store_id": 1,
+                "status": "placed",
+                "total": "0",
+                "payment_mode": "upi",
+                "created_at": "2026-10-23 23:59:59+00:00",
+                "delivered_at": "2026-10-23 23:59:59+00:00",
+                "rider_id": 1
+              },
+              {
+                "order_id": 2,
+                "customer_id": 1,
+                "store_id": 1,
+                "status": "packing",
+                "total": "1",
+                "payment_mode": "card",
+                "created_at": "2026-10-24 00:00:00+00:00",
+                "delivered_at": "2026-10-24 00:00:00+00:00",
+                "rider_id": 1
+              },
+              {
+                "order_id": 3,
+                "customer_id": 2,
+                "store_id": 2,
+                "status": "placed",
+                "total": "2.5",
+                "payment_mode": "cod",
+                "created_at": "2026-10-24 00:00:01+00:00",
+                "delivered_at": "2026-10-24 00:00:01+00:00",
+                "rider_id": 2
+              },
+              {
+                "order_id": 4,
+                "customer_id": 1,
+                "store_id": 1,
+                "status": "cancelled",
+                "total": "10",
+                "payment_mode": "wallet",
+                "created_at": "2026-10-24 23:59:59+00:00",
+                "delivered_at": "2026-10-24 23:59:59+00:00",
+                "rider_id": 1
+              },
+              {
+                "order_id": 5,
+                "customer_id": 3,
+                "store_id": 3,
+                "status": "out_for_delivery",
+                "total": "100",
+                "payment_mode": "upi",
+                "created_at": "2026-10-25 00:00:00+00:00",
+                "delivered_at": "2026-10-25 00:00:00+00:00",
+                "rider_id": 3
+              },
+              {
+                "order_id": 6,
+                "customer_id": 4,
+                "store_id": 4,
+                "status": "placed",
+                "total": "0",
+                "payment_mode": "card",
+                "created_at": "2026-10-25 00:00:01+00:00",
+                "delivered_at": "2026-10-25 00:00:01+00:00",
+                "rider_id": 4
+              },
+              {
+                "order_id": 7,
+                "customer_id": 1,
+                "store_id": 1,
+                "status": "packing",
+                "total": "1",
+                "payment_mode": "cod",
+                "created_at": "2026-10-23 18:29:59+00:00",
+                "delivered_at": "2026-10-23 18:29:59+00:00",
+                "rider_id": 1
+              },
+              {
+                "order_id": 8,
+                "customer_id": 3,
+                "store_id": 3,
+                "status": "delivered",
+                "total": "2.5",
+                "payment_mode": "wallet",
+                "created_at": "2026-10-23 18:30:00+00:00",
+                "delivered_at": "2026-10-23 18:30:00+00:00",
+                "rider_id": 3
+              },
+              {
+                "order_id": 9,
+                "customer_id": 4,
+                "store_id": 4,
+                "status": "cancelled",
+                "total": "10",
+                "payment_mode": "upi",
+                "created_at": "2026-10-23 18:30:01+00:00",
+                "delivered_at": "2026-10-23 18:30:01+00:00",
+                "rider_id": 4
+              },
+              {
+                "order_id": 10,
+                "customer_id": 1,
+                "store_id": 1,
+                "status": "out_for_delivery",
+                "total": "100",
+                "payment_mode": "card",
+                "created_at": "2026-10-24 18:29:59+00:00",
+                "delivered_at": "2026-10-24 18:29:59+00:00",
+                "rider_id": 1
+              },
+              {
+                "order_id": 11,
+                "customer_id": 3,
+                "store_id": 3,
+                "status": "placed",
+                "total": "0",
+                "payment_mode": "cod",
+                "created_at": "2026-10-24 18:30:00+00:00",
+                "delivered_at": "2026-10-24 18:30:00+00:00",
+                "rider_id": 3
+              },
+              {
+                "order_id": 12,
+                "customer_id": 4,
+                "store_id": 4,
+                "status": "packing",
+                "total": "1",
+                "payment_mode": "wallet",
+                "created_at": "2026-10-24 18:30:01+00:00",
+                "delivered_at": "2026-10-24 18:30:01+00:00",
+                "rider_id": 4
+              },
+              {
+                "order_id": 13,
+                "customer_id": 1,
+                "store_id": 1,
+                "status": "delivered",
+                "total": "2.5",
+                "payment_mode": "upi",
+                "created_at": "2026-10-24 06:59:59+00:00",
+                "delivered_at": "2026-10-24 06:59:59+00:00",
+                "rider_id": 1
+              },
+              {
+                "order_id": 14,
+                "customer_id": 3,
+                "store_id": 3,
+                "status": "cancelled",
+                "total": "10",
+                "payment_mode": "card",
+                "created_at": "2026-10-24 07:00:00+00:00",
+                "delivered_at": "2026-10-24 07:00:00+00:00",
+                "rider_id": 3
+              },
+              {
+                "order_id": 15,
+                "customer_id": 4,
+                "store_id": 4,
+                "status": "out_for_delivery",
+                "total": "100",
+                "payment_mode": "cod",
+                "created_at": "2026-10-24 07:00:01+00:00",
+                "delivered_at": "2026-10-24 07:00:01+00:00",
+                "rider_id": 4
+              },
+              {
+                "order_id": 16,
+                "customer_id": 1,
+                "store_id": 1,
+                "status": "placed",
+                "total": "0",
+                "payment_mode": "wallet",
+                "created_at": "2026-10-25 06:59:59+00:00",
+                "delivered_at": "2026-10-25 06:59:59+00:00",
+                "rider_id": 1
+              },
+              {
+                "order_id": 17,
+                "customer_id": 3,
+                "store_id": 3,
+                "status": "packing",
+                "total": "1",
+                "payment_mode": "upi",
+                "created_at": "2026-10-25 07:00:00+00:00",
+                "delivered_at": "2026-10-25 07:00:00+00:00",
+                "rider_id": 3
+              },
+              {
+                "order_id": 18,
+                "customer_id": 4,
+                "store_id": 4,
+                "status": "delivered",
+                "total": "2.5",
+                "payment_mode": "card",
+                "created_at": "2026-10-25 07:00:01+00:00",
+                "delivered_at": "2026-10-25 07:00:01+00:00",
+                "rider_id": 4
+              },
+              {
+                "order_id": 19,
+                "customer_id": 1,
+                "store_id": 1,
+                "status": "cancelled",
+                "total": "10",
+                "payment_mode": "cod",
+                "created_at": "2026-10-23 18:29:59+00:00",
+                "delivered_at": null,
+                "rider_id": 1
+              },
+              {
+                "order_id": 20,
+                "customer_id": 3,
+                "store_id": 3,
+                "status": "out_for_delivery",
+                "total": "100",
+                "payment_mode": "wallet",
+                "created_at": "2026-10-25 00:59:00+00:00",
+                "delivered_at": "2026-10-24 07:00:01+00:00",
+                "rider_id": 3
+              }
+            ]
+          },
+          "table_row_counts": {
+            "customers": 5,
+            "stores": 5,
+            "riders": 5,
+            "orders": 30
+          },
+          "orig_rows": [
+            [
+              1,
+              4,
+              "113.50"
+            ],
+            [
+              2,
+              1,
+              "2.50"
+            ],
+            [
+              3,
+              4,
+              "112.50"
+            ],
+            [
+              4,
+              2,
+              "101.00"
+            ]
+          ],
+          "new_rows": [
+            [
+              1,
+              4,
+              "113.50"
+            ],
+            [
+              2,
+              1,
+              "2.50"
+            ],
+            [
+              3,
+              5,
+              "212.50"
+            ],
+            [
+              4,
+              2,
+              "101.00"
+            ]
+          ],
+          "orig_count": 4,
+          "new_count": 4
+        },
+        "cx_dbs": 1,
+        "nonvacuous_fraction": 1.0,
+        "weak": false
+      },
+      "seconds": 0.033459999998740386
+    },
+    {
+      "id": "T3",
+      "expected": "rejected",
+      "result": {
+        "label": "rejected",
+        "rewrite_class": 1,
+        "tier_reached": 2,
+        "reason": "counterexample mismatch",
+        "counterexample": {
+          "tz": "UTC",
+          "seed": 1234,
+          "case": 0,
+          "tables": {
+            "customers": [
+              {
+                "customer_id": 1,
+                "name": "a",
+                "phone": "a",
+                "city": "Bengaluru",
+                "created_at": "2026-10-23 23:59:59+00:00"
+              },
+              {
+                "customer_id": 2,
+                "name": "b",
+                "phone": "b",
+                "city": "Mumbai",
+                "created_at": "2026-10-24 00:00:00+00:00"
+              },
+              {
+                "customer_id": 3,
+                "name": "c",
+                "phone": "c",
+                "city": "Delhi",
+                "created_at": "2026-10-24 00:00:01+00:00"
+              },
+              {
+                "customer_id": 4,
+                "name": "2026-10-25T12:00:00+00:00",
+                "phone": "2026-10-25T12:00:00+00:00",
+                "city": "Bengaluru",
+                "created_at": "2026-10-24 23:59:59+00:00"
+              },
+              {
+                "customer_id": 5,
+                "name": "2026-10-25T12:00:00+00:00",
+                "phone": null,
+                "city": "Mumbai",
+                "created_at": "2026-10-25 00:00:00+00:00"
+              }
+            ],
+            "stores": [
+              {
+                "store_id": 1,
+                "name": "a",
+                "city": "Bengaluru",
+                "lat": "0",
+                "lon": "0"
+              },
+              {
+                "store_id": 2,
+                "name": "b",
+                "city": "Mumbai",
+                "lat": "1",
+                "lon": "1"
+              },
+              {
+                "store_id": 3,
+                "name": "c",
+                "city": "Delhi",
+                "lat": "2.5",
+                "lon": "2.5"
+              },
+              {
+                "store_id": 4,
+                "name": "c",
+                "city": "Bengaluru",
+                "lat": "10",
+                "lon": "10"
+              },
+              {
+                "store_id": 5,
+                "name": "2026-10-25T12:00:00+00:00",
+                "city": "Mumbai",
+                "lat": null,
+                "lon": null
+              }
+            ],
+            "riders": [
+              {
+                "rider_id": 1,
+                "store_id": 1,
+                "name": "a",
+                "status": "placed"
+              },
+              {
+                "rider_id": 2,
+                "store_id": 1,
+                "name": "b",
+                "status": "packing"
+              },
+              {
+                "rider_id": 3,
+                "store_id": 2,
+                "name": "c",
+                "status": "placed"
+              },
+              {
+                "rider_id": 4,
+                "store_id": 1,
+                "name": "b",
+                "status": "cancelled"
+              },
+              {
+                "rider_id": 5,
+                "store_id": 3,
+                "name": "Bengaluru",
+                "status": "out_for_delivery"
+              }
+            ],
+            "orders": [
+              {
+                "order_id": 1,
+                "customer_id": 1,
+                "store_id": 1,
+                "status": "placed",
+                "total": "0",
+                "payment_mode": "upi",
+                "created_at": "2026-10-23 23:59:59+00:00",
+                "delivered_at": "2026-10-23 23:59:59+00:00",
+                "rider_id": 1
+              },
+              {
+                "order_id": 2,
+                "customer_id": 1,
+                "store_id": 1,
+                "status": "packing",
+                "total": "1",
+                "payment_mode": "card",
+                "created_at": "2026-10-24 00:00:00+00:00",
+                "delivered_at": "2026-10-24 00:00:00+00:00",
+                "rider_id": 1
+              },
+              {
+                "order_id": 3,
+                "customer_id": 2,
+                "store_id": 2,
+                "status": "placed",
+                "total": "2.5",
+                "payment_mode": "cod",
+                "created_at": "2026-10-24 00:00:01+00:00",
+                "delivered_at": "2026-10-24 00:00:01+00:00",
+                "rider_id": 2
+              },
+              {
+                "order_id": 4,
+                "customer_id": 1,
+                "store_id": 1,
+                "status": "cancelled",
+                "total": "10",
+                "payment_mode": "wallet",
+                "created_at": "2026-10-24 23:59:59+00:00",
+                "delivered_at": "2026-10-24 23:59:59+00:00",
+                "rider_id": 1
+              },
+              {
+                "order_id": 5,
+                "customer_id": 3,
+                "store_id": 3,
+                "status": "out_for_delivery",
+                "total": "100",
+                "payment_mode": "upi",
+                "created_at": "2026-10-25 00:00:00+00:00",
+                "delivered_at": "2026-10-25 00:00:00+00:00",
+                "rider_id": 3
+              },
+              {
+                "order_id": 6,
+                "customer_id": 4,
+                "store_id": 4,
+                "status": "placed",
+                "total": "0",
+                "payment_mode": "card",
+                "created_at": "2026-10-25 00:00:01+00:00",
+                "delivered_at": "2026-10-25 00:00:01+00:00",
+                "rider_id": 4
+              },
+              {
+                "order_id": 7,
+                "customer_id": 1,
+                "store_id": 1,
+                "status": "packing",
+                "total": "1",
+                "payment_mode": "cod",
+                "created_at": "2026-10-23 18:29:59+00:00",
+                "delivered_at": "2026-10-23 18:29:59+00:00",
+                "rider_id": 1
+              },
+              {
+                "order_id": 8,
+                "customer_id": 3,
+                "store_id": 3,
+                "status": "delivered",
+                "total": "2.5",
+                "payment_mode": "wallet",
+                "created_at": "2026-10-23 18:30:00+00:00",
+                "delivered_at": "2026-10-23 18:30:00+00:00",
+                "rider_id": 3
+              },
+              {
+                "order_id": 9,
+                "customer_id": 4,
+                "store_id": 4,
+                "status": "cancelled",
+                "total": "10",
+                "payment_mode": "upi",
+                "created_at": "2026-10-23 18:30:01+00:00",
+                "delivered_at": "2026-10-23 18:30:01+00:00",
+                "rider_id": 4
+              },
+              {
+                "order_id": 10,
+                "customer_id": 1,
+                "store_id": 1,
+                "status": "out_for_delivery",
+                "total": "100",
+                "payment_mode": "card",
+                "created_at": "2026-10-24 18:29:59+00:00",
+                "delivered_at": "2026-10-24 18:29:59+00:00",
+                "rider_id": 1
+              },
+              {
+                "order_id": 11,
+                "customer_id": 3,
+                "store_id": 3,
+                "status": "placed",
+                "total": "0",
+                "payment_mode": "cod",
+                "created_at": "2026-10-24 18:30:00+00:00",
+                "delivered_at": "2026-10-24 18:30:00+00:00",
+                "rider_id": 3
+              },
+              {
+                "order_id": 12,
+                "customer_id": 4,
+                "store_id": 4,
+                "status": "packing",
+                "total": "1",
+                "payment_mode": "wallet",
+                "created_at": "2026-10-24 18:30:01+00:00",
+                "delivered_at": "2026-10-24 18:30:01+00:00",
+                "rider_id": 4
+              },
+              {
+                "order_id": 13,
+                "customer_id": 1,
+                "store_id": 1,
+                "status": "delivered",
+                "total": "2.5",
+                "payment_mode": "upi",
+                "created_at": "2026-10-24 06:59:59+00:00",
+                "delivered_at": "2026-10-24 06:59:59+00:00",
+                "rider_id": 1
+              },
+              {
+                "order_id": 14,
+                "customer_id": 3,
+                "store_id": 3,
+                "status": "cancelled",
+                "total": "10",
+                "payment_mode": "card",
+                "created_at": "2026-10-24 07:00:00+00:00",
+                "delivered_at": "2026-10-24 07:00:00+00:00",
+                "rider_id": 3
+              },
+              {
+                "order_id": 15,
+                "customer_id": 4,
+                "store_id": 4,
+                "status": "out_for_delivery",
+                "total": "100",
+                "payment_mode": "cod",
+                "created_at": "2026-10-24 07:00:01+00:00",
+                "delivered_at": "2026-10-24 07:00:01+00:00",
+                "rider_id": 4
+              },
+              {
+                "order_id": 16,
+                "customer_id": 1,
+                "store_id": 1,
+                "status": "placed",
+                "total": "0",
+                "payment_mode": "wallet",
+                "created_at": "2026-10-25 06:59:59+00:00",
+                "delivered_at": "2026-10-25 06:59:59+00:00",
+                "rider_id": 1
+              },
+              {
+                "order_id": 17,
+                "customer_id": 3,
+                "store_id": 3,
+                "status": "packing",
+                "total": "1",
+                "payment_mode": "upi",
+                "created_at": "2026-10-25 07:00:00+00:00",
+                "delivered_at": "2026-10-25 07:00:00+00:00",
+                "rider_id": 3
+              },
+              {
+                "order_id": 18,
+                "customer_id": 4,
+                "store_id": 4,
+                "status": "delivered",
+                "total": "2.5",
+                "payment_mode": "card",
+                "created_at": "2026-10-25 07:00:01+00:00",
+                "delivered_at": "2026-10-25 07:00:01+00:00",
+                "rider_id": 4
+              },
+              {
+                "order_id": 19,
+                "customer_id": 1,
+                "store_id": 1,
+                "status": "cancelled",
+                "total": "10",
+                "payment_mode": "cod",
+                "created_at": "2026-10-23 18:29:59+00:00",
+                "delivered_at": null,
+                "rider_id": 1
+              },
+              {
+                "order_id": 20,
+                "customer_id": 3,
+                "store_id": 3,
+                "status": "out_for_delivery",
+                "total": "100",
+                "payment_mode": "wallet",
+                "created_at": "2026-10-25 00:59:00+00:00",
+                "delivered_at": "2026-10-24 07:00:01+00:00",
+                "rider_id": 3
+              }
+            ]
+          },
+          "table_row_counts": {
+            "customers": 5,
+            "stores": 5,
+            "riders": 5,
+            "orders": 30
+          },
+          "orig_rows": [
+            [
+              1,
+              4,
+              "113.50"
+            ],
+            [
+              2,
+              1,
+              "2.50"
+            ],
+            [
+              3,
+              4,
+              "112.50"
+            ],
+            [
+              4,
+              2,
+              "101.00"
+            ]
+          ],
+          "new_rows": [
+            [
+              1,
+              1,
+              "1.00"
+            ]
+          ],
+          "orig_count": 4,
+          "new_count": 1
+        },
+        "cx_dbs": 1,
+        "nonvacuous_fraction": 1.0,
+        "weak": false
+      },
+      "seconds": 0.031100041000172496
+    },
+    {
+      "id": "T4",
+      "expected": "rejected",
+      "result": {
+        "label": "rejected",
+        "rewrite_class": 2,
+        "tier_reached": 1,
+        "reason": "join may duplicate rows",
+        "counterexample": null,
+        "cx_dbs": 0,
+        "nonvacuous_fraction": null,
+        "weak": true
+      },
+      "seconds": 0.012548834001790965
+    },
+    {
+      "id": "T5",
+      "expected": "rejected",
+      "result": {
+        "label": "rejected",
+        "rewrite_class": 2,
+        "tier_reached": 1,
+        "reason": "negated membership cannot become a positive inner join",
+        "counterexample": null,
+        "cx_dbs": 0,
+        "nonvacuous_fraction": null,
+        "weak": true
+      },
+      "seconds": 0.011204000002180692
+    },
+    {
+      "id": "T6",
+      "expected": "rejected",
+      "result": {
+        "label": "rejected",
+        "rewrite_class": 2,
+        "tier_reached": 2,
+        "reason": "counterexample mismatch",
+        "counterexample": {
+          "tz": "UTC",
+          "seed": 1234,
+          "case": 0,
+          "tables": {
+            "customers": [
+              {
+                "customer_id": 1,
+                "name": "a",
+                "phone": "a",
+                "city": "Bengaluru",
+                "created_at": "2026-10-23 23:59:59+00:00"
+              },
+              {
+                "customer_id": 2,
+                "name": "b",
+                "phone": "b",
+                "city": "Mumbai",
+                "created_at": "2026-10-24 00:00:00+00:00"
+              },
+              {
+                "customer_id": 3,
+                "name": "c",
+                "phone": "c",
+                "city": "Delhi",
+                "created_at": "2026-10-24 00:00:01+00:00"
+              },
+              {
+                "customer_id": 4,
+                "name": "upi",
+                "phone": "upi",
+                "city": "Bengaluru",
+                "created_at": "2026-10-24 23:59:59+00:00"
+              },
+              {
+                "customer_id": 5,
+                "name": "upi",
+                "phone": "Mumbai",
+                "city": "Mumbai",
+                "created_at": "2026-10-25 00:00:00+00:00"
+              },
+              {
+                "customer_id": 6,
+                "name": "b",
+                "phone": "upi",
+                "city": "Delhi",
+                "created_at": "2026-10-25 00:00:01+00:00"
+              },
+              {
+                "customer_id": 7,
+                "name": "b",
+                "phone": "c",
+                "city": "Bengaluru",
+                "created_at": "2026-10-23 18:29:59+00:00"
+              },
+              {
+                "customer_id": 8,
+                "name": "b",
+                "phone": "Bengaluru",
+                "city": "Mumbai",
+                "created_at": "2026-10-23 18:30:00+00:00"
+              },
+              {
+                "customer_id": 9,
+                "name": "Delhi",
+                "phone": "b",
+                "city": "Delhi",
+                "created_at": "2026-10-23 18:30:01+00:00"
+              },
+              {
+                "customer_id": 10,
+                "name": "packing",
+                "phone": "c",
+                "city": "Bengaluru",
+                "created_at": "2026-10-24 18:29:59+00:00"
+              },
+              {
+                "customer_id": 11,
+                "name": "packing",
+                "phone": "Bengaluru",
+                "city": "Mumbai",
+                "created_at": "2026-10-24 18:30:00+00:00"
+              },
+              {
+                "customer_id": 12,
+                "name": "packing",
+                "phone": "upi",
+                "city": "Delhi",
+                "created_at": "2026-10-24 18:30:01+00:00"
+              },
+              {
+                "customer_id": 13,
+                "name": "upi",
+                "phone": "c",
+                "city": "Bengaluru",
+                "created_at": "2026-10-24 06:59:59+00:00"
+              },
+              {
+                "customer_id": 14,
+                "name": "delivered",
+                "phone": "Mumbai",
+                "city": "Mumbai",
+                "created_at": "2026-10-24 07:00:00+00:00"
+              },
+              {
+                "customer_id": 15,
+                "name": "c",
+                "phone": "delivered",
+                "city": "Delhi",
+                "created_at": "2026-10-24 07:00:01+00:00"
+              },
+              {
+                "customer_id": 16,
+                "name": "cancelled",
+                "phone": "cancelled",
+                "city": "Bengaluru",
+                "created_at": "2026-10-25 06:59:59+00:00"
+              },
+              {
+                "customer_id": 17,
+                "name": "placed",
+                "phone": "cancelled",
+                "city": "Mumbai",
+                "created_at": "2026-10-25 07:00:00+00:00"
+              },
+              {
+                "customer_id": 18,
+                "name": "Delhi",
+                "phone": "placed",
+                "city": "Delhi",
+                "created_at": "2026-10-25 07:00:01+00:00"
+              },
+              {
+                "customer_id": 19,
+                "name": "upi",
+                "phone": "placed",
+                "city": "Bengaluru",
+                "created_at": "2026-10-24 23:59:59+00:00"
+              },
+              {
+                "customer_id": 20,
+                "name": "c",
+                "phone": "cancelled",
+                "city": "Mumbai",
+                "created_at": "2026-10-23 18:30:00+00:00"
+              }
+            ],
+            "stores": [
+              {
+                "store_id": 1,
+                "name": "a",
+                "city": "Bengaluru",
+                "lat": "0",
+                "lon": "0"
+              },
+              {
+                "store_id": 2,
+                "name": "b",
+                "city": "Mumbai",
+                "lat": "1",
+                "lon": "1"
+              },
+              {
+                "store_id": 3,
+                "name": "c",
+                "city": "Delhi",
+                "lat": "2.5",
+                "lon": "2.5"
+              },
+              {
+                "store_id": 4,
+                "name": "Bengaluru",
+                "city": "Bengaluru",
+                "lat": "10",
+                "lon": "10"
+              },
+              {
+                "store_id": 5,
+                "name": "cancelled",
+                "city": "Mumbai",
+                "lat": null,
+                "lon": null
+              }
+            ],
+            "riders": [
+              {
+                "rider_id": 1,
+                "store_id": 1,
+                "name": "a",
+                "status": "placed"
+              },
+              {
+                "rider_id": 2,
+                "store_id": 1,
+                "name": "b",
+                "status": "packing"
+              },
+              {
+                "rider_id": 3,
+                "store_id": 2,
+                "name": "c",
+                "status": "placed"
+              },
+              {
+                "rider_id": 4,
+                "store_id": 1,
+                "name": "Mumbai",
+                "status": "cancelled"
+              },
+              {
+                "rider_id": 5,
+                "store_id": 3,
+                "name": "Mumbai",
+                "status": "out_for_delivery"
+              }
+            ],
+            "orders": [
+              {
+                "order_id": 1,
+                "customer_id": 1,
+                "store_id": 1,
+                "status": "placed",
+                "total": "0",
+                "payment_mode": "upi",
+                "created_at": "2026-10-23 23:59:59+00:00",
+                "delivered_at": "2026-10-23 23:59:59+00:00",
+                "rider_id": 1
+              },
+              {
+                "order_id": 2,
+                "customer_id": 1,
+                "store_id": 1,
+                "status": "packing",
+                "total": "1",
+                "payment_mode": "card",
+                "created_at": "2026-10-24 00:00:00+00:00",
+                "delivered_at": "2026-10-24 00:00:00+00:00",
+                "rider_id": 1
+              },
+              {
+                "order_id": 3,
+                "customer_id": 2,
+                "store_id": 2,
+                "status": "placed",
+                "total": "2.5",
+                "payment_mode": "cod",
+                "created_at": "2026-10-24 00:00:01+00:00",
+                "delivered_at": "2026-10-24 00:00:01+00:00",
+                "rider_id": 2
+              },
+              {
+                "order_id": 4,
+                "customer_id": 1,
+                "store_id": 1,
+                "status": "cancelled",
+                "total": "10",
+                "payment_mode": "wallet",
+                "created_at": "2026-10-24 23:59:59+00:00",
+                "delivered_at": "2026-10-24 23:59:59+00:00",
+                "rider_id": 1
+              },
+              {
+                "order_id": 5,
+                "customer_id": 3,
+                "store_id": 3,
+                "status": "out_for_delivery",
+                "total": "100",
+                "payment_mode": "upi",
+                "created_at": "2026-10-25 00:00:00+00:00",
+                "delivered_at": "2026-10-25 00:00:00+00:00",
+                "rider_id": 3
+              },
+              {
+                "order_id": 6,
+                "customer_id": 4,
+                "store_id": 4,
+                "status": "placed",
+                "total": "0",
+                "payment_mode": "card",
+                "created_at": "2026-10-25 00:00:01+00:00",
+                "delivered_at": "2026-10-25 00:00:01+00:00",
+                "rider_id": 4
+              },
+              {
+                "order_id": 7,
+                "customer_id": 1,
+                "store_id": 1,
+                "status": "packing",
+                "total": "1",
+                "payment_mode": "cod",
+                "created_at": "2026-10-23 18:29:59+00:00",
+                "delivered_at": "2026-10-23 18:29:59+00:00",
+                "rider_id": 1
+              },
+              {
+                "order_id": 8,
+                "customer_id": 3,
+                "store_id": 3,
+                "status": "delivered",
+                "total": "2.5",
+                "payment_mode": "wallet",
+                "created_at": "2026-10-23 18:30:00+00:00",
+                "delivered_at": "2026-10-23 18:30:00+00:00",
+                "rider_id": 3
+              },
+              {
+                "order_id": 9,
+                "customer_id": 4,
+                "store_id": 4,
+                "status": "cancelled",
+                "total": "10",
+                "payment_mode": "upi",
+                "created_at": "2026-10-23 18:30:01+00:00",
+                "delivered_at": "2026-10-23 18:30:01+00:00",
+                "rider_id": 4
+              },
+              {
+                "order_id": 10,
+                "customer_id": 1,
+                "store_id": 1,
+                "status": "out_for_delivery",
+                "total": "100",
+                "payment_mode": "card",
+                "created_at": "2026-10-24 18:29:59+00:00",
+                "delivered_at": "2026-10-24 18:29:59+00:00",
+                "rider_id": 1
+              },
+              {
+                "order_id": 11,
+                "customer_id": 3,
+                "store_id": 3,
+                "status": "placed",
+                "total": "0",
+                "payment_mode": "cod",
+                "created_at": "2026-10-24 18:30:00+00:00",
+                "delivered_at": "2026-10-24 18:30:00+00:00",
+                "rider_id": 3
+              },
+              {
+                "order_id": 12,
+                "customer_id": 4,
+                "store_id": 4,
+                "status": "packing",
+                "total": "1",
+                "payment_mode": "wallet",
+                "created_at": "2026-10-24 18:30:01+00:00",
+                "delivered_at": "2026-10-24 18:30:01+00:00",
+                "rider_id": 4
+              },
+              {
+                "order_id": 13,
+                "customer_id": 1,
+                "store_id": 1,
+                "status": "delivered",
+                "total": "2.5",
+                "payment_mode": "upi",
+                "created_at": "2026-10-24 06:59:59+00:00",
+                "delivered_at": "2026-10-24 06:59:59+00:00",
+                "rider_id": 1
+              },
+              {
+                "order_id": 14,
+                "customer_id": 3,
+                "store_id": 3,
+                "status": "cancelled",
+                "total": "10",
+                "payment_mode": "card",
+                "created_at": "2026-10-24 07:00:00+00:00",
+                "delivered_at": "2026-10-24 07:00:00+00:00",
+                "rider_id": 3
+              },
+              {
+                "order_id": 15,
+                "customer_id": 4,
+                "store_id": 4,
+                "status": "out_for_delivery",
+                "total": "100",
+                "payment_mode": "cod",
+                "created_at": "2026-10-24 07:00:01+00:00",
+                "delivered_at": "2026-10-24 07:00:01+00:00",
+                "rider_id": 4
+              },
+              {
+                "order_id": 16,
+                "customer_id": 1,
+                "store_id": 1,
+                "status": "placed",
+                "total": "0",
+                "payment_mode": "wallet",
+                "created_at": "2026-10-25 06:59:59+00:00",
+                "delivered_at": "2026-10-25 06:59:59+00:00",
+                "rider_id": 1
+              },
+              {
+                "order_id": 17,
+                "customer_id": 3,
+                "store_id": 3,
+                "status": "packing",
+                "total": "1",
+                "payment_mode": "upi",
+                "created_at": "2026-10-25 07:00:00+00:00",
+                "delivered_at": "2026-10-25 07:00:00+00:00",
+                "rider_id": 3
+              },
+              {
+                "order_id": 18,
+                "customer_id": 4,
+                "store_id": 4,
+                "status": "delivered",
+                "total": "2.5",
+                "payment_mode": "card",
+                "created_at": "2026-10-25 07:00:01+00:00",
+                "delivered_at": "2026-10-25 07:00:01+00:00",
+                "rider_id": 4
+              },
+              {
+                "order_id": 19,
+                "customer_id": 1,
+                "store_id": 1,
+                "status": "cancelled",
+                "total": "10",
+                "payment_mode": "cod",
+                "created_at": "2026-10-24 23:59:59.999999+00:00",
+                "delivered_at": "2026-10-25 07:00:01+00:00",
+                "rider_id": null
+              },
+              {
+                "order_id": 20,
+                "customer_id": 3,
+                "store_id": 3,
+                "status": "out_for_delivery",
+                "total": "100",
+                "payment_mode": "wallet",
+                "created_at": "2026-10-25 00:00:00.000001+00:00",
+                "delivered_at": "2026-10-24 18:30:00+00:00",
+                "rider_id": 3
+              }
+            ]
+          },
+          "table_row_counts": {
+            "customers": 30,
+            "stores": 5,
+            "riders": 5,
+            "orders": 29
+          },
+          "orig_rows": [
+            [
+              1,
+              "a"
+            ],
+            [
+              3,
+              "c"
+            ],
+            [
+              4,
+              "upi"
+            ]
+          ],
+          "new_rows": [
+            [
+              1,
+              "a"
+            ],
+            [
+              2,
+              "b"
+            ],
+            [
+              3,
+              "c"
+            ],
+            [
+              4,
+              "upi"
+            ]
+          ],
+          "orig_count": 3,
+          "new_count": 4
+        },
+        "cx_dbs": 1,
+        "nonvacuous_fraction": 1.0,
+        "weak": false
+      },
+      "seconds": 0.03576891699776752
+    },
+    {
+      "id": "T7",
+      "expected": "rejected",
+      "result": {
+        "label": "rejected",
+        "rewrite_class": 3,
+        "tier_reached": 2,
+        "reason": "counterexample mismatch",
+        "counterexample": {
+          "tz": "UTC",
+          "seed": 1234,
+          "case": 0,
+          "tables": {
+            "customers": [
+              {
+                "customer_id": 1,
+                "name": "a",
+                "phone": "a",
+                "city": "Bengaluru",
+                "created_at": "2026-10-23 23:59:59+00:00"
+              },
+              {
+                "customer_id": 2,
+                "name": "b",
+                "phone": "b",
+                "city": "Mumbai",
+                "created_at": "2026-10-24 00:00:00+00:00"
+              },
+              {
+                "customer_id": 3,
+                "name": "c",
+                "phone": "c",
+                "city": "Delhi",
+                "created_at": "2026-10-24 00:00:01+00:00"
+              },
+              {
+                "customer_id": 4,
+                "name": "upi",
+                "phone": "upi",
+                "city": "Bengaluru",
+                "created_at": "2026-10-24 23:59:59+00:00"
+              },
+              {
+                "customer_id": 5,
+                "name": "upi",
+                "phone": "Mumbai",
+                "city": "Mumbai",
+                "created_at": "2026-10-25 00:00:00+00:00"
+              },
+              {
+                "customer_id": 6,
+                "name": "b",
+                "phone": "upi",
+                "city": "Delhi",
+                "created_at": "2026-10-25 00:00:01+00:00"
+              },
+              {
+                "customer_id": 7,
+                "name": "b",
+                "phone": "c",
+                "city": "Bengaluru",
+                "created_at": "2026-10-23 18:29:59+00:00"
+              },
+              {
+                "customer_id": 8,
+                "name": "b",
+                "phone": "Bengaluru",
+                "city": "Mumbai",
+                "created_at": "2026-10-23 18:30:00+00:00"
+              },
+              {
+                "customer_id": 9,
+                "name": "Delhi",
+                "phone": "b",
+                "city": "Delhi",
+                "created_at": "2026-10-23 18:30:01+00:00"
+              },
+              {
+                "customer_id": 10,
+                "name": "packing",
+                "phone": "c",
+                "city": "Bengaluru",
+                "created_at": "2026-10-24 18:29:59+00:00"
+              },
+              {
+                "customer_id": 11,
+                "name": "packing",
+                "phone": "Bengaluru",
+                "city": "Mumbai",
+                "created_at": "2026-10-24 18:30:00+00:00"
+              },
+              {
+                "customer_id": 12,
+                "name": "packing",
+                "phone": "upi",
+                "city": "Delhi",
+                "created_at": "2026-10-24 18:30:01+00:00"
+              },
+              {
+                "customer_id": 13,
+                "name": "upi",
+                "phone": "c",
+                "city": "Bengaluru",
+                "created_at": "2026-10-24 06:59:59+00:00"
+              },
+              {
+                "customer_id": 14,
+                "name": "delivered",
+                "phone": "Mumbai",
+                "city": "Mumbai",
+                "created_at": "2026-10-24 07:00:00+00:00"
+              },
+              {
+                "customer_id": 15,
+                "name": "c",
+                "phone": "delivered",
+                "city": "Delhi",
+                "created_at": "2026-10-24 07:00:01+00:00"
+              },
+              {
+                "customer_id": 16,
+                "name": "cancelled",
+                "phone": "cancelled",
+                "city": "Bengaluru",
+                "created_at": "2026-10-25 06:59:59+00:00"
+              },
+              {
+                "customer_id": 17,
+                "name": "placed",
+                "phone": "cancelled",
+                "city": "Mumbai",
+                "created_at": "2026-10-25 07:00:00+00:00"
+              },
+              {
+                "customer_id": 18,
+                "name": "Delhi",
+                "phone": "placed",
+                "city": "Delhi",
+                "created_at": "2026-10-25 07:00:01+00:00"
+              },
+              {
+                "customer_id": 19,
+                "name": "upi",
+                "phone": "placed",
+                "city": "Bengaluru",
+                "created_at": "2026-10-24 23:59:59+00:00"
+              },
+              {
+                "customer_id": 20,
+                "name": "c",
+                "phone": "cancelled",
+                "city": "Mumbai",
+                "created_at": "2026-10-23 18:30:00+00:00"
+              }
+            ]
+          },
+          "table_row_counts": {
+            "customers": 30
+          },
+          "orig_rows": [
+            [
+              "Bengaluru"
+            ],
+            [
+              "Delhi"
+            ],
+            [
+              "Mumbai"
+            ]
+          ],
+          "new_rows": [
+            [
+              "Bengaluru"
+            ],
+            [
+              "Bengaluru"
+            ],
+            [
+              "Bengaluru"
+            ],
+            [
+              "Bengaluru"
+            ],
+            [
+              "Bengaluru"
+            ],
+            [
+              "Bengaluru"
+            ],
+            [
+              "Bengaluru"
+            ],
+            [
+              "Bengaluru"
+            ],
+            [
+              "Bengaluru"
+            ],
+            [
+              "Bengaluru"
+            ],
+            [
+              "Delhi"
+            ],
+            [
+              "Delhi"
+            ],
+            [
+              "Delhi"
+            ],
+            [
+              "Delhi"
+            ],
+            [
+              "Delhi"
+            ],
+            [
+              "Delhi"
+            ],
+            [
+              "Delhi"
+            ],
+            [
+              "Delhi"
+            ],
+            [
+              "Delhi"
+            ],
+            [
+              "Delhi"
+            ]
+          ],
+          "orig_count": 3,
+          "new_count": 30
+        },
+        "cx_dbs": 1,
+        "nonvacuous_fraction": 1.0,
+        "weak": false
+      },
+      "seconds": 0.0219427909978549
+    },
+    {
+      "id": "T8",
+      "expected": "rejected",
+      "result": {
+        "label": "rejected",
+        "rewrite_class": null,
+        "tier_reached": 1,
+        "reason": "top-level ORDER BY removal forbidden",
+        "counterexample": null,
+        "cx_dbs": 0,
+        "nonvacuous_fraction": null,
+        "weak": true
+      },
+      "seconds": 0.007895582999481121
+    },
+    {
+      "id": "T9",
+      "expected": "rejected",
+      "result": {
+        "label": "rejected",
+        "rewrite_class": 3,
+        "tier_reached": 2,
+        "reason": "counterexample mismatch",
+        "counterexample": {
+          "tz": "UTC",
+          "seed": 1234,
+          "case": 0,
+          "tables": {
+            "customers": [
+              {
+                "customer_id": 1,
+                "name": "a",
+                "phone": "a",
+                "city": "Bengaluru",
+                "created_at": "2026-10-23 23:59:59+00:00"
+              },
+              {
+                "customer_id": 2,
+                "name": "b",
+                "phone": "b",
+                "city": "Mumbai",
+                "created_at": "2026-10-24 00:00:00+00:00"
+              },
+              {
+                "customer_id": 3,
+                "name": "c",
+                "phone": "c",
+                "city": "Delhi",
+                "created_at": "2026-10-24 00:00:01+00:00"
+              },
+              {
+                "customer_id": 4,
+                "name": "upi",
+                "phone": "upi",
+                "city": "Bengaluru",
+                "created_at": "2026-10-24 23:59:59+00:00"
+              },
+              {
+                "customer_id": 5,
+                "name": "upi",
+                "phone": "Mumbai",
+                "city": "Mumbai",
+                "created_at": "2026-10-25 00:00:00+00:00"
+              },
+              {
+                "customer_id": 6,
+                "name": "b",
+                "phone": "upi",
+                "city": "Delhi",
+                "created_at": "2026-10-25 00:00:01+00:00"
+              },
+              {
+                "customer_id": 7,
+                "name": "b",
+                "phone": "c",
+                "city": "Bengaluru",
+                "created_at": "2026-10-23 18:29:59+00:00"
+              },
+              {
+                "customer_id": 8,
+                "name": "b",
+                "phone": "Bengaluru",
+                "city": "Mumbai",
+                "created_at": "2026-10-23 18:30:00+00:00"
+              },
+              {
+                "customer_id": 9,
+                "name": "Delhi",
+                "phone": "b",
+                "city": "Delhi",
+                "created_at": "2026-10-23 18:30:01+00:00"
+              },
+              {
+                "customer_id": 10,
+                "name": "packing",
+                "phone": "c",
+                "city": "Bengaluru",
+                "created_at": "2026-10-24 18:29:59+00:00"
+              },
+              {
+                "customer_id": 11,
+                "name": "packing",
+                "phone": "Bengaluru",
+                "city": "Mumbai",
+                "created_at": "2026-10-24 18:30:00+00:00"
+              },
+              {
+                "customer_id": 12,
+                "name": "packing",
+                "phone": "upi",
+                "city": "Delhi",
+                "created_at": "2026-10-24 18:30:01+00:00"
+              },
+              {
+                "customer_id": 13,
+                "name": "upi",
+                "phone": "c",
+                "city": "Bengaluru",
+                "created_at": "2026-10-24 06:59:59+00:00"
+              },
+              {
+                "customer_id": 14,
+                "name": "delivered",
+                "phone": "Mumbai",
+                "city": "Mumbai",
+                "created_at": "2026-10-24 07:00:00+00:00"
+              },
+              {
+                "customer_id": 15,
+                "name": "c",
+                "phone": "delivered",
+                "city": "Delhi",
+                "created_at": "2026-10-24 07:00:01+00:00"
+              },
+              {
+                "customer_id": 16,
+                "name": "cancelled",
+                "phone": "cancelled",
+                "city": "Bengaluru",
+                "created_at": "2026-10-25 06:59:59+00:00"
+              },
+              {
+                "customer_id": 17,
+                "name": "placed",
+                "phone": "cancelled",
+                "city": "Mumbai",
+                "created_at": "2026-10-25 07:00:00+00:00"
+              },
+              {
+                "customer_id": 18,
+                "name": "Delhi",
+                "phone": "placed",
+                "city": "Delhi",
+                "created_at": "2026-10-25 07:00:01+00:00"
+              },
+              {
+                "customer_id": 19,
+                "name": "upi",
+                "phone": "placed",
+                "city": "Bengaluru",
+                "created_at": "2026-10-24 23:59:59+00:00"
+              },
+              {
+                "customer_id": 20,
+                "name": "c",
+                "phone": "cancelled",
+                "city": "Mumbai",
+                "created_at": "2026-10-23 18:30:00+00:00"
+              }
+            ],
+            "stores": [
+              {
+                "store_id": 1,
+                "name": "a",
+                "city": "Bengaluru",
+                "lat": "0",
+                "lon": "0"
+              },
+              {
+                "store_id": 2,
+                "name": "b",
+                "city": "Mumbai",
+                "lat": "1",
+                "lon": "1"
+              },
+              {
+                "store_id": 3,
+                "name": "c",
+                "city": "Delhi",
+                "lat": "2.5",
+                "lon": "2.5"
+              },
+              {
+                "store_id": 4,
+                "name": "Bengaluru",
+                "city": "Bengaluru",
+                "lat": "10",
+                "lon": "10"
+              },
+              {
+                "store_id": 5,
+                "name": "cancelled",
+                "city": "Mumbai",
+                "lat": "100",
+                "lon": "100"
+              },
+              {
+                "store_id": 6,
+                "name": "Mumbai",
+                "city": "Delhi",
+                "lat": "0",
+                "lon": "0"
+              },
+              {
+                "store_id": 7,
+                "name": "Mumbai",
+                "city": "Bengaluru",
+                "lat": "1",
+                "lon": "1"
+              },
+              {
+                "store_id": 8,
+                "name": "packing",
+                "city": "Mumbai",
+                "lat": "2.5",
+                "lon": "2.5"
+              },
+              {
+                "store_id": 9,
+                "name": "Mumbai",
+                "city": "Delhi",
+                "lat": "10",
+                "lon": "10"
+              },
+              {
+                "store_id": 10,
+                "name": "packing",
+                "city": "Bengaluru",
+                "lat": "100",
+                "lon": "100"
+              },
+              {
+                "store_id": 11,
+                "name": "Delhi",
+                "city": "Mumbai",
+                "lat": "0",
+                "lon": "0"
+              },
+              {
+                "store_id": 12,
+                "name": "a",
+                "city": "Delhi",
+                "lat": "1",
+                "lon": "1"
+              },
+              {
+                "store_id": 13,
+                "name": "b",
+                "city": "Bengaluru",
+                "lat": "2.5",
+                "lon": "2.5"
+              },
+              {
+                "store_id": 14,
+                "name": "packing",
+                "city": "Mumbai",
+                "lat": "10",
+                "lon": "10"
+              },
+              {
+                "store_id": 15,
+                "name": "c",
+                "city": "Delhi",
+                "lat": "100",
+                "lon": "100"
+              },
+              {
+                "store_id": 16,
+                "name": "upi",
+                "city": "Bengaluru",
+                "lat": "0",
+                "lon": "0"
+              },
+              {
+                "store_id": 17,
+                "name": "Delhi",
+                "city": "Mumbai",
+                "lat": "1",
+                "lon": "1"
+              },
+              {
+                "store_id": 18,
+                "name": "b",
+                "city": "Delhi",
+                "lat": "2.5",
+                "lon": "2.5"
+              },
+              {
+                "store_id": 19,
+                "name": "packing",
+                "city": "Bengaluru",
+                "lat": "10",
+                "lon": "10"
+              },
+              {
+                "store_id": 20,
+                "name": "placed",
+                "city": "Mumbai",
+                "lat": "100",
+                "lon": "100"
+              }
+            ]
+          },
+          "table_row_counts": {
+            "customers": 30,
+            "stores": 29
+          },
+          "orig_rows": [
+            [
+              1
+            ],
+            [
+              2
+            ],
+            [
+              3
+            ],
+            [
+              4
+            ],
+            [
+              5
+            ],
+            [
+              6
+            ],
+            [
+              7
+            ],
+            [
+              8
+            ],
+            [
+              9
+            ],
+            [
+              10
+            ],
+            [
+              11
+            ],
+            [
+              12
+            ],
+            [
+              13
+            ],
+            [
+              14
+            ],
+            [
+              15
+            ],
+            [
+              16
+            ],
+            [
+              17
+            ],
+            [
+              18
+            ],
+            [
+              19
+            ],
+            [
+              20
+            ]
+          ],
+          "new_rows": [
+            [
+              1
+            ],
+            [
+              2
+            ],
+            [
+              3
+            ],
+            [
+              4
+            ],
+            [
+              5
+            ],
+            [
+              6
+            ],
+            [
+              7
+            ],
+            [
+              8
+            ],
+            [
+              9
+            ],
+            [
+              10
+            ],
+            [
+              11
+            ],
+            [
+              12
+            ],
+            [
+              13
+            ],
+            [
+              14
+            ],
+            [
+              15
+            ],
+            [
+              16
+            ],
+            [
+              17
+            ],
+            [
+              18
+            ],
+            [
+              19
+            ],
+            [
+              20
+            ]
+          ],
+          "orig_count": 29,
+          "new_count": 30
+        },
+        "cx_dbs": 1,
+        "nonvacuous_fraction": 1.0,
+        "weak": false
+      },
+      "seconds": 0.022147042000142392
+    },
+    {
+      "id": "T10",
+      "expected": "rejected",
+      "result": {
+        "label": "rejected",
+        "rewrite_class": null,
+        "tier_reached": 1,
+        "reason": "outside allowed classes",
+        "counterexample": null,
+        "cx_dbs": 0,
+        "nonvacuous_fraction": null,
+        "weak": true
+      },
+      "seconds": 0.011598583998420509
+    },
+    {
+      "id": "E1",
+      "expected": "tested",
+      "result": {
+        "label": "tested",
+        "rewrite_class": 1,
+        "tier_reached": 3,
+        "reason": "tiers 0-3 completed; human approval required",
+        "counterexample": null,
+        "cx_dbs": 50,
+        "nonvacuous_fraction": 1.0,
+        "weak": false
+      },
+      "seconds": 1.2847803750009916
+    },
+    {
+      "id": "E2",
+      "expected": "tested",
+      "result": {
+        "label": "tested",
+        "rewrite_class": 1,
+        "tier_reached": 3,
+        "reason": "tiers 0-3 completed; human approval required",
+        "counterexample": null,
+        "cx_dbs": 50,
+        "nonvacuous_fraction": 1.0,
+        "weak": false
+      },
+      "seconds": 1.2438313330021629
+    },
+    {
+      "id": "E3",
+      "expected": "tested",
+      "result": {
+        "label": "tested",
+        "rewrite_class": 1,
+        "tier_reached": 3,
+        "reason": "tiers 0-3 completed; human approval required",
+        "counterexample": null,
+        "cx_dbs": 50,
+        "nonvacuous_fraction": 1.0,
+        "weak": false
+      },
+      "seconds": 1.3243725419997645
+    },
+    {
+      "id": "E4",
+      "expected": "tested",
+      "result": {
+        "label": "tested",
+        "rewrite_class": 1,
+        "tier_reached": 3,
+        "reason": "tiers 0-3 completed; human approval required",
+        "counterexample": null,
+        "cx_dbs": 50,
+        "nonvacuous_fraction": 1.0,
+        "weak": false
+      },
+      "seconds": 1.0367270419992565
+    },
+    {
+      "id": "E5",
+      "expected": "tested",
+      "result": {
+        "label": "tested",
+        "rewrite_class": 2,
+        "tier_reached": 3,
+        "reason": "tiers 0-3 completed; human approval required",
+        "counterexample": null,
+        "cx_dbs": 50,
+        "nonvacuous_fraction": 1.0,
+        "weak": false
+      },
+      "seconds": 0.896438958003273
+    },
+    {
+      "id": "E6",
+      "expected": "tested",
+      "result": {
+        "label": "tested",
+        "rewrite_class": 2,
+        "tier_reached": 3,
+        "reason": "tiers 0-3 completed; human approval required",
+        "counterexample": null,
+        "cx_dbs": 50,
+        "nonvacuous_fraction": 1.0,
+        "weak": false
+      },
+      "seconds": 0.9273278750006284
+    },
+    {
+      "id": "E7",
+      "expected": "tested",
+      "result": {
+        "label": "tested",
+        "rewrite_class": 2,
+        "tier_reached": 3,
+        "reason": "tiers 0-3 completed; human approval required",
+        "counterexample": null,
+        "cx_dbs": 50,
+        "nonvacuous_fraction": 1.0,
+        "weak": false
+      },
+      "seconds": 3.6443783750000875
+    },
+    {
+      "id": "E8",
+      "expected": "tested",
+      "result": {
+        "label": "tested",
+        "rewrite_class": 2,
+        "tier_reached": 3,
+        "reason": "tiers 0-3 completed; human approval required",
+        "counterexample": null,
+        "cx_dbs": 50,
+        "nonvacuous_fraction": 1.0,
+        "weak": false
+      },
+      "seconds": 1.4754500840026594
+    },
+    {
+      "id": "E9",
+      "expected": "tested",
+      "result": {
+        "label": "tested",
+        "rewrite_class": 3,
+        "tier_reached": 3,
+        "reason": "tiers 0-3 completed; human approval required",
+        "counterexample": null,
+        "cx_dbs": 50,
+        "nonvacuous_fraction": 1.0,
+        "weak": false
+      },
+      "seconds": 1.1194710419986222
+    },
+    {
+      "id": "E10",
+      "expected": "tested",
+      "result": {
+        "label": "tested",
+        "rewrite_class": 3,
+        "tier_reached": 3,
+        "reason": "tiers 0-3 completed; human approval required",
+        "counterexample": null,
+        "cx_dbs": 50,
+        "nonvacuous_fraction": 1.0,
+        "weak": false
+      },
+      "seconds": 0.46765495900035603
+    },
+    {
+      "id": "E11",
+      "expected": "tested",
+      "result": {
+        "label": "tested",
+        "rewrite_class": 3,
+        "tier_reached": 3,
+        "reason": "tiers 0-3 completed; human approval required",
+        "counterexample": null,
+        "cx_dbs": 50,
+        "nonvacuous_fraction": 1.0,
+        "weak": false
+      },
+      "seconds": 6.990379582999594
+    },
+    {
+      "id": "E12",
+      "expected": "tested",
+      "result": {
+        "label": "tested",
+        "rewrite_class": 3,
+        "tier_reached": 3,
+        "reason": "tiers 0-3 completed; human approval required",
+        "counterexample": null,
+        "cx_dbs": 50,
+        "nonvacuous_fraction": 1.0,
+        "weak": false
+      },
+      "seconds": 0.5154919999986305
+    }
+  ]
+}

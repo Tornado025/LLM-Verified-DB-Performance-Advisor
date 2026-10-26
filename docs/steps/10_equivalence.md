@@ -118,6 +118,39 @@ If `cfg.use_llm_veto`: ask the provider "Could these two queries differ for some
 * Metrics script prints the **false-accept rate per tier** over the labelled set (feeds RQ2-equivalence in step 19).
 
 ## 10.10 Done checklist
-- [ ] Every trap rejected, every equivalent pair accepted on the labelled set (or documented exceptions in `PROGRESS.md`)
-- [ ] False-accept/false-block counts per tier recorded
-- [ ] Commit `step 10: equivalence`
+- [x] Every trap rejected, every equivalent pair accepted on the labelled set (or documented exceptions in `PROGRESS.md`)
+- [x] False-accept/false-block counts per tier recorded
+- [x] Commit `step 10: equivalence`
+
+
+## Implementation clarifications
+
+- Step 10 bootstraps the required T1–T10 / E1–E12 catalogue (22 pairs). Step 18
+  expands it to >=60; this does not claim the later dataset-analysis step complete.
+- Generated databases are scratch table populations on one baseline clone, not
+  50 physical database clones. Tables/constraints are created once and truncated
+  between seeded cases. Scratch serial defaults use local sequences; public
+  sequence values are never advanced. Declared FK parents are sampled consistently.
+- Nonvacuous_fraction counts each database once if the original has output in at
+  least one configured timezone, divided by databases run, so it stays in [0,1].
+- Midnights/duplicate children/missing children/nullable columns are targeted within
+  every generated population, with seeded random fill. Composite FK-primary-key
+  table populations are capped at available unique parent combinations.
+- Schema-qualified public table references must be rebound to cx in the scratch
+  world; search_path alone cannot shadow public.orders. Only schema identifiers
+  are rebound; full-data queries use original SQL. This is an explicit correction
+  to section 10.4's unchanged-text instruction for qualified sources.
+- Class 1 recognizes inclusive/degenerate range claims so targeted cases can reject
+  their semantics. Class 3 requires every other clause unchanged; T10 therefore
+  rejects at tier 1, earlier than the catalogue's illustrative tier 2/3.
+- E8's unindexed scalar count is limited identically to three customer IDs on both
+  sides; counting per every customer exceeded the 60s query limit at scale 3.
+- Scratch output comparison has a 10000-row budget; excess or unsupported data
+  yields unknown, never tested. Numeric scratch comparisons use absolute 1e-9
+  tolerance and multiplicity-preserving matching; full EXCEPT ALL is exact SQL.
+- Optional veto requires an explicit veto_fn (make_llm_veto adapts provider.complete).
+  Missing/malformed/failed veto is unknown; a true veto rejects; false never
+  overrides an earlier rejection. Tests use injected mock callbacks, no paid calls.
+- Tier metrics are cumulative trap survival through each prefix, not independent
+  tests or deployment approvals. Final tested remains human-approved evidence,
+  never a claim that arbitrary database states have been proven equivalent.
