@@ -90,6 +90,30 @@ Return `{"queryid": str, "query": str, "calls": int, "total_ms": float, "mean_ms
 * `test_observe_tags`: run two tagged statements, `top_statements` shows tags.
 
 ## 8.9 Done checklist
-- [ ] Fingerprint stable across runs; tests green
-- [ ] Filter proven on the mock fixtures of step 04
-- [ ] Commit `step 08: plans and filter`
+- [x] Fingerprint stable across runs; tests green
+- [x] Filter proven on the mock fixtures of step 04
+- [x] Commit `step 08: plans and filter`
+
+
+## Implementation clarifications
+
+- Explain/signature/filter require idle autocommit sandbox connections. Only
+  trusted or safety-checked SELECTs are accepted; analysis uses read-only transactions.
+- Cache is opt-in through plan_cache() for one job, limited to 256 entries and
+  isolated by backend PID and EXPLAIN options as well as the documented base key.
+  It is invalidated on HypoPG reset/create and never used for ANALYZE. Call
+  invalidate_cache() after any other DDL, ANALYZE, or planning-session change.
+- Existing-index duplication takes precedence over generic no-plan status, because
+  an existing index may already be responsible for the baseline plan. This resolves
+  the conflict between the listed ordering and test_existing_index_skipped.
+- duplicate_of is recorded in Candidate.reason (the fixed contract has no separate
+  duplicate_of field). No Candidate fields were added.
+- Catalog lives in app/catalog.py; its shape is now documented in the contracts.
+  Row counts are estimates; unknown -1 estimates remain unknown rather than invented.
+- top_statements returns StatementList with extension_missing, retaining the list
+  contract. A future API must expose that flag separately alongside the list.
+- pg_stat_statements keeps representative SQL per normalized query identity; tag
+  attribution is based on its stored first comment, not a complete call history.
+- Covering INCLUDE(store_id) yielded a different fingerprint from the composite
+  index on this setup. Identical definitions with different explicit names were
+  used for the duplicate test; no presumed duplicate was hard-coded.
