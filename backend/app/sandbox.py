@@ -74,7 +74,7 @@ def _create(
     name = name or settings.sandbox_prefix + uuid4().hex[:8]
     _validate(name, settings)
     template = template or settings.golden_db
-    if template != settings.golden_db:
+    if template not in {settings.golden_db, "qc_ch_golden"}:
         _validate(template, settings)
     semaphore = _semaphore(settings)
     if not reserved:
@@ -95,7 +95,10 @@ def _create(
             ):
                 raise SandboxError("Free disk hint cannot accommodate a clone pair")
             admin.execute(
-                sql.SQL("/* dpa:sys */ CREATE DATABASE {} TEMPLATE {}").format(
+                # Large templates otherwise emit their full contents into WAL,
+                # triggering checkpoints during the subsequent paired blocks.
+                # FILE_COPY completes its forced checkpoints before returning.
+                sql.SQL("/* dpa:sys */ CREATE DATABASE {} TEMPLATE {} STRATEGY FILE_COPY").format(
                     sql.Identifier(name), sql.Identifier(template)
                 )
             )
@@ -104,7 +107,11 @@ def _create(
             _OWNED[name] = settings
         _analyze(name, None, settings)
         with _LOCK:
-            metrics[name] = {"seconds": perf_counter() - start, "template_bytes": size}
+            metrics[name] = {
+                "seconds": perf_counter() - start,
+                "template_bytes": size,
+                "copy_strategy": "FILE_COPY",
+            }
         _LOG.info(
             "Created clone %s in %.3f seconds (%d template bytes)",
             name,

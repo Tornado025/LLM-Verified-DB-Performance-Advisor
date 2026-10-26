@@ -758,3 +758,361 @@ relative change above 5%; CPU is measured whole-host utilization, not worker dut
 | top_products_store | 0.05 | buffers | 0.000000 | 0.000000 | 0.000000 | 0.000 | 50.5 |
 | top_products_store | 0.1 | time | 0.020911 | 0.180813 | 0.071598 | 0.360 | 54.7 |
 | top_products_store | 0.1 | buffers | 0.000000 | 0.000000 | 0.000000 | 0.000 | 54.7 |
+
+## 2026-10-25 step 08 — plans, HypoPG screening and observation
+
+- Added sandbox-only EXPLAIN with JSON, generic PostgreSQL 16 plans, read-only
+  analyzed SELECTs and an opt-in per-job bounded cache. Session PID/options extend
+  the base cache key so different hypothetical sessions cannot share stale plans.
+  HypoPG create/reset invalidates cache; analyzed plans are never cached.
+- Added structural 12-hex SHA-1 fingerprints, literal normalization, sort-column
+  canonicalization, OID normalization, and depth-preserving preorder traversal.
+  Costs, estimates, actual runtimes, buffers and worker counts do not affect identity.
+- Added B-tree DDL normalization and parameter-bound HypoPG planning with reset
+  in finally, including on query errors. No hypothetical candidate builds a real index.
+- Added kind-specific signatures, fixed-parameter no-plan and same-kind duplicate
+  filtering, existing-index checks and normalized stats-column signatures. Existing
+  physical indexes take duplicate precedence over generic no-plan to meet the
+  reference's explicit existing-index acceptance case. Duplicate owner ID is in reason.
+- Added public schema Catalog (columns/types/nullability, indexes, planner row
+  estimates, PKs/FKs) and pg_stat_statements observation by total/mean time. System
+  and utility SQL is excluded; missing extension is an explicit list-result flag.
+  Updated contracts for Catalog/flag and the step's keyword/generic EXPLAIN signature.
+- Verified fingerprint stability across changing hypothetical OIDs, cache lifetime,
+  cache invalidation, generic $1 planning, analyzed SELECTs, live refusal, real
+  invalid expression DDL rejection, plain/partial/expression/covering hypothetical
+  indexes, statistics signatures, existing-index duplication, query tags and catalog.
+- Commands: focused tests/test_plans.py -m db -s: 11 passed, 5 non-DB cases
+  deselected; make test: 90 passed, 41 DB cases deselected; make lint: Ruff
+  check/format and mypy (17 modules) pass; git diff --check. Raw integration log
+  is /tmp/dpa-step08-plans.log. Cleanup CLI returned 0; no sandbox leaks.
+- All 24 step 04 fixtures were screened on a baseline clone at scale 3, seed 1234.
+  recent_orders status index was skipped_noplan; delivered_at DATE index was
+  rejected_invalid_ddl. Its real clone attempt also rejected it. Two identical
+  index definitions with different names were skipped_duplicate on the second.
+  INCLUDE(store_id) had a different signature and was retained, per observed plans.
+- Fixture observations also differ from hypotheses: hourly_sales composite index
+  and open_order_customers partial index did not change their sampled plans here.
+  The deliberately wrong hourly-window rewrite also had the same structural plan
+  and was dropped. Correct/wrong delivered-day rewrites both survived screening.
+  Surviving means proposed only, never selected, equivalent, faster or safe.
+- This is plan screening, not the LLM safety allowlist or equivalence engine.
+  No LLM/network calls; no qc_live changes; query measurements/guard decisions
+  were not fabricated. Step 09 not started. Commit pending user's message.
+
+- Final normalization edge check: preserve case and significant whitespace inside
+  quoted identifiers, so differently named columns/tables never collapse together.
+
+## 2026-10-25 step 09 — providers, allowlist and plan-saturation sampling
+
+- Added typed provider/context/result contracts, bounded JSON extraction, prompt
+  construction with seeded table/index order variation, OpenRouter and Ollama
+  HTTP clients, and deterministic mock sampling with trusted parameter binding.
+- HTTP clients implement bounded 429/5xx/transport backoff, optional OpenRouter
+  response_format fallback, one parse-reminder retry, usage/model/provider/temperature
+  records, output/prompt size caps and optional explicit request budgets. No full
+  prompts, keys or provider error bodies are logged. Settings repr hides credentials.
+- Pure safety checks reject comments, multiple statements, DML/locking/INTO,
+  unknown tables/columns, non-B-tree or unique indexes, oversized indexes, volatile
+  index expressions, unsupported functions, system schemas, custom cast types and
+  operator classes. CONCURRENTLY is removed before plan checking. Rewrite output
+  names/count are checked against an explicitly supplied baseline via qualification.
+  Semantic correctness and the three rewrite-class validation remain step 10 work.
+- The proposer runs safety before normalization/signature DB calls, records
+  rejections/duplicates and usage, enforces per-job index identity, stops on plan
+  saturation or should_stop(), and records a cumulative novelty curve. Provider
+  failures stop the run rather than falsely implying saturation. Updated contracts
+  for provider/proposer signatures, Catalog.original_sql and the result curve.
+- Local mock integration is reproducible and saturates on recent_orders, keeping
+  multiple distinct signatures. Every step 04 mock fixture is safety-screened;
+  deliberately semantically wrong rewrites may pass syntax/scope checks and still
+  need equivalence. Invalid DDL and rejected safety evidence are separately tested.
+- Initially configured GPT-4.1 Mini with explicit user authorization and $3 budget.
+  Live models API confirmed input $0.40/M, output $1.60/M. Real smoke call:
+  OpenAI provider, temperature 0.7, 970 prompt / 89 completion tokens,
+  reported cost $0.0005304; one index proposal parsed and passed the safety screen.
+- Generation used 60 hand-written seed questions (6 categories, 12 sale-specific),
+  producing 228 saved questions validated by the final safety checker and read-only
+  EXPLAIN on qc_live. 53 are sale-specific, all day labels 1..14 represented.
+  SHA256 questions.json: e94ea64fc4af6aae4afc2f925133c4adbd96aac84978cb2323d4a4dc1b38bbd7.
+  Completed saved generation responses: 11 requests, reported cost $0.0594336.
+- User requested a smaller model while generation was running. Terminated that
+  worker and preserved its >=200 accepted items. Metadata explicitly records Mini
+  as their source and the user-requested stop. An interrupted in-flight response,
+  if billed, is not included in the saved-response subtotal; do not claim account
+  billing/remaining credits from this subtotal. No regeneration or further Mini calls.
+- Changed ignored .env to openai/gpt-4.1-nano; mock remains default LLM_PROVIDER.
+  Live models API confirmed Nano input $0.10/M, output $0.40/M (4x cheaper token
+  rates). One Nano smoke call via Azure, temperature 0.7, 970 prompt / 152 completion
+  tokens, cost $0.0001578. Its parsed rewrite was cleanly rejected by the allowlist;
+  this is not evidence of correctness or a model-quality benchmark.
+- Recorded completed-response subtotal: $0.0601218 including both smoke calls.
+  Generation capped at 15 HTTP requests; each request at 8192 output tokens and
+  50000 encoded prompt bytes. The user's $3 limit was not treated as a spending goal.
+- Provider wire/usage verification references: OpenRouter chat reference
+  https://openrouter.ai/docs/api/api-reference/chat/send-chat-completion-request;
+  model pricing https://openrouter.ai/openai/gpt-4.1-nano/providers;
+  Ollama source docs https://github.com/ollama/ollama/blob/main/docs/api.md.
+- Verification: make test 146 passed, 44 DB/real-LLM cases deselected; make lint
+  Ruff check/format and mypy (25 modules) pass. Focused mock DB tests passed;
+  final focused mock DB run: 2 passed, 2 non-DB cases deselected. Cleanup CLI
+  returned 0. Read-only re-audit of all 228 saved queries had zero failures. Real calls were
+  explicit, not hidden in unit tests; real API pytest is marked llm and opt-in.
+  HTTP retry/fallback/parse tests use MockTransport only. Seed list coverage checked.
+- .env is ignored and mode 0600. A scan of every Git-visible file found no API
+  credential. No destructive qc_live operations, no research-source changes.
+  Step 10 not started. Step 08/09 changes remain uncommitted pending user's message.
+
+## 2026-10-25 step 10 — tiered rewrite equivalence tested
+
+- Implemented syntax/output-name/count/type-family checks with read-only LIMIT 0;
+  identical SQL returns unknown. Restricted structural recognizers cover bare
+  range predicates, correlated EXISTS/IN/scalar-to-join claims and redundant
+  DISTINCT/internal-sort/join removal. Top-level sort removal is always rejected.
+- Implemented seeded counterexample rows in cx: PK/unique keys, ancestor tables,
+  FK parent selection, duplicate join keys, no-child parents, NULLs, numeric/text
+  literal pools and local-midnight boundaries in all configured timezones. Local
+  scratch sequences avoid modifying public serial sequences. Cleanup uses finally.
+- Each eligible positive runs 50 seeded scratch databases (seed 1234+k), default
+  rows_per_table 30, in UTC/Asia-Kolkata/America-Los_Angeles, then symmetric full-data
+  EXCEPT ALL, count and ordered-result hash checks under all three zones. Queries
+  execute read-only with transaction-local timeout, timezone and search_path.
+- Results carry tested/rejected/unknown, class/tier, actual scratch count, bounded
+  nonvacuous fraction, weak flag and truncated replayable counterexample evidence
+  with seed/case/row counts. Unsupported generators, unhashable JSON, timeout,
+  scratch-size excess and unavailable veto fail closed. No claim of proof.
+- Added an explicit optional veto adapter; it preserves reported usage in the
+  reason and can only downgrade. It is disabled by default and tested with mocks;
+  no additional OpenRouter calls or credits were used in this step.
+- Bootstrapped backend/data/rewrite_pairs.json with the 10 mandatory traps and
+  12 positive cases across all three classes, with human-written explanations.
+  This is the step 10 seed catalogue, not step 18's future >=60-pair expansion.
+- Initial smoke check exposed EXISTS as a sqlglot Func subclass. Added it as a
+  structural predicate to the safety allowlist and added a regression test.
+  The unbounded E8 scalar COUNT over 60000 customers timed out without an index;
+  bounded both versions to the same three customer IDs rather than loosening
+  timeout or masking a failure. It now tests the same scalar-to-join behavior.
+- Final measured sweep: all T1–T10 rejected, all E1–E12 tested. Every E case ran
+  all 50 scratch databases with nonvacuous_fraction=1.0, weak=False, and completed
+  tier 3. T1's first mismatch was Asia/Kolkata. Other targeted tier-2 traps caught
+  inclusive/degenerate bounds, dropped subquery filter, invalid DISTINCT removal
+  and a filtering join removal. T4/T5/T8/T10 reject structurally at tier 1.
+- Prefix-tier false-accept/false-block counts follow. These are planted-set
+  survival statistics, not universal error-rate estimates. No candidate can be
+  selected for application merely by passing an early tier.
+
+| Through tier | Traps surviving / 10 | Equivalent blocked / 12 |
+|---|---:|---:|
+| 0 | 10 | 0 |
+| 1 | 6 | 0 |
+| 2 | 0 | 0 |
+| 3 | 0 | 0 |
+
+- Full measured 22-pair sweep took 19.441 seconds at scale
+  3. Saved raw verdicts, counterexamples, policy and pair hash in
+  experiments/results/equivalence_report.json. Runner: scripts/equivalence_report.py.
+- Verification: make test 173 passed, 73 DB/real-LLM cases deselected; focused
+  tests/test_equivalence.py -m db: 29 passed, 25 then-current unit cases deselected
+  in 28.13s (including the sweep and additional DB edge checks); make lint: Ruff
+  check/format and mypy (26 modules) pass; git diff --check passes.
+- Additional checks: session timezone/search_path restoration; unchanged public
+  sequence state; scratch cleanup after success and injected insertion error;
+  timeout returns unknown; nullable JSON reaches unknown at tier 3, NOT NULL JSON
+  at tier 2; output type-family mismatch rejected at tier 0; live DB forbidden;
+  duplicate/NULL/numeric comparisons; CTE sort recognizer; explicit mock veto.
+- Final cleanup CLI returned 0: no sandbox databases remain. No qc_live writes,
+  raw research-data changes or model charges. Step 11 not started. Commit pending
+  user's chosen message; previous step 08/09 work remains uncommitted.
+
+## 2026-10-25 step 10 — resumed final safety review
+
+- Added a defensive call to safety.check with trusted schema/baseline context before
+  executing candidate SQL for output-description checks. Regression confirms a
+  system-schema candidate never reaches the description query.
+- Re-ran the complete equivalence sweep: all 10 traps rejected, all 12 equivalent
+  examples tested after 50 scratch populations and three timezones each. Updated
+  equivalence_report.json with this measured run.
+- Commands: make test (173 passed, 74 DB/real-LLM cases deselected); focused DB
+  equivalence suite (30 passed, 26 non-DB cases deselected, 31.45 seconds);
+  make lint and git diff --check passed. Cleanup CLI returned 0.
+- No API calls or model charges. Step 10 is verified; step 11 has not started.
+  Changes remain uncommitted pending the user's chosen message.
+
+## 2026-10-25 step 11 — runner and BenchBase implementation (acceptance in progress)
+
+- Added deterministic Poisson schedules, profile-specific product skew/polling,
+  precomputed order parameters and logical references to earlier scheduled order
+  creations. Logical references avoid depending on concurrently allocated sequence
+  ids. Seeded status transition budgets prevent exhausted active pools. A/B reuse
+  the same schedule and initial pools. Fresh clones per A/A pair avoid state drift.
+- Worker connections execute the five trusted transactions; a separate dispatcher
+  keeps arrivals open-loop. Finish-target latency includes queueing; OOS/errors,
+  dropped arrivals, dashboard samples and dispatcher lag are retained. Dashboard
+  samples are excluded from protected transaction cells. Stragglers are bounded.
+- Clone preparation fills missing hot stock rows as well as updating existing
+  ones: the seed intentionally omits 20% of stock rows, so UPDATE alone cannot
+  meet the requested available-hot-stock fixture. Flash preload inserts 2,000
+  products with stock for 20 stores and refreshes prices. Flash20 skips explicit
+  ANALYZE; autovacuum remains enabled and may analyze asynchronously.
+- Actual 20-second calibration extended beyond the original 320 TPS ceiling to
+  640/1,280/2,560, because 320 was not saturation. Place-order p95 was 14.513 ms at
+  5 TPS, 8.090 ms at 1,280 TPS, then 5,674.199 ms at 2,560 TPS. Last good rate:
+  1,280 TPS; uncensored. Local BASE_RATE_TPS=41 gives flash20=820 TPS (64.06%).
+  BLOCK_SECONDS=12 covers the 10-second normal dashboard interval and rare types;
+  A/A uses longer 20-second normal and 10-second flash5 blocks. Hardware/scale
+  changes require recalibration. Raw measurements: backend/data/calibration.json.
+- Built pinned CMU BenchBase 33c00473807ebd49304d114a6d769d2d2b2bbb34 using verified
+  Temurin 23.0.2+7. README's Java 21 advice differs from pom.xml's Java 23 target;
+  Java 27 fails in its formatter plugin. Build command: JAVA_HOME=<jdk23-home>
+  ./mvnw clean package -P postgres -DskipTests. Packaging succeeded; upstream
+  tests were not run. Source/JDK/distribution/raw logs are ignored; provenance
+  and upstream license retained in benchbase/.
+- Actual load_ch('qc_ch_golden', 10) succeeded; warehouse count checked and CH
+  template closed to ordinary connections. Source confirms composite benchmark
+  name tpcc,chbenchmark and work attribute arrival="poisson". Four configs and
+  adapter preserve separate CH databases, ms conversion, independent abort/error/
+  retry counts, missing-data nulls, and fresh output directories. See benchbase/
+  README.md for sources, commands and limitations. No model calls or charges.
+- Acceptance still running: A/A raw checkpoints are retained in
+  experiments/results/workload_aa.json. No A/A PASS or step completion claimed
+  yet. BenchBase 60-second profile executions follow A/A to avoid interference.
+  Final acceptance/test numbers will be appended. No commit without the user's
+  chosen message; no step 12 work started.
+
+### Step 11 checkpoint interference diagnosis
+
+- Initial A/A attempt: 40 normal pairs, mean logs place_order 0.0152,
+  update_status -0.0094, order_status -0.0020, stock_decrement -0.0243,
+  picker_queue_read -0.0267. Upper bounds 0.0630/0.0620/0.0347/0.0469/-0.0049:
+  first two BLOCK, remaining three PASS. Flash5 stopped after three completed
+  pairs. Evidence retained as workload_aa_busy_host.json; this is not acceptance.
+- User reported the Mac quiet before a fresh attempt. Spikes persisted (e.g.
+  134–171 ms place_order and 149–169 ms update_status, while dispatcher lag
+  remained about 5 ms). This rules out treating desktop activity as the complete
+  explanation. Interrupted the attempt with SIGINT; contexts cleaned clones.
+  Completed pairs retained as workload_aa_wal_log.json, explicitly incomplete.
+- PostgreSQL logs repeatedly showed "checkpoints are occurring too frequently
+  (1 second apart)" and WAL-triggered checkpoints lasting about 43 seconds during
+  blocks. PostgreSQL 16 CREATE DATABASE defaults to WAL_LOG, logging every copied
+  template block. Repeated pairs of 348 MB templates created substantial WAL.
+- Changed sandbox creation to STRATEGY FILE_COPY: much smaller WAL records and
+  forced checkpoints completed before clone creation returns. This changes clone
+  preparation, not database tuning knobs or measured transaction definitions.
+  Official reference: https://www.postgresql.org/docs/16/sql-createdatabase.html
+  (strategy parameter). Record actual clone strategy in metrics/A/A evidence.
+  No claim of resolved measurement noise until the corrected A/A run passes.
+- make test: 179 passed / 78 deselected. make lint: ruff check+format and mypy
+  clean (28 app modules). Focused workload DB tests: 3 passed / 4 deselected in
+  8.11s, including actual FILE_COPY cloning/preparation/traffic/error accounting.
+- Repeating calibration after this preparation change. Prior calibration raw
+  data retained locally in ignored benchbase/results/calibration_wal_log.json.
+
+## 2026-10-25 step 11 — paused at user request
+
+- User asked to continue tomorrow. Sent SIGINT to the active A/A worker; it
+  exited 130 and its caffeinate process ended. Verified zero qc_sbx_* databases
+  and zero workload connections. No benchmark/download worker started for later.
+- Corrected FILE_COPY calibration completed successfully: last good rate 1,280
+  TPS, 2,560 TPS exceeded the threshold; BASE_RATE_TPS remains 41 and local
+  BLOCK_SECONDS remains 12. Low-load p95 and final overload values are in the
+  current backend/data/calibration.json. Current calibration numbers:
+  low-load p95=14.241698 ms; overload p95=2298.457598 ms.
+- Corrected A/A checkpoint: normal, 13 completed pairs; profile passed=False.
+  {'place_order': {'mean_log': -0.000884, 'upper': 0.05705, 'state': 'CONTINUE'}, 'update_status': {'mean_log': 0.000707, 'upper': 0.073528, 'state': 'CONTINUE'}, 'order_status': {'mean_log': 0.009858, 'upper': 0.109348, 'state': 'CONTINUE'}, 'stock_decrement': {'mean_log': -0.007706, 'upper': 0.081369, 'state': 'CONTINUE'}, 'picker_queue_read': {'mean_log': -0.011094, 'upper': 0.024635, 'state': 'PASS'}}
+- A/A remains incomplete; do not mark step 11 finished. Saved current raw
+  pairs in experiments/results/workload_aa.json. Earlier failed/interrupted
+  attempts are workload_aa_busy_host.json and workload_aa_wal_log.json; retain
+  them as non-acceptance evidence. Current log: /tmp/dpa-step11-aa.log.
+- Resume: read this entry, inspect worker state (do not duplicate), then rerun
+  `python backend/scripts/validate_workload_aa.py` on a quiet Mac, preserving
+  the interrupted checkpoint separately first. The CLI currently starts a fresh
+  experiment rather than appending pairs. Default blocks normal=20s, flash5=10s;
+  acceptance is >=12 pairs, all five types PASS and abs(mean log)<0.03 within40.
+  Bounds retain alpha=.05, delta=.05, family10, looks35. File-copy strategy is
+  recorded per clone. No weakening checks or selectively discarding pairs.
+- BenchBase source/JDK/build and ten-warehouse qc_ch_golden load are complete.
+  Still run `python backend/scripts/benchbase_smoke.py` after A/A (never concurrently):
+  normal/flash5/flash10/flash20 each60s plus flash20 with active warehouse range2.
+  It creates qc_ch if absent, uses fresh FILE_COPY CH clones, checkpoints actual
+  results into experiments/results/ch_smoke.json and drops temporary clones.
+- Remaining verification: slow A/A evidence audit; focused sandbox/workload DB
+  tests (including FILE_COPY); make test and make lint after final edits. Last
+  completed results:179 unit tests passed,3 focused workload DB tests passed,
+  Ruff clean and mypy clean28 modules. Minor subsequent edits were metadata/
+  evidence assertions/scripts; rerun final checks. Slow A/A audit intentionally
+  fails on the current incomplete checkpoint. All other step08–11 changes remain
+  uncommitted, per user's control of commit messages. No step12 work started.
+
+## 2026-10-26 step 11 — resumed at user request
+
+- Read current AGENTS.md, contracts, step 11 and the saved pause entry. No prior
+  benchmark workers remained. Docker Desktop was stopped; started it and the
+  existing db container without resetting/seeding or changing the named volume.
+- Added explicit --resume to the A/A CLI. It rejects changed policies, durations,
+  seed/order prefixes, invalid blocks and non-FILE_COPY clones; reconstructs all
+  paired observations from raw samples; preserves the original40-pair budget and
+  look allocation; and records resumed_at timestamps. Prior completed13 pairs
+  were retained, not selectively discarded. Backup before resuming:
+  experiments/results/workload_aa_paused_20261025.json.
+- Running caffeinate -i python backend/scripts/validate_workload_aa.py --resume;
+  current log /tmp/dpa-step11-aa-resume.log. Independent BenchBase runs remain
+  queued after A/A; no concurrent heavy experiments or real LLM calls.
+- Added a unit control rejecting missing/incompatible resume checkpoints before
+  any database work. Final acceptance and verification results pending.
+
+### Step 11 A/A acceptance completed on 2026-10-26
+- Resumed experiment completed successfully without changing thresholds or dropping prior completed pairs. Seeds1234+i,16workers, normal20s/flash5 10s; alpha=.05, delta=.05, family10,35looks, max40pairs.
+- All below are derived from the saved raw samples, in percent.
+
+| Profile | Pairs | Transaction | Geometric mean change % | Upper bound % | Verdict |
+|---|---:|---|---:|---:|---|
+| normal | 32 | place_order | 0.0716 | 2.8077 | PASS |
+| normal | 32 | update_status | 0.9613 | 4.9412 | PASS |
+| normal | 32 | order_status | 0.2005 | 4.4280 | PASS |
+| normal | 32 | stock_decrement | 0.2227 | 4.3895 | PASS |
+| normal | 32 | picker_queue_read | -0.7089 | 1.1183 | PASS |
+| flash5 | 15 | place_order | -0.8836 | 4.2663 | PASS |
+| flash5 | 15 | update_status | -0.7935 | 4.4317 | PASS |
+| flash5 | 15 | order_status | -1.1079 | 4.4131 | PASS |
+| flash5 | 15 | stock_decrement | -2.7790 | 4.3868 | PASS |
+| flash5 | 15 | picker_queue_read | -0.3587 | 3.0070 | PASS |
+
+- Every mean log magnitude is below.03, every upper bound is below.05, every block is valid, and no arrivals were dropped. Raw latencies include queueing and failed transactions.
+- Failed attempts were retained: normal A/B counts match exactly per type (place5130, update189, status134, stock677, picker0); flash5 counts likewise match (5974,422,628,1005,0). These include out-of-stock attempts and references to failed planned order creations; this is not a claim that all attempted orders succeeded. Dashboard samples are present but excluded from protected cells.
+- Current result: experiments/results/workload_aa.json; saved interrupted/failed attempts remain separate and are not used as acceptance passes. Completed normal32pairs and flash5 15pairs.
+- Started separate BenchBase smoke runs only after A/A exited0. No real LLM calls. Final functional tests and BenchBase results pending.
+
+### Step 11 final verification — 2026-10-26
+- BenchBase completed all five CH-benCHmark/TPC-C-derived smoke scenarios on
+  disposable clones: normal, flash5, flash10, flash20, and flash20 with two
+  active warehouses. Every run lasted about 60 seconds and included all five
+  protected transaction sample types. Results are in
+  `experiments/results/ch_smoke.json`; each run records measured throughput and
+  successful goodput separately.
+- BenchBase throughput/goodput requests per second: normal 36.5/19.9; flash5
+  215.1/193.5; flash10 429.9/331.4; flash20 831.9/544.0; flash20 with two
+  active warehouses 835.1/361.8. These are local smoke measurements, not
+  certified TPC-C results or claims about production capacity.
+- The smoke run exposed unexpected SQL errors: 0 normal, 0 flash5, 1,430
+  flash10, 11,511 flash20, and 2 flash20/two-warehouse. PostgreSQL logged
+  `out of shared memory` and recommended reviewing
+  `max_pred_locks_per_transaction`; it is 64 in this environment. BenchBase's
+  sample configuration uses SERIALIZABLE transactions. This is recorded as an
+  observed limitation, not a clean/error-free benchmark pass. No PostgreSQL
+  runtime setting was changed because tuning configuration is outside scope.
+- Final checks: `make test` — 180 passed, 78 deselected;
+  `make lint` — Ruff check/format and mypy clean across 28 app modules;
+  `pytest -m 'db and not slow' tests/test_sandbox.py tests/test_workload.py` —
+  8 passed, 6 deselected; and `pytest -m 'db and slow' tests/test_workload.py`
+  — 1 passed, 7 deselected (saved A/A evidence audit).
+- Calibration remains BASE_RATE_TPS=41, from measured saturation at 1,280 TPS;
+  2,560 TPS exceeded the target. Measured low-load p95 was 14.24 ms and
+  overload p95 was 2,298.46 ms. Sandbox clones were cleaned up; `qc_live` was
+  not used for benchmark writes, and both golden databases remain closed to
+  ordinary connections.
+- Step 11 acceptance checks are complete. No commit was created; the commit
+  checklist remains for the user to supply the commit message. No step 12 work
+  started.
+- Created `docs/POST_21_FOLLOWUPS.md` to track the BenchBase high-load predicate-
+  lock errors and Step 07 host-noise variance test. Both are explicitly deferred
+  until after Step 21 and do not gate or alter numbered-step acceptance.

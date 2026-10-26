@@ -184,6 +184,20 @@ class ProfileSpec:
     dashboard_refresh_s: float   # background report refresh period
     pre_sale_load: bool          # bulk catalogue load before the block
     analyze_after_load: bool
+
+@dataclass
+class Arrival:
+    t: float                     # seconds relative to block start
+    txn: str
+    params: dict                 # precomputed; logical indices for created orders
+
+@dataclass
+class BlockResult:
+    seconds: float
+    latencies: dict[str, list[float]]  # milliseconds, including queueing
+    errors: dict[str, int]
+    dropped: int
+    metadata: dict = field(default_factory=dict) # validity, seed, OOS and dispatcher evidence
 ```
 
 ## 0.6 Errors (`app/errors.py`)
@@ -208,16 +222,18 @@ API error body: `{"error": {"code": "...", "message": "...", "detail": {...}}}`.
 | `pg` | `connect(dbname, autocommit=True) -> psycopg.Connection`; `admin_connect()`; `render_sql(conn, sql, params: dict) -> str`; `mask_dsn(str)->str` |
 | `store` | `Store(path)`; `create_job(params)->job_id`; `set_job_status`; `emit(job_id, step, level, message, data=None)`; `events_after(job_id, last_id)->list`; `save_candidate(c)`; `get_candidates(job_id)`; `save_evidence(job_id, shape_id, card)`; `get_evidence(job_id)`; `create_applied(...)`; `list_applied()`; `update_applied(...)` |
 | `shapes` | `REPORT_SHAPES: dict[str, Shape]`, `ORDER_TXNS: dict[str, TxnDef]`, `load_as_of(conn) -> datetime`, `sample_params(shape, conn, rng, as_of) -> dict`, `render(shape, conn, params) -> str` |
-| `observe` | `top_statements(conn, limit=20, order="total") -> list[dict]` |
-| `llm.base` | `LLMProvider.suggest(shape, ctx: SchemaContext, sample_idx: int) -> SuggestResult(candidates: list[RawCandidate], usage: dict)`; `get_provider(settings)` |
+| `catalog` | `get_catalog(conn) -> Catalog` (`tables: list[dict]`, `indexes: list[dict]`, `row_counts: dict[str, float]`, `primary_keys: list[dict]`, `foreign_keys: list[dict]`, `original_sql: str | None = None`; row counts are planner estimates; attach baseline SQL before rewrite safety checks) |
+| `observe` | `top_statements(conn, limit=20, order="total") -> list[dict]` (list-compatible `StatementList` has `extension_missing: bool`) |
+| `llm.base` | `LLMProvider.suggest(shape, ctx: SchemaContext, sample_idx: int, rendered_sql: str) -> SuggestResult(candidates: list[RawCandidate], usage: dict)`; `get_provider(settings)` |
 | `safety` | `check(raw: RawCandidate, catalog: Catalog) -> tuple[bool, str]` |
 | `propose` | `propose(shape, provider, ctx, signature_fn, k_max, patience, safety_fn) -> ProposeResult(kept: list[Candidate], samples: int, saturated: bool, usage: dict, rejected: list[dict])` |
-| `plans` | `explain(conn, sql, analyze=False, buffers=False) -> dict`; `fingerprint(plan: dict) -> str`; `hypo_plan(conn, create_index_sql, query_sql) -> dict`; `signature_for(candidate, original_sql, conn) -> str` |
-| `equivalence` | `check_rewrite(conn, original_sql, rewrite_sql, cfg: EquivConfig) -> EquivResult` |
-| `sandbox` | `create_clone(name=None) -> str`; `drop_clone(name)`; `clone_pair(candidate, settings) -> ContextManager[ClonePair(a: str, b: str)]`; `apply_ddl(db, sql)`; `analyze(db)` |
+| `plans` | `explain(conn, sql, *, analyze=False, buffers=False, generic=False) -> dict`; `fingerprint(plan: dict) -> str`; `hypo_plan(conn, create_index_sql, query_sql) -> dict`; `signature_for(candidate, original_sql, conn) -> str` |
+| `equivalence` | `check_rewrite(conn, original_sql, rewrite_sql, cfg: EquivConfig) -> EquivResult`; `EquivConfig(cx_dbs=50, rows_per_table=30, timezones=("UTC","Asia/Kolkata","America/Los_Angeles"), stmt_timeout_ms=60000, min_nonvacuous=0.30, seed=1234, use_llm_veto=False, veto_fn=None)`; `make_llm_veto(provider.complete)` supplies an explicit optional veto callback, never implicit network calls |
+| `sandbox` | `create_clone(name=None, template=None) -> str` (default commerce golden; also permits `qc_ch_golden`); `drop_clone(name)`; `clone_pair(candidate, settings) -> ContextManager[ClonePair(a: str, b: str)]`; `apply_ddl(db, sql)`; `analyze(db)` |
 | `measure` | `run_once(conn, sql, metric) -> float`; `paired_report(conn_a, sql_a, conn_b, sql_b, *, metric, delta=None, alpha, looks, family, min_n, max_n, batch, mode="noninferiority", budget_s=None, rng=None) -> PairedResult(d: list[float], summary: Summary, seconds: float)` |
 | `stats` | `verdict(d, delta, alpha, looks, family, min_n, max_n) -> tuple[State, Bounds | None]`; `summarize(d, delta, alpha, looks, family, min_n, max_n) -> Summary`; `SequentialTest` class |
-| `workload` | `build_schedule(profile, seconds, seed, base_rate, pools) -> list[Arrival]`; `run_block(dbname, schedule, workers, stop_event=None) -> BlockResult`; `prepare_clone(dbname, profile, seed)` |
+| `workload` | `load_profiles() -> dict[str, ProfileSpec]`; `load_pools(dbname, profile) -> dict`; `build_schedule(profile, seconds, seed, base_rate, pools) -> list[Arrival]` (list-compatible `Schedule` preserves duration/profile/seed/pools); `run_block(dbname, schedule, workers, *, stop_event=None, record_timeline=False) -> BlockResult`; `prepare_clone(dbname, profile, seed) -> dict` (sandbox only) |
+| `benchbase` | `load_ch(db, scale) -> None`; `run_profile(db, profile, out_dir, seconds, active_warehouses=None) -> dict`; `parse_results(out_dir) -> dict[str, dict]` (per transaction, latencies in ms); `parse_summary(out_dir) -> dict` (elapsed time, requests, throughput and goodput; missing values remain null) |
 | `guard` | `run_guard(candidate, profiles, settings, progress) -> GuardResult` |
 | `race` | `race(candidates, shape, settings, progress) -> RaceResult` |
 | `decide` | `decide(survivors, shape, settings, progress) -> Decision` |

@@ -1,0 +1,6 @@
+[
+  {"name":"normal","rate_mult":1,"zipf_s":0.8,"hot_set_size":50,"hot_share":0.15,"status_poll_mult":1,"dashboard_refresh_s":10,"pre_sale_load":false,"analyze_after_load":false},
+  {"name":"flash5","rate_mult":5,"zipf_s":1.1,"hot_set_size":20,"hot_share":0.40,"status_poll_mult":2,"dashboard_refresh_s":5,"pre_sale_load":true,"analyze_after_load":true},
+  {"name":"flash10","rate_mult":10,"zipf_s":1.2,"hot_set_size":15,"hot_share":0.55,"status_poll_mult":3,"dashboard_refresh_s":3,"pre_sale_load":true,"analyze_after_load":true},
+  {"name":"flash20","rate_mult":20,"zipf_s":1.3,"hot_set_size":10,"hot_share":0.70,"status_poll_mult":4,"dashboard_refresh_s":2,"pre_sale_load":true,"analyze_after_load":false}
+]

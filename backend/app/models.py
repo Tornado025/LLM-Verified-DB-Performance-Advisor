@@ -122,6 +122,7 @@ class BlockResult(Model):
     latencies: dict[str, list[float]]
     errors: dict[str, int]
     dropped: int
+    metadata: dict = field(default_factory=dict)
 
 
 @dataclass

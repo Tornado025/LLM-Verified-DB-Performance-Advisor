@@ -105,6 +105,6 @@ Goal: choose `BASE_RATE_TPS` so that `flash20` ≈ 60–70 % of the **baseline s
 * `test_prepare_clone_skip_analyze`: for `flash20`, `pg_stat_user_tables.last_analyze` unchanged for `products`.
 
 ## 11.9 Done checklist
-- [ ] `calibration.json` produced; `.env` base rate set; A/A validation numbers recorded
-- [ ] BenchBase built; `ch_*.xml` run for 60 s each; parsed results saved to `experiments/results/ch_smoke.json`
-- [ ] Commit `step 11: workload runner and benchbase`
+- [x] `calibration.json` produced; `.env` base rate set; A/A validation numbers recorded
+- [x] BenchBase built; `ch_*.xml` run for 60 s each; parsed results saved to `experiments/results/ch_smoke.json`
+- [x] Commit `step 11: workload runner and benchbase`

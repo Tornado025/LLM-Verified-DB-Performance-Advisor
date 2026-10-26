@@ -6,14 +6,19 @@ human approval, application, monitoring, and automatic rollback on regression.
 
 ## Status
 
-Steps 01–07 are implemented and verified (host-noise variance test is inconclusive). Step 02 provides the original
+Steps 01–11 are implemented and verified (step 07's host-noise variance test remains inconclusive). Step 02 provides the original
 generated quick-commerce schema and deterministic seeder. Research datasets complement later experiments;
 they are not imported into the operational commerce tables. Backend configuration, connection helpers, models, logging and SQLite metadata
 storage are implemented, along with eight report shapes and five protected order
 transactions. The statistics engine provides conservative sequential safety and
 improvement tests. A reproducible RQ2 simulation compares decision rules under
 noise. Disposable clones, read-only paired measurements and a real A/A noise
-report are available. The tuning pipeline, API and frontend are not implemented.
+report are available. Plan fingerprinting, hypothetical-index screening, schema
+metadata and slow-query observation are implemented. The tuning pipeline, API and
+frontend are not implemented. LLM providers, safety screening and plan-saturation
+proposal sampling are implemented; 228 generated report questions are available.
+Rewrite equivalence checks include generated counterexamples and full-data
+comparisons; the 22-case seed catalogue passes. Results are tested, never proven.
 See [project guidance](AGENTS.md), [contracts](docs/steps/00_contracts.md), and the
 [progress log](docs/PROGRESS.md). Implementation follows steps 01–21 in order.
 
@@ -21,6 +26,26 @@ See [project guidance](AGENTS.md), [contracts](docs/steps/00_contracts.md), and 
 
 Requires Python 3.11, Docker with Compose v2, Git, and make. Node 20+ is needed
 when the frontend is introduced in step 16.
+
+Step 11 acceptance is complete. It adds seeded normal/flash-sale traffic, local
+rate calibration and a separate BenchBase CH workload. The BenchBase flash10 and
+flash20 observations include PostgreSQL predicate-lock errors; the noise
+injector variance check from Step 07 is inconclusive. Both are recorded for
+review after Step 21 in [deferred follow-ups](docs/POST_21_FOLLOWUPS.md) and do
+not interrupt the numbered implementation sequence.
+With the environment active, `python backend/scripts/calibrate_rate.py` measures
+the host's saturation and writes `backend/data/calibration.json`; set its
+recommended `BASE_RATE_TPS` in `.env`. Rerun after changing hardware or seed scale.
+`python backend/scripts/validate_workload_aa.py` compares identical clones with
+counterbalanced ordering and checkpoints every pair. It can take tens of minutes;
+a failed or inconclusive check does not become a safety PASS. The slow DB test
+recomputes acceptance from the raw saved pairs, or runs the experiment if absent.
+After an interruption, add `--resume` to retain completed pairs and the original
+40-pair budget. Resume checks the policy, durations, seeds, ordering and raw block
+validity, then rebuilds the paired observations; it rejects incompatible evidence.
+See [BenchBase setup](benchbase/README.md) for the separate benchmark build and
+60-second profile commands. Profile values are experiment parameters; calibration
+comes from measured database traffic on this host.
 
 ```sh
 cp .env.example .env
@@ -99,3 +124,31 @@ python -m app.simulate --trials 400 --seed 1234 --borderline --out ../experiment
 This uses synthetic measurements and needs no database or LLM. Trials are per
 true-effect value per noise level. The JSON includes error-rate confidence
 intervals and measurement costs; borderline effects are reported separately.
+
+
+## LLM development and real calls
+
+`LLM_PROVIDER=mock` is the free development/test default. For explicit real calls,
+configure `OPENROUTER_API_KEY` and `OPENROUTER_MODEL` only in ignored `.env` and
+select `LLM_PROVIDER=openrouter`. GPT-4.1 Nano is the current low-cost testing choice;
+API key/account limits remain the user's responsibility. Real API tests require
+`RUN_LLM_TESTS=1` and the `llm` marker. Routine tests mock HTTP completely.
+
+The saved questions were generated with GPT-4.1 Mini before switching to Nano;
+`backend/data/questions_meta.json` preserves model/usage/provenance. Queries passed
+safety and EXPLAIN checks, which do not establish that their answers match the
+English questions or that a rewrite is equivalent.
+
+
+## Re-run rewrite equivalence measurements
+
+With PostgreSQL running and the virtual environment active:
+
+```sh
+python backend/scripts/equivalence_report.py
+```
+
+This uses disposable clones, 50 seeded scratch populations per eligible pair and
+three timezones. It requires no model calls and writes measured verdicts to
+`experiments/results/equivalence_report.json`. The seed catalogue contains ten
+known traps and twelve equivalent pairs; later analysis expands it.

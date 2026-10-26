@@ -1,0 +1,20 @@
+{
+  "upstream": "https://github.com/cmu-db/benchbase",
+  "commit": "33c00473807ebd49304d114a6d769d2d2b2bbb34",
+  "jdk_vendor": "Eclipse Temurin",
+  "jdk_version": "23.0.2+7",
+  "source_java_target": 23,
+  "distribution_sha256": "59b5d07cab9ed487cbb1cf043e6df0f576cba4d512cde28fa8d15fc2fa25961e",
+  "jdk_package": {
+    "checksum": "749993e751f085c7ae713140066a90800075e4aeedfac50a5ed0c5457131c5a0",
+    "checksum_link": "https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23.0.2%2B7/OpenJDK23U-jdk_aarch64_mac_hotspot_23.0.2_7.tar.gz.sha256.txt",
+    "download_count": 179910,
+    "link": "https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23.0.2%2B7/OpenJDK23U-jdk_aarch64_mac_hotspot_23.0.2_7.tar.gz",
+    "metadata_link": "https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23.0.2%2B7/OpenJDK23U-jdk_aarch64_mac_hotspot_23.0.2_7.tar.gz.json",
+    "name": "OpenJDK23U-jdk_aarch64_mac_hotspot_23.0.2_7.tar.gz",
+    "signature_link": "https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23.0.2%2B7/OpenJDK23U-jdk_aarch64_mac_hotspot_23.0.2_7.tar.gz.sig",
+    "size": 207224316
+  },
+  "build_command": "JAVA_HOME=<pinned-jdk> ./mvnw clean package -P postgres -DskipTests",
+  "upstream_tests": "not run by packaging; adapter and real benchmark smoke checks are separate"
+}

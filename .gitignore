@@ -30,3 +30,9 @@ experiments/results/*.tmp
 
 # Reproducible detailed inventory; keep the analysis script and report in Git.
 experiments/results/dataset_inventory.json
+
+# Local BenchBase source/build runtime and generated credential-bearing configs
+benchbase/.runtime/
+
+# Interrupted/failed A/A diagnostic checkpoints (keep the final report only)
+experiments/results/workload_aa_*.json

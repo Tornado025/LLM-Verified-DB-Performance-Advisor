@@ -45,7 +45,7 @@ Implement exactly the dataclasses from contracts 0.5, plus:
 @dataclass
 class Arrival: t: float; txn: str; params: dict      # scheduled offset seconds, TxnType, parameters
 @dataclass
-class BlockResult: seconds: float; latencies: dict[str, list[float]]; errors: dict[str, int]; dropped: int
+class BlockResult: seconds: float; latencies: dict[str, list[float]]; errors: dict[str, int]; dropped: int; metadata: dict = field(default_factory=dict)
 @dataclass
 class PairedResult: d: list[float]; summary: Summary; seconds: float; metric: str; a_vals: list[float]; b_vals: list[float]
 @dataclass
@@ -56,6 +56,7 @@ class GuardResult: passed: bool; profiles: dict; seconds: float; blocks: dict; f
 class RaceResult: states: dict[str, Summary]; dropped: dict[str, str]; seconds: float; runs: int
 @dataclass
 class ProposeResult: kept: list; samples: int; saturated: bool; usage: dict; rejected: list
+    # Step 09 extension: distinct_plan_curve: list[int] = field(default_factory=list)
 ```
 Add `to_dict()` helpers (`dataclasses.asdict`) and `from_dict` for `Candidate`, `Summary`.
 
