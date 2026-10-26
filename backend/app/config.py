@@ -24,7 +24,9 @@ class Settings:
     pg_host: str = field(default_factory=lambda: os.getenv("PG_HOST", "localhost"))
     pg_port: int = field(default_factory=lambda: int(os.getenv("PG_PORT", "5432")))
     pg_user: str = field(default_factory=lambda: os.getenv("PG_USER", "advisor"))
-    pg_password: str = field(default_factory=lambda: os.getenv("PG_PASSWORD", "advisor"))
+    pg_password: str = field(
+        default_factory=lambda: os.getenv("PG_PASSWORD", "advisor"), repr=False
+    )
     golden_db: str = field(default_factory=lambda: os.getenv("GOLDEN_DB", "qc_golden"))
     live_db: str = field(default_factory=lambda: os.getenv("LIVE_DB", "qc_live"))
     maint_db: str = field(default_factory=lambda: os.getenv("MAINT_DB", "postgres"))
@@ -57,7 +59,9 @@ class Settings:
     )
     stmt_timeout_ms: int = field(default_factory=lambda: int(os.getenv("STMT_TIMEOUT_MS", "60000")))
     llm_provider: str = field(default_factory=lambda: os.getenv("LLM_PROVIDER", "mock"))
-    openrouter_api_key: str = field(default_factory=lambda: os.getenv("OPENROUTER_API_KEY", ""))
+    openrouter_api_key: str = field(
+        default_factory=lambda: os.getenv("OPENROUTER_API_KEY", ""), repr=False
+    )
     openrouter_model: str = field(default_factory=lambda: os.getenv("OPENROUTER_MODEL", ""))
     openrouter_base_url: str = field(
         default_factory=lambda: os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1")

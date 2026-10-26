@@ -1,0 +1,1598 @@
+[
+  {
+    "id": "q0001",
+    "question": "Which products currently have zero available stock across all stores?",
+    "sql": "SELECT p.product_id, p.name AS product_name, s.store_id, s.name AS store_name FROM products p JOIN store_stock ss ON p.product_id = ss.product_id JOIN stores s ON ss.store_id = s.store_id WHERE ss.qty = 0 AND p.is_active = true ORDER BY s.store_id, p.product_id",
+    "sale_specific": false,
+    "day": 14
+  },
+  {
+    "id": "q0002",
+    "question": "Identify stock records updated within the last 15 minutes before 2026-10-25 12:00:00 UTC.",
+    "sql": "SELECT store_id, product_id, qty, reserved, updated_at FROM store_stock WHERE updated_at BETWEEN '2026-10-25 11:45:00+00' AND '2026-10-25 12:00:00+00' ORDER BY updated_at DESC",
+    "sale_specific": false,
+    "day": 14
+  },
+  {
+    "id": "q0003",
+    "question": "List stores that have less than 10 units in stock for each product they carry.",
+    "sql": "SELECT s.store_id, s.name AS store_name, p.product_id, p.name AS product_name, ss.qty FROM stores s JOIN store_stock ss ON s.store_id = ss.store_id JOIN products p ON ss.product_id = p.product_id WHERE ss.qty < 10 ORDER BY s.store_id, p.product_id",
+    "sale_specific": false,
+    "day": 14
+  },
+  {
+    "id": "q0004",
+    "question": "How many units are currently reserved in stock broken down by store?",
+    "sql": "SELECT s.store_id, s.name AS store_name, SUM(ss.reserved) AS total_reserved_units FROM stores s JOIN store_stock ss ON s.store_id = ss.store_id GROUP BY s.store_id, s.name ORDER BY total_reserved_units DESC",
+    "sale_specific": false,
+    "day": 6
+  },
+  {
+    "id": "q0005",
+    "question": "For each category, what is the total available stock quantity across all stores?",
+    "sql": "SELECT c.category_id, c.name AS category_name, COALESCE(SUM(ss.qty),0) AS total_stock FROM categories c LEFT JOIN products p ON c.category_id = p.category_id LEFT JOIN store_stock ss ON p.product_id = ss.product_id GROUP BY c.category_id, c.name ORDER BY total_stock ASC",
+    "sale_specific": false,
+    "day": 3
+  },
+  {
+    "id": "q0006",
+    "question": "Which stores have the highest count of distinct products currently in stock?",
+    "sql": "SELECT s.store_id, s.name AS store_name, COUNT(DISTINCT ss.product_id) AS distinct_products FROM stores s JOIN store_stock ss ON s.store_id = ss.store_id WHERE ss.qty > 0 GROUP BY s.store_id, s.name ORDER BY distinct_products DESC LIMIT 10",
+    "sale_specific": false,
+    "day": 13
+  },
+  {
+    "id": "q0007",
+    "question": "Find products that have not had their stock quantities updated for at least one full day before the reference time.",
+    "sql": "SELECT p.product_id, p.name, MAX(ss.updated_at) AS last_stock_update FROM products p LEFT JOIN store_stock ss ON p.product_id = ss.product_id GROUP BY p.product_id, p.name HAVING MAX(ss.updated_at) < '2026-10-24 12:00:00+00' OR MAX(ss.updated_at) IS NULL ORDER BY last_stock_update NULLS FIRST",
+    "sale_specific": false,
+    "day": 2
+  },
+  {
+    "id": "q0008",
+    "question": "Which stores have stock quantities below their reserved units during the flash sale?",
+    "sql": "WITH flash_sale AS (SELECT value::timestamp AT TIME ZONE 'UTC' AS start_time FROM meta WHERE key = 'flash_sale_start') SELECT s.store_id, s.name AS store_name, SUM(ss.qty) AS total_qty, SUM(ss.reserved) AS total_reserved FROM stores s JOIN store_stock ss ON s.store_id = ss.store_id GROUP BY s.store_id, s.name HAVING SUM(ss.qty) < SUM(ss.reserved) ORDER BY total_qty ASC",
+    "sale_specific": true,
+    "day": 4
+  },
+  {
+    "id": "q0009",
+    "question": "What is the average quantity of stock available per product category in the city of 'New York'?",
+    "sql": "SELECT c.category_id, c.name AS category_name, AVG(ss.qty) AS avg_stock_qty FROM categories c JOIN products p ON c.category_id = p.category_id JOIN store_stock ss ON p.product_id = ss.product_id JOIN stores s ON ss.store_id = s.store_id WHERE s.city = 'New York' GROUP BY c.category_id, c.name ORDER BY avg_stock_qty DESC",
+    "sale_specific": false,
+    "day": 2
+  },
+  {
+    "id": "q0010",
+    "question": "List all stores that have any product with zero stock but non-zero reserved quantities.",
+    "sql": "SELECT DISTINCT s.store_id, s.name FROM stores s JOIN store_stock ss ON s.store_id = ss.store_id WHERE ss.qty = 0 AND ss.reserved > 0 ORDER BY s.store_id",
+    "sale_specific": false,
+    "day": 5
+  },
+  {
+    "id": "q0011",
+    "question": "Which customers from 'San Francisco' placed orders in the last 7 days before 2026-10-25 12:00:00 UTC?",
+    "sql": "SELECT DISTINCT c.customer_id, c.name FROM customers c JOIN orders o ON c.customer_id = o.customer_id WHERE c.city = 'San Francisco' AND o.created_at BETWEEN '2026-10-18 12:00:00+00' AND '2026-10-25 12:00:00+00' ORDER BY c.customer_id",
+    "sale_specific": false,
+    "day": 8
+  },
+  {
+    "id": "q0012",
+    "question": "Which riders are currently active and assigned to stores located in the city of 'Chicago'?",
+    "sql": "SELECT r.rider_id, r.name, s.store_id, s.name AS store_name FROM riders r JOIN stores s ON r.store_id = s.store_id WHERE r.status = 'active' AND s.city = 'Chicago' ORDER BY r.rider_id",
+    "sale_specific": false,
+    "day": 2
+  },
+  {
+    "id": "q0013",
+    "question": "What is the maximum unit price of products sold per brand in orders completed before 2026-10-25 12:00:00 UTC?",
+    "sql": "SELECT p.brand, MAX(oi.unit_price) AS max_unit_price FROM order_items oi JOIN orders o ON oi.order_id = o.order_id JOIN products p ON oi.product_id = p.product_id WHERE o.status = 'completed' AND o.created_at < '2026-10-25 12:00:00+00' GROUP BY p.brand ORDER BY max_unit_price DESC",
+    "sale_specific": true,
+    "day": 12
+  },
+  {
+    "id": "q0014",
+    "question": "Find stores in 'Los Angeles' that have the largest sum of reserved stock quantities.",
+    "sql": "SELECT s.store_id, s.name AS store_name, SUM(ss.reserved) AS total_reserved FROM stores s JOIN store_stock ss ON s.store_id = ss.store_id WHERE s.city = 'Los Angeles' GROUP BY s.store_id, s.name ORDER BY total_reserved DESC LIMIT 5",
+    "sale_specific": false,
+    "day": 4
+  },
+  {
+    "id": "q0015",
+    "question": "Which customers have placed orders paid by 'credit_card' with totals exceeding 100 in the last 30 days before the cutoff time?",
+    "sql": "SELECT DISTINCT c.customer_id, c.name FROM customers c JOIN orders o ON c.customer_id = o.customer_id WHERE o.payment_mode = 'credit_card' AND o.total > 100 AND o.created_at BETWEEN '2026-09-25 12:00:00+00' AND '2026-10-25 12:00:00+00' ORDER BY c.customer_id",
+    "sale_specific": true,
+    "day": 12
+  },
+  {
+    "id": "q0016",
+    "question": "Compute the total quantity of all products in stock grouped by store and ordered by city alphabetically.",
+    "sql": "SELECT s.city, s.store_id, s.name AS store_name, SUM(ss.qty) AS total_stock FROM stores s JOIN store_stock ss ON s.store_id = ss.store_id GROUP BY s.city, s.store_id, s.name ORDER BY s.city, s.store_id",
+    "sale_specific": false,
+    "day": 5
+  },
+  {
+    "id": "q0017",
+    "question": "Which categories have the fewest total active products currently in stock across all stores?",
+    "sql": "SELECT c.category_id, c.name AS category_name, COUNT(DISTINCT p.product_id) AS active_products_in_stock FROM categories c JOIN products p ON c.category_id = p.category_id JOIN store_stock ss ON p.product_id = ss.product_id WHERE p.is_active = true AND ss.qty > 0 GROUP BY c.category_id, c.name ORDER BY active_products_in_stock ASC LIMIT 5",
+    "sale_specific": false,
+    "day": 12
+  },
+  {
+    "id": "q0018",
+    "question": "What is the total number of orders delivered by each rider in the last 60 days before the fixed timestamp?",
+    "sql": "SELECT r.rider_id, r.name AS rider_name, COUNT(o.order_id) AS delivered_orders FROM riders r LEFT JOIN orders o ON r.rider_id = o.rider_id AND o.delivered_at BETWEEN '2026-08-26 12:00:00+00' AND '2026-10-25 12:00:00+00' GROUP BY r.rider_id, r.name ORDER BY delivered_orders DESC",
+    "sale_specific": false,
+    "day": 14
+  },
+  {
+    "id": "q0019",
+    "question": "Which stores have at least one product with reserved stock exceeding 50 units during the flash sale?",
+    "sql": "WITH flash_sale AS (SELECT value::timestamp AT TIME ZONE 'UTC' AS start_time FROM meta WHERE key = 'flash_sale_start') SELECT DISTINCT s.store_id, s.name FROM stores s JOIN store_stock ss ON s.store_id = ss.store_id WHERE ss.reserved > 50 ORDER BY s.store_id",
+    "sale_specific": true,
+    "day": 14
+  },
+  {
+    "id": "q0020",
+    "question": "Retrieve the 20 most recent orders placed by a specific customer identified by ID.",
+    "sql": "SELECT order_id, store_id, status, total, created_at FROM orders WHERE customer_id = 123 ORDER BY created_at DESC LIMIT 20;",
+    "sale_specific": false,
+    "day": 4
+  },
+  {
+    "id": "q0021",
+    "question": "Count the total orders delivered yesterday for each individual store.",
+    "sql": "SELECT store_id, COUNT(*) AS orders_delivered FROM orders WHERE date(delivered_at) = '2026-10-24' GROUP BY store_id ORDER BY store_id;",
+    "sale_specific": false,
+    "day": 8
+  },
+  {
+    "id": "q0022",
+    "question": "List all orders that currently have a packing status.",
+    "sql": "SELECT order_id, customer_id, store_id, status FROM orders WHERE status = 'packing' ORDER BY created_at DESC;",
+    "sale_specific": false,
+    "day": 7
+  },
+  {
+    "id": "q0023",
+    "question": "Show the count of cancelled orders grouped by the payment mode used.",
+    "sql": "SELECT payment_mode, COUNT(*) AS cancelled_orders FROM orders WHERE status = 'cancelled' GROUP BY payment_mode ORDER BY cancelled_orders DESC;",
+    "sale_specific": false,
+    "day": 4
+  },
+  {
+    "id": "q0024",
+    "question": "Identify stores with the highest number of open orders at present.",
+    "sql": "SELECT store_id, COUNT(*) AS open_orders FROM orders WHERE status IN ('placed', 'packing') GROUP BY store_id ORDER BY open_orders DESC LIMIT 10;",
+    "sale_specific": false,
+    "day": 9
+  },
+  {
+    "id": "q0025",
+    "question": "Which orders include more than four distinct order items?",
+    "sql": "SELECT order_id, COUNT(*) AS item_count FROM order_items GROUP BY order_id HAVING COUNT(*) > 4 ORDER BY item_count DESC;",
+    "sale_specific": false,
+    "day": 13
+  },
+  {
+    "id": "q0026",
+    "question": "Calculate the average value of delivered orders for each city.",
+    "sql": "SELECT c.city, AVG(o.total) AS avg_order_value FROM orders o JOIN customers c ON o.customer_id = c.customer_id WHERE o.status = 'delivered' GROUP BY c.city ORDER BY avg_order_value DESC;",
+    "sale_specific": false,
+    "day": 13
+  },
+  {
+    "id": "q0027",
+    "question": "Find orders that have not been assigned to any rider yet.",
+    "sql": "SELECT order_id, store_id, status FROM orders WHERE rider_id IS NULL ORDER BY created_at DESC;",
+    "sale_specific": false,
+    "day": 10
+  },
+  {
+    "id": "q0028",
+    "question": "During the flash sale, count how many orders are placed each minute in the last hour.",
+    "sql": "SELECT date_trunc('minute', created_at) AS minute_slot, COUNT(*) AS orders_count FROM orders WHERE created_at BETWEEN '2026-10-25 11:00:00+00' AND '2026-10-25 12:00:00+00' GROUP BY minute_slot ORDER BY minute_slot;",
+    "sale_specific": true,
+    "day": 13
+  },
+  {
+    "id": "q0029",
+    "question": "How many orders placed during the flash sale are currently waiting at each store?",
+    "sql": "SELECT store_id, COUNT(*) AS waiting_orders FROM orders WHERE status = 'placed' AND created_at BETWEEN '2026-10-25 11:00:00+00' AND '2026-10-25 12:00:00+00' GROUP BY store_id ORDER BY waiting_orders DESC;",
+    "sale_specific": true,
+    "day": 8
+  },
+  {
+    "id": "q0030",
+    "question": "List all customers from 'Boston' who placed orders in the last 10 days before the cutoff timestamp.",
+    "sql": "SELECT DISTINCT c.customer_id, c.name FROM customers c JOIN orders o ON c.customer_id = o.customer_id WHERE c.city = 'Boston' AND o.created_at BETWEEN '2026-10-15 12:00:00+00' AND '2026-10-25 12:00:00+00' ORDER BY c.name;",
+    "sale_specific": false,
+    "day": 10
+  },
+  {
+    "id": "q0031",
+    "question": "What is the total revenue generated by each payment mode for orders delivered in the previous week?",
+    "sql": "SELECT payment_mode, SUM(total) AS total_revenue FROM orders WHERE status = 'delivered' AND delivered_at BETWEEN '2026-10-18 12:00:00+00' AND '2026-10-25 12:00:00+00' GROUP BY payment_mode ORDER BY total_revenue DESC;",
+    "sale_specific": false,
+    "day": 14
+  },
+  {
+    "id": "q0032",
+    "question": "Identify all riders currently active and assigned to stores in 'Seattle'.",
+    "sql": "SELECT r.rider_id, r.name, r.status FROM riders r JOIN stores s ON r.store_id = s.store_id WHERE r.status = 'active' AND s.city = 'Seattle' ORDER BY r.name;",
+    "sale_specific": false,
+    "day": 10
+  },
+  {
+    "id": "q0033",
+    "question": "Show the average number of order items per order for orders completed in the last 30 days.",
+    "sql": "SELECT AVG(item_count) AS avg_items_per_order FROM (SELECT order_id, COUNT(*) AS item_count FROM order_items WHERE order_id IN (SELECT order_id FROM orders WHERE status = 'delivered' AND delivered_at BETWEEN '2026-09-25 12:00:00+00' AND '2026-10-25 12:00:00+00') GROUP BY order_id) sub;",
+    "sale_specific": false,
+    "day": 1
+  },
+  {
+    "id": "q0034",
+    "question": "Which products have been ordered more than 100 times during the last month?",
+    "sql": "SELECT oi.product_id, p.name, SUM(oi.qty) AS total_qty_ordered FROM order_items oi JOIN products p ON oi.product_id = p.product_id JOIN orders o ON oi.order_id = o.order_id WHERE o.created_at BETWEEN '2026-09-25 12:00:00+00' AND '2026-10-25 12:00:00+00' GROUP BY oi.product_id, p.name HAVING SUM(oi.qty) > 100 ORDER BY total_qty_ordered DESC;",
+    "sale_specific": false,
+    "day": 11
+  },
+  {
+    "id": "q0035",
+    "question": "Find stores where the sum of reserved stock is greater than 100 units during the flash sale.",
+    "sql": "SELECT store_id, SUM(reserved) AS total_reserved FROM store_stock WHERE updated_at BETWEEN '2026-10-25 11:00:00+00' AND '2026-10-25 12:00:00+00' GROUP BY store_id HAVING SUM(reserved) > 100 ORDER BY total_reserved DESC;",
+    "sale_specific": true,
+    "day": 11
+  },
+  {
+    "id": "q0036",
+    "question": "List orders from the last 48 hours that contain items priced above 50 units.",
+    "sql": "SELECT DISTINCT o.order_id, o.customer_id, o.status, o.total, o.created_at FROM orders o JOIN order_items oi ON o.order_id = oi.order_id JOIN products p ON oi.product_id = p.product_id WHERE o.created_at BETWEEN '2026-10-23 12:00:00+00' AND '2026-10-25 12:00:00+00' AND oi.unit_price > 50 ORDER BY o.created_at DESC;",
+    "sale_specific": false,
+    "day": 4
+  },
+  {
+    "id": "q0037",
+    "question": "Which customers have placed orders with payment mode 'paypal' totaling more than 200 in the last 15 days?",
+    "sql": "SELECT DISTINCT c.customer_id, c.name FROM customers c JOIN orders o ON c.customer_id = o.customer_id WHERE o.payment_mode = 'paypal' AND o.total > 200 AND o.created_at BETWEEN '2026-10-10 12:00:00+00' AND '2026-10-25 12:00:00+00' ORDER BY c.name;",
+    "sale_specific": false,
+    "day": 13
+  },
+  {
+    "id": "q0038",
+    "question": "Count orders that are currently in 'placed' status per city for stores located in 'Chicago'.",
+    "sql": "SELECT s.city, COUNT(o.order_id) AS placed_orders FROM orders o JOIN stores s ON o.store_id = s.store_id WHERE o.status = 'placed' AND s.city = 'Chicago' GROUP BY s.city;",
+    "sale_specific": false,
+    "day": 3
+  },
+  {
+    "id": "q0039",
+    "question": "What is the minimum and maximum price of products available in stores located in 'Miami'?",
+    "sql": "SELECT MIN(p.price) AS min_price, MAX(p.price) AS max_price FROM products p JOIN store_stock ss ON p.product_id = ss.product_id JOIN stores s ON ss.store_id = s.store_id WHERE s.city = 'Miami' AND p.is_active = true;",
+    "sale_specific": false,
+    "day": 12
+  },
+  {
+    "id": "q0040",
+    "question": "Find stores with no orders delivered in the last 7 days.",
+    "sql": "SELECT store_id FROM stores WHERE store_id NOT IN (SELECT DISTINCT store_id FROM orders WHERE status = 'delivered' AND delivered_at BETWEEN '2026-10-18 12:00:00+00' AND '2026-10-25 12:00:00+00') ORDER BY store_id;",
+    "sale_specific": false,
+    "day": 13
+  },
+  {
+    "id": "q0041",
+    "question": "During the flash sale, what is the average order total per store?",
+    "sql": "SELECT store_id, AVG(total) AS avg_order_total FROM orders WHERE created_at BETWEEN '2026-10-25 11:00:00+00' AND '2026-10-25 12:00:00+00' GROUP BY store_id ORDER BY avg_order_total DESC;",
+    "sale_specific": true,
+    "day": 7
+  },
+  {
+    "id": "q0042",
+    "question": "Which orders have order items from more than two different categories?",
+    "sql": "SELECT oi.order_id, COUNT(DISTINCT p.category_id) AS category_count FROM order_items oi JOIN products p ON oi.product_id = p.product_id GROUP BY oi.order_id HAVING COUNT(DISTINCT p.category_id) > 2 ORDER BY category_count DESC;",
+    "sale_specific": false,
+    "day": 1
+  },
+  {
+    "id": "q0043",
+    "question": "Identify the top 5 customers by total order value in the last 90 days.",
+    "sql": "SELECT c.customer_id, c.name, SUM(o.total) AS total_spent FROM customers c JOIN orders o ON c.customer_id = o.customer_id WHERE o.created_at BETWEEN '2026-07-27 12:00:00+00' AND '2026-10-25 12:00:00+00' GROUP BY c.customer_id, c.name ORDER BY total_spent DESC LIMIT 5;",
+    "sale_specific": false,
+    "day": 3
+  },
+  {
+    "id": "q0044",
+    "question": "Count how many orders have been assigned to riders who are currently 'inactive'.",
+    "sql": "SELECT COUNT(o.order_id) AS orders_assigned_to_inactive_riders FROM orders o JOIN riders r ON o.rider_id = r.rider_id WHERE r.status = 'inactive';",
+    "sale_specific": false,
+    "day": 10
+  },
+  {
+    "id": "q0045",
+    "question": "During the flash sale, which stores have more than 50 orders currently in 'packing' status?",
+    "sql": "SELECT store_id, COUNT(*) AS packing_orders FROM orders WHERE status = 'packing' AND created_at BETWEEN '2026-10-25 11:00:00+00' AND '2026-10-25 12:00:00+00' GROUP BY store_id HAVING COUNT(*) > 50 ORDER BY packing_orders DESC;",
+    "sale_specific": true,
+    "day": 1
+  },
+  {
+    "id": "q0046",
+    "question": "For each store, how many riders are currently marked as idle?",
+    "sql": "select s.store_id, s.name as store_name, count(r.rider_id) as idle_riders from stores s left join riders r on s.store_id = r.store_id and r.status = 'idle' group by s.store_id, s.name order by s.name",
+    "sale_specific": false,
+    "day": 10
+  },
+  {
+    "id": "q0047",
+    "question": "What is the total count of orders each rider has delivered up until the fixed timestamp?",
+    "sql": "select r.rider_id, r.name, count(o.order_id) as delivered_orders from riders r left join orders o on r.rider_id = o.rider_id and o.status = 'delivered' and o.delivered_at <= '2026-10-25T12:00:00+00:00' group by r.rider_id, r.name order by delivered_orders desc",
+    "sale_specific": false,
+    "day": 2
+  },
+  {
+    "id": "q0048",
+    "question": "Which riders currently have the highest number of orders out for delivery, and how many do they have?",
+    "sql": "select r.rider_id, r.name, count(o.order_id) as active_deliveries from riders r join orders o on r.rider_id = o.rider_id where o.status = 'out_for_delivery' group by r.rider_id, r.name order by active_deliveries desc limit 10",
+    "sale_specific": false,
+    "day": 9
+  },
+  {
+    "id": "q0049",
+    "question": "Calculate the average delivery time in minutes for each rider for all completed deliveries in the last 30 days before the frozen timestamp.",
+    "sql": "select r.rider_id, r.name, avg(extract(epoch from (o.delivered_at - o.created_at))/60) as avg_delivery_minutes from riders r join orders o on r.rider_id = o.rider_id where o.status = 'delivered' and o.delivered_at between '2026-09-25T12:00:00+00:00' and '2026-10-25T12:00:00+00:00' group by r.rider_id, r.name order by avg_delivery_minutes asc",
+    "sale_specific": false,
+    "day": 8
+  },
+  {
+    "id": "q0050",
+    "question": "List all riders who are assigned to stores located in the city of Bengaluru.",
+    "sql": "select r.rider_id, r.name, s.name as store_name from riders r join stores s on r.store_id = s.store_id where lower(s.city) = 'bengaluru' order by r.name",
+    "sale_specific": false,
+    "day": 1
+  },
+  {
+    "id": "q0051",
+    "question": "Count the number of riders assigned to each city based on their store's location.",
+    "sql": "select s.city, count(r.rider_id) as total_riders from riders r join stores s on r.store_id = s.store_id group by s.city order by s.city",
+    "sale_specific": false,
+    "day": 3
+  },
+  {
+    "id": "q0052",
+    "question": "During the flash sale period from 2026-10-25 10:00 to 2026-10-25 12:00 UTC, which riders have more than one active delivery in progress?",
+    "sql": "select r.rider_id, r.name, count(o.order_id) as active_deliveries from riders r join orders o on r.rider_id = o.rider_id where o.status = 'out_for_delivery' and o.created_at between '2026-10-25T10:00:00+00:00' and '2026-10-25T12:00:00+00:00' group by r.rider_id, r.name having count(o.order_id) > 1 order by active_deliveries desc",
+    "sale_specific": true,
+    "day": 14
+  },
+  {
+    "id": "q0053",
+    "question": "During the flash sale on 2026-10-25 between 09:00 and 12:00, which stores have more active orders than idle riders?",
+    "sql": "select s.store_id, s.name, count(distinct o.order_id) as active_orders, count(distinct r.rider_id) filter (where r.status = 'idle') as idle_riders from stores s left join orders o on s.store_id = o.store_id and o.status in ('placed','packing','out_for_delivery') and o.created_at between '2026-10-25T09:00:00+00:00' and '2026-10-25T12:00:00+00:00' left join riders r on s.store_id = r.store_id group by s.store_id, s.name having count(distinct o.order_id) > count(distinct r.rider_id) filter (where r.status = 'idle') order by active_orders desc",
+    "sale_specific": true,
+    "day": 6
+  },
+  {
+    "id": "q0054",
+    "question": "Which stores have the highest average total order value for orders delivered in the past 90 days?",
+    "sql": "select s.store_id, s.name, avg(o.total) as avg_order_value from stores s join orders o on s.store_id = o.store_id where o.status = 'delivered' and o.delivered_at between '2026-07-27T12:00:00+00:00' and '2026-10-25T12:00:00+00:00' group by s.store_id, s.name order by avg_order_value desc limit 10",
+    "sale_specific": false,
+    "day": 7
+  },
+  {
+    "id": "q0055",
+    "question": "Find the five cities with the greatest number of active riders currently assigned to stores within those cities.",
+    "sql": "select s.city, count(r.rider_id) as active_riders from riders r join stores s on r.store_id = s.store_id where r.status = 'active' group by s.city order by active_riders desc limit 5",
+    "sale_specific": false,
+    "day": 7
+  },
+  {
+    "id": "q0056",
+    "question": "Which customers placed orders during the last 15 days before the frozen timestamp and have used a payment mode of 'credit_card'?",
+    "sql": "select distinct c.customer_id, c.name, c.city from customers c join orders o on c.customer_id = o.customer_id where o.payment_mode = 'credit_card' and o.created_at between '2026-10-10T12:00:00+00:00' and '2026-10-25T12:00:00+00:00' order by c.name",
+    "sale_specific": false,
+    "day": 8
+  },
+  {
+    "id": "q0057",
+    "question": "Identify stores where the combined reserved stock quantity exceeds 200 units during the flash sale period.",
+    "sql": "select ss.store_id, s.name, sum(ss.reserved) as total_reserved from store_stock ss join stores s on ss.store_id = s.store_id where ss.updated_at between '2026-10-25T09:00:00+00:00' and '2026-10-25T12:00:00+00:00' group by ss.store_id, s.name having sum(ss.reserved) > 200 order by total_reserved desc",
+    "sale_specific": true,
+    "day": 3
+  },
+  {
+    "id": "q0058",
+    "question": "For each product category, what is the maximum price of active products currently in stock?",
+    "sql": "select c.category_id, c.name as category_name, max(p.price) as max_active_price from categories c join products p on c.category_id = p.category_id join store_stock ss on p.product_id = ss.product_id where p.is_active = true and ss.qty > 0 group by c.category_id, c.name order by max_active_price desc",
+    "sale_specific": false,
+    "day": 1
+  },
+  {
+    "id": "q0059",
+    "question": "Which riders have delivered at least 50 orders in the last 180 days, and what is their average delivery duration?",
+    "sql": "select r.rider_id, r.name, count(o.order_id) as delivered_orders, avg(extract(epoch from (o.delivered_at - o.created_at))/60) as avg_delivery_minutes from riders r join orders o on r.rider_id = o.rider_id where o.status = 'delivered' and o.delivered_at between '2026-04-28T12:00:00+00:00' and '2026-10-25T12:00:00+00:00' group by r.rider_id, r.name having count(o.order_id) >= 50 order by delivered_orders desc",
+    "sale_specific": false,
+    "day": 10
+  },
+  {
+    "id": "q0060",
+    "question": "List all orders that contain order items from at least three distinct product categories.",
+    "sql": "select o.order_id, count(distinct p.category_id) as category_count from orders o join order_items oi on o.order_id = oi.order_id join products p on oi.product_id = p.product_id group by o.order_id having count(distinct p.category_id) >= 3 order by o.order_id desc limit 20",
+    "sale_specific": false,
+    "day": 4
+  },
+  {
+    "id": "q0061",
+    "question": "During the flash sale, what is the total revenue generated by each store from delivered orders?",
+    "sql": "select s.store_id, s.name, sum(o.total) as total_revenue from stores s join orders o on s.store_id = o.store_id where o.status = 'delivered' and o.delivered_at between '2026-10-25T09:00:00+00:00' and '2026-10-25T12:00:00+00:00' group by s.store_id, s.name order by total_revenue desc",
+    "sale_specific": true,
+    "day": 10
+  },
+  {
+    "id": "q0062",
+    "question": "Which customers from New York have placed orders totaling more than 500 units in the last 60 days?",
+    "sql": "select c.customer_id, c.name, sum(o.total) as total_spent from customers c join orders o on c.customer_id = o.customer_id where lower(c.city) = 'new york' and o.created_at between '2026-08-26T12:00:00+00:00' and '2026-10-25T12:00:00+00:00' group by c.customer_id, c.name having sum(o.total) > 500 order by total_spent desc",
+    "sale_specific": false,
+    "day": 13
+  },
+  {
+    "id": "q0063",
+    "question": "Find all stores in Chicago where the number of orders currently in 'placed' status exceeds 30.",
+    "sql": "select s.store_id, s.name, count(o.order_id) as placed_orders from stores s join orders o on s.store_id = o.store_id where lower(s.city) = 'chicago' and o.status = 'placed' group by s.store_id, s.name having count(o.order_id) > 30 order by placed_orders desc",
+    "sale_specific": false,
+    "day": 7
+  },
+  {
+    "id": "q0064",
+    "question": "Which products have been ordered more than 150 times in total across all stores during the past 60 days?",
+    "sql": "select p.product_id, p.name, sum(oi.qty) as total_ordered from products p join order_items oi on p.product_id = oi.product_id join orders o on oi.order_id = o.order_id where o.created_at between '2026-08-26T12:00:00+00:00' and '2026-10-25T12:00:00+00:00' group by p.product_id, p.name having sum(oi.qty) > 150 order by total_ordered desc",
+    "sale_specific": false,
+    "day": 6
+  },
+  {
+    "id": "q0065",
+    "question": "During the flash sale, which riders assigned to Seattle stores have active deliveries exceeding 3 orders?",
+    "sql": "select r.rider_id, r.name, count(o.order_id) as active_deliveries from riders r join stores s on r.store_id = s.store_id join orders o on o.rider_id = r.rider_id where lower(s.city) = 'seattle' and o.status = 'out_for_delivery' and o.created_at between '2026-10-25T09:00:00+00:00' and '2026-10-25T12:00:00+00:00' group by r.rider_id, r.name having count(o.order_id) > 3 order by active_deliveries desc",
+    "sale_specific": true,
+    "day": 3
+  },
+  {
+    "id": "q0066",
+    "question": "Calculate the average number of products per order for all delivered orders in Houston over the last 45 days.",
+    "sql": "select s.city, avg(items_per_order) as avg_products_per_order from (select o.order_id, count(oi.order_item_id) as items_per_order from orders o join order_items oi on o.order_id = oi.order_id where o.status = 'delivered' and o.delivered_at between '2026-09-10T12:00:00+00:00' and '2026-10-25T12:00:00+00:00' group by o.order_id) sub join orders o2 on sub.order_id = o2.order_id join stores s on o2.store_id = s.store_id where lower(s.city) = 'houston' group by s.city",
+    "sale_specific": false,
+    "day": 11
+  },
+  {
+    "id": "q0067",
+    "question": "Over the last 10 days, what are the total payouts for orders marked as delivered, grouped by store and payment mode?",
+    "sql": "SELECT s.name AS store_name, o.payment_mode, SUM(o.total) AS total_payout FROM orders o JOIN stores s ON o.store_id = s.store_id WHERE o.status = 'delivered' AND o.delivered_at >= '2026-10-15T12:00:00+00:00' AND o.delivered_at < '2026-10-25T12:00:00+00:00' GROUP BY s.name, o.payment_mode ORDER BY s.name, o.payment_mode;",
+    "sale_specific": false,
+    "day": 10
+  },
+  {
+    "id": "q0068",
+    "question": "For each rider, what is the sum of delivered order revenue they handled in the last 30 days?",
+    "sql": "SELECT r.name AS rider_name, SUM(o.total) AS delivered_revenue FROM riders r JOIN orders o ON r.rider_id = o.rider_id WHERE o.status = 'delivered' AND o.delivered_at >= '2026-09-25T12:00:00+00:00' AND o.delivered_at < '2026-10-25T12:00:00+00:00' GROUP BY r.name ORDER BY delivered_revenue DESC;",
+    "sale_specific": false,
+    "day": 13
+  },
+  {
+    "id": "q0069",
+    "question": "What is the daily delivered revenue per store for the month prior to the frozen timestamp?",
+    "sql": "SELECT s.name AS store_name, date_trunc('day', o.delivered_at) AS day, SUM(o.total) AS daily_revenue FROM orders o JOIN stores s ON o.store_id = s.store_id WHERE o.status = 'delivered' AND o.delivered_at >= '2026-09-25T12:00:00+00:00' AND o.delivered_at < '2026-10-25T12:00:00+00:00' GROUP BY s.name, day ORDER BY s.name, day;",
+    "sale_specific": false,
+    "day": 11
+  },
+  {
+    "id": "q0070",
+    "question": "Which stores have delivered revenue exceeding the average delivered revenue per store in the last 60 days?",
+    "sql": "WITH store_revenue AS ( SELECT o.store_id, SUM(o.total) AS revenue FROM orders o WHERE o.status = 'delivered' AND o.delivered_at >= '2026-08-26T12:00:00+00:00' AND o.delivered_at < '2026-10-25T12:00:00+00:00' GROUP BY o.store_id ), avg_revenue AS ( SELECT AVG(revenue) AS avg_rev FROM store_revenue ) SELECT s.name AS store_name, sr.revenue FROM store_revenue sr JOIN stores s ON sr.store_id = s.store_id, avg_revenue WHERE sr.revenue > avg_revenue.avg_rev ORDER BY sr.revenue DESC;",
+    "sale_specific": false,
+    "day": 3
+  },
+  {
+    "id": "q0071",
+    "question": "What is the total cancelled order amount per city for orders cancelled within the last 45 days?",
+    "sql": "SELECT c.city, SUM(o.total) AS cancelled_total FROM orders o JOIN customers c ON o.customer_id = c.customer_id WHERE o.status = 'cancelled' AND o.created_at >= '2026-09-10T12:00:00+00:00' AND o.created_at < '2026-10-25T12:00:00+00:00' GROUP BY c.city ORDER BY cancelled_total DESC;",
+    "sale_specific": false,
+    "day": 12
+  },
+  {
+    "id": "q0072",
+    "question": "Which payment methods had the highest average order value for delivered orders in the last 90 days?",
+    "sql": "SELECT o.payment_mode, AVG(o.total) AS avg_order_value FROM orders o WHERE o.status = 'delivered' AND o.delivered_at >= '2026-07-27T12:00:00+00:00' AND o.delivered_at < '2026-10-25T12:00:00+00:00' GROUP BY o.payment_mode ORDER BY avg_order_value DESC;",
+    "sale_specific": false,
+    "day": 14
+  },
+  {
+    "id": "q0073",
+    "question": "During the flash sale on 2026-10-25 from 08:00 to 12:00 UTC, what is the total delivered revenue per hour?",
+    "sql": "SELECT date_trunc('hour', o.delivered_at) AS hour, SUM(o.total) AS delivered_revenue FROM orders o WHERE o.status = 'delivered' AND o.delivered_at >= '2026-10-25T08:00:00+00:00' AND o.delivered_at < '2026-10-25T12:00:00+00:00' GROUP BY hour ORDER BY hour;",
+    "sale_specific": true,
+    "day": 6
+  },
+  {
+    "id": "q0074",
+    "question": "During the flash sale period from 2026-10-25 09:00 to 12:00 UTC, how much order value remains in orders not yet delivered?",
+    "sql": "SELECT SUM(o.total) AS awaiting_delivery_value FROM orders o WHERE o.status <> 'delivered' AND o.created_at >= '2026-10-25T09:00:00+00:00' AND o.created_at < '2026-10-25T12:00:00+00:00';",
+    "sale_specific": true,
+    "day": 3
+  },
+  {
+    "id": "q0075",
+    "question": "List the total delivered order payouts by store and city for the last 14 days.",
+    "sql": "SELECT s.name AS store_name, s.city, SUM(o.total) AS delivered_payout FROM orders o JOIN stores s ON o.store_id = s.store_id WHERE o.status = 'delivered' AND o.delivered_at >= '2026-10-11T12:00:00+00:00' AND o.delivered_at < '2026-10-25T12:00:00+00:00' GROUP BY s.name, s.city ORDER BY s.city, s.name;",
+    "sale_specific": false,
+    "day": 12
+  },
+  {
+    "id": "q0076",
+    "question": "What is the total delivered revenue handled per rider for stores located in 'San Francisco' in the past 20 days?",
+    "sql": "SELECT r.name AS rider_name, SUM(o.total) AS total_revenue FROM riders r JOIN orders o ON r.rider_id = o.rider_id JOIN stores s ON r.store_id = s.store_id WHERE o.status = 'delivered' AND s.city = 'San Francisco' AND o.delivered_at >= '2026-10-05T12:00:00+00:00' AND o.delivered_at < '2026-10-25T12:00:00+00:00' GROUP BY r.name ORDER BY total_revenue DESC;",
+    "sale_specific": false,
+    "day": 14
+  },
+  {
+    "id": "q0077",
+    "question": "What is the daily delivered revenue per store for stores in 'Austin' for the last 30 days?",
+    "sql": "SELECT s.name AS store_name, date_trunc('day', o.delivered_at) AS day, SUM(o.total) AS daily_revenue FROM orders o JOIN stores s ON o.store_id = s.store_id WHERE o.status = 'delivered' AND s.city = 'Austin' AND o.delivered_at >= '2026-09-25T12:00:00+00:00' AND o.delivered_at < '2026-10-25T12:00:00+00:00' GROUP BY s.name, day ORDER BY s.name, day;",
+    "sale_specific": false,
+    "day": 14
+  },
+  {
+    "id": "q0078",
+    "question": "Which stores in 'Los Angeles' have delivered revenue above the average delivered revenue for that city over the past 60 days?",
+    "sql": "WITH city_store_revenue AS ( SELECT o.store_id, SUM(o.total) AS revenue FROM orders o JOIN stores s ON o.store_id = s.store_id WHERE o.status = 'delivered' AND s.city = 'Los Angeles' AND o.delivered_at >= '2026-08-26T12:00:00+00:00' AND o.delivered_at < '2026-10-25T12:00:00+00:00' GROUP BY o.store_id ), city_avg AS ( SELECT AVG(revenue) AS avg_revenue FROM city_store_revenue ) SELECT s.name AS store_name, csr.revenue FROM city_store_revenue csr JOIN stores s ON csr.store_id = s.store_id, city_avg WHERE csr.revenue > city_avg.avg_revenue ORDER BY csr.revenue DESC;",
+    "sale_specific": false,
+    "day": 2
+  },
+  {
+    "id": "q0079",
+    "question": "Compute the total cancelled order value per city for the last 90 days.",
+    "sql": "SELECT c.city, SUM(o.total) AS cancelled_value FROM orders o JOIN customers c ON o.customer_id = c.customer_id WHERE o.status = 'cancelled' AND o.created_at >= '2026-07-27T12:00:00+00:00' AND o.created_at < '2026-10-25T12:00:00+00:00' GROUP BY c.city ORDER BY cancelled_value DESC;",
+    "sale_specific": false,
+    "day": 13
+  },
+  {
+    "id": "q0080",
+    "question": "Which payment modes achieved the highest average delivered order value in the last 180 days?",
+    "sql": "SELECT o.payment_mode, AVG(o.total) AS avg_value FROM orders o WHERE o.status = 'delivered' AND o.delivered_at >= '2026-04-28T12:00:00+00:00' AND o.delivered_at < '2026-10-25T12:00:00+00:00' GROUP BY o.payment_mode ORDER BY avg_value DESC;",
+    "sale_specific": false,
+    "day": 7
+  },
+  {
+    "id": "q0081",
+    "question": "During the flash sale on 2026-10-25 between 07:00 and 11:00 UTC, what is the hourly delivered revenue per store?",
+    "sql": "SELECT s.name AS store_name, date_trunc('hour', o.delivered_at) AS hour, SUM(o.total) AS delivered_revenue FROM orders o JOIN stores s ON o.store_id = s.store_id WHERE o.status = 'delivered' AND o.delivered_at >= '2026-10-25T07:00:00+00:00' AND o.delivered_at < '2026-10-25T11:00:00+00:00' GROUP BY s.name, hour ORDER BY s.name, hour;",
+    "sale_specific": true,
+    "day": 7
+  },
+  {
+    "id": "q0082",
+    "question": "During the flash sale on 2026-10-25 between 10:00 and 12:00, what is the total value of orders placed but yet to be delivered?",
+    "sql": "SELECT SUM(o.total) AS pending_delivery_value FROM orders o WHERE o.status <> 'delivered' AND o.created_at >= '2026-10-25T10:00:00+00:00' AND o.created_at < '2026-10-25T12:00:00+00:00';",
+    "sale_specific": true,
+    "day": 12
+  },
+  {
+    "id": "q0083",
+    "question": "What are the total delivered payouts by store and city from orders delivered in the last 21 days?",
+    "sql": "SELECT s.name AS store_name, s.city, SUM(o.total) AS delivered_payout FROM orders o JOIN stores s ON o.store_id = s.store_id WHERE o.status = 'delivered' AND o.delivered_at >= '2026-10-04T12:00:00+00:00' AND o.delivered_at < '2026-10-25T12:00:00+00:00' GROUP BY s.name, s.city ORDER BY s.city, s.name;",
+    "sale_specific": false,
+    "day": 13
+  },
+  {
+    "id": "q0084",
+    "question": "For each rider delivering for stores in 'Denver', what is the sum of delivered order revenue handled in the last 15 days?",
+    "sql": "SELECT r.name AS rider_name, SUM(o.total) AS revenue_handled FROM riders r JOIN orders o ON r.rider_id = o.rider_id JOIN stores s ON r.store_id = s.store_id WHERE o.status = 'delivered' AND s.city = 'Denver' AND o.delivered_at >= '2026-10-10T12:00:00+00:00' AND o.delivered_at < '2026-10-25T12:00:00+00:00' GROUP BY r.name ORDER BY revenue_handled DESC;",
+    "sale_specific": false,
+    "day": 4
+  },
+  {
+    "id": "q0085",
+    "question": "Calculate the daily delivered revenue by store for stores located in 'Boston' during the last 60 days.",
+    "sql": "SELECT s.name AS store_name, date_trunc('day', o.delivered_at) AS day, SUM(o.total) AS daily_revenue FROM orders o JOIN stores s ON o.store_id = s.store_id WHERE o.status = 'delivered' AND s.city = 'Boston' AND o.delivered_at >= '2026-08-26T12:00:00+00:00' AND o.delivered_at < '2026-10-25T12:00:00+00:00' GROUP BY s.name, day ORDER BY s.name, day;",
+    "sale_specific": false,
+    "day": 11
+  },
+  {
+    "id": "q0086",
+    "question": "Which stores in 'Seattle' have delivered revenue exceeding the average delivered revenue for that city in the past 90 days?",
+    "sql": "WITH city_revenue AS ( SELECT o.store_id, SUM(o.total) AS revenue FROM orders o JOIN stores s ON o.store_id = s.store_id WHERE o.status = 'delivered' AND s.city = 'Seattle' AND o.delivered_at >= '2026-07-27T12:00:00+00:00' AND o.delivered_at < '2026-10-25T12:00:00+00:00' GROUP BY o.store_id ), city_avg AS ( SELECT AVG(revenue) AS avg_revenue FROM city_revenue ) SELECT s.name AS store_name, cr.revenue FROM city_revenue cr JOIN stores s ON cr.store_id = s.store_id, city_avg WHERE cr.revenue > city_avg.avg_revenue ORDER BY cr.revenue DESC;",
+    "sale_specific": false,
+    "day": 13
+  },
+  {
+    "id": "q0087",
+    "question": "What are the total units sold and total sales revenue by brand for delivered orders in San Francisco over the last 30 days?",
+    "sql": "SELECT p.brand AS brand, SUM(oi.qty) AS total_units_sold, SUM(oi.qty * oi.unit_price) AS total_revenue FROM order_items oi JOIN orders o ON oi.order_id = o.order_id JOIN products p ON oi.product_id = p.product_id JOIN stores s ON o.store_id = s.store_id WHERE s.city = 'San Francisco' AND o.status = 'delivered' AND o.delivered_at >= '2026-09-25T12:00:00+00:00' GROUP BY p.brand ORDER BY total_revenue DESC;",
+    "sale_specific": false,
+    "day": 13
+  },
+  {
+    "id": "q0088",
+    "question": "For each store in Chicago, what is the average number of distinct products sold per day over the past 15 days?",
+    "sql": "SELECT s.store_id, s.name, AVG(daily_product_count) AS avg_distinct_products_per_day FROM stores s JOIN ( SELECT o.store_id, date_trunc('day', o.delivered_at) AS day, COUNT(DISTINCT oi.product_id) AS daily_product_count FROM orders o JOIN order_items oi ON o.order_id = oi.order_id WHERE o.status = 'delivered' AND o.delivered_at >= '2026-10-10T12:00:00+00:00' GROUP BY o.store_id, day ) daily_counts ON s.store_id = daily_counts.store_id WHERE s.city = 'Chicago' GROUP BY s.store_id, s.name ORDER BY avg_distinct_products_per_day DESC;",
+    "sale_specific": false,
+    "day": 14
+  },
+  {
+    "id": "q0089",
+    "question": "What is the hourly distribution of delivered order counts and revenue for stores located in Boston during the first week of October 2026?",
+    "sql": "SELECT s.store_id, date_trunc('hour', o.delivered_at) AS hour, COUNT(*) AS order_count, SUM(o.total) AS total_revenue FROM orders o JOIN stores s ON o.store_id = s.store_id WHERE o.status = 'delivered' AND s.city = 'Boston' AND o.delivered_at >= '2026-10-01T00:00:00+00:00' AND o.delivered_at < '2026-10-08T00:00:00+00:00' GROUP BY s.store_id, hour ORDER BY s.store_id, hour;",
+    "sale_specific": false,
+    "day": 5
+  },
+  {
+    "id": "q0090",
+    "question": "During the flash sale on 2026-10-25 from 06:00 to 09:00 UTC, which stores recorded the highest total delivered order revenue?",
+    "sql": "SELECT s.store_id, s.name, SUM(o.total) AS total_revenue FROM orders o JOIN stores s ON o.store_id = s.store_id WHERE o.status = 'delivered' AND o.delivered_at >= '2026-10-25T06:00:00+00:00' AND o.delivered_at < '2026-10-25T09:00:00+00:00' GROUP BY s.store_id, s.name ORDER BY total_revenue DESC LIMIT 10;",
+    "sale_specific": true,
+    "day": 12
+  },
+  {
+    "id": "q0091",
+    "question": "Which customers from Los Angeles have placed more than 5 orders with a total delivered value exceeding $1000 in the last 90 days?",
+    "sql": "SELECT c.customer_id, c.name, COUNT(o.order_id) AS order_count, SUM(o.total) AS total_spent FROM customers c JOIN orders o ON c.customer_id = o.customer_id WHERE c.city = 'Los Angeles' AND o.status = 'delivered' AND o.delivered_at >= '2026-07-27T12:00:00+00:00' GROUP BY c.customer_id, c.name HAVING COUNT(o.order_id) > 5 AND SUM(o.total) > 1000 ORDER BY total_spent DESC;",
+    "sale_specific": false,
+    "day": 6
+  },
+  {
+    "id": "q0092",
+    "question": "What is the average quantity per order line by product category for delivered orders in Austin during September 2026?",
+    "sql": "SELECT c.name AS category_name, AVG(oi.qty) AS avg_quantity_per_order_line FROM order_items oi JOIN orders o ON oi.order_id = o.order_id JOIN products p ON oi.product_id = p.product_id JOIN categories c ON p.category_id = c.category_id JOIN stores s ON o.store_id = s.store_id WHERE o.status = 'delivered' AND s.city = 'Austin' AND o.delivered_at >= '2026-09-01T00:00:00+00:00' AND o.delivered_at < '2026-10-01T00:00:00+00:00' GROUP BY c.name ORDER BY avg_quantity_per_order_line DESC;",
+    "sale_specific": false,
+    "day": 7
+  },
+  {
+    "id": "q0093",
+    "question": "Which product categories generated the highest total revenue during the flash sale on 2026-10-25 between 07:00 and 11:00 UTC?",
+    "sql": "SELECT c.name AS category_name, SUM(oi.qty * oi.unit_price) AS total_revenue FROM order_items oi JOIN orders o ON oi.order_id = o.order_id JOIN products p ON oi.product_id = p.product_id JOIN categories c ON p.category_id = c.category_id WHERE o.status = 'delivered' AND o.delivered_at >= '2026-10-25T07:00:00+00:00' AND o.delivered_at < '2026-10-25T11:00:00+00:00' GROUP BY c.name ORDER BY total_revenue DESC;",
+    "sale_specific": true,
+    "day": 11
+  },
+  {
+    "id": "q0094",
+    "question": "Which stores in Seattle have more than 100 distinct products sold during the last 45 days?",
+    "sql": "SELECT s.store_id, s.name, COUNT(DISTINCT oi.product_id) AS distinct_products_sold FROM stores s JOIN orders o ON s.store_id = o.store_id JOIN order_items oi ON o.order_id = oi.order_id WHERE s.city = 'Seattle' AND o.status = 'delivered' AND o.delivered_at >= '2026-09-10T12:00:00+00:00' GROUP BY s.store_id, s.name HAVING COUNT(DISTINCT oi.product_id) > 100 ORDER BY distinct_products_sold DESC;",
+    "sale_specific": false,
+    "day": 6
+  },
+  {
+    "id": "q0095",
+    "question": "Find all active products priced above the average price of their category, including their category names.",
+    "sql": "SELECT p.product_id, p.name, p.price, c.name AS category_name FROM products p JOIN categories c ON p.category_id = c.category_id WHERE p.is_active = TRUE AND p.price > (SELECT AVG(price) FROM products WHERE category_id = p.category_id);",
+    "sale_specific": false,
+    "day": 11
+  },
+  {
+    "id": "q0096",
+    "question": "What is the total quantity and total revenue of products sold per brand in New York stores during the last 60 days?",
+    "sql": "SELECT p.brand, SUM(oi.qty) AS total_qty_sold, SUM(oi.qty * oi.unit_price) AS total_revenue FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id JOIN stores s ON o.store_id = s.store_id WHERE o.status = 'delivered' AND s.city = 'New York' AND o.delivered_at >= '2026-08-26T12:00:00+00:00' GROUP BY p.brand ORDER BY total_revenue DESC;",
+    "sale_specific": false,
+    "day": 7
+  },
+  {
+    "id": "q0097",
+    "question": "Which riders have delivered orders totaling more than $20,000 in revenue for stores located in Denver in the last 20 days?",
+    "sql": "SELECT r.rider_id, r.name, SUM(o.total) AS total_revenue FROM riders r JOIN orders o ON r.rider_id = o.rider_id JOIN stores s ON r.store_id = s.store_id WHERE s.city = 'Denver' AND o.status = 'delivered' AND o.delivered_at >= '2026-10-05T12:00:00+00:00' GROUP BY r.rider_id, r.name HAVING SUM(o.total) > 20000 ORDER BY total_revenue DESC;",
+    "sale_specific": false,
+    "day": 1
+  },
+  {
+    "id": "q0098",
+    "question": "During the flash sale on 2026-10-25 between 09:00 and 12:00, which products sold the highest units in the stores located in Miami?",
+    "sql": "SELECT p.product_id, p.name, SUM(oi.qty) AS total_units_sold FROM order_items oi JOIN orders o ON oi.order_id = o.order_id JOIN products p ON oi.product_id = p.product_id JOIN stores s ON o.store_id = s.store_id WHERE s.city = 'Miami' AND o.status = 'delivered' AND o.delivered_at >= '2026-10-25T09:00:00+00:00' AND o.delivered_at < '2026-10-25T12:00:00+00:00' GROUP BY p.product_id, p.name ORDER BY total_units_sold DESC LIMIT 20;",
+    "sale_specific": true,
+    "day": 2
+  },
+  {
+    "id": "q0099",
+    "question": "List stores in Austin with average daily delivered revenue above $5000 during October 2026.",
+    "sql": "SELECT s.store_id, s.name, AVG(daily_revenue) AS avg_daily_revenue FROM stores s JOIN ( SELECT o.store_id, date_trunc('day', o.delivered_at) AS day, SUM(o.total) AS daily_revenue FROM orders o WHERE o.status = 'delivered' AND o.delivered_at >= '2026-10-01T00:00:00+00:00' AND o.delivered_at < '2026-11-01T00:00:00+00:00' GROUP BY o.store_id, day ) daily ON s.store_id = daily.store_id GROUP BY s.store_id, s.name HAVING AVG(daily_revenue) > 5000 ORDER BY avg_daily_revenue DESC;",
+    "sale_specific": false,
+    "day": 11
+  },
+  {
+    "id": "q0100",
+    "question": "Which products in the 'Snacks' category have zero stock reserved across all stores as of 2026-10-25 12:00 UTC?",
+    "sql": "SELECT p.product_id, p.name FROM products p JOIN categories c ON p.category_id = c.category_id LEFT JOIN store_stock ss ON p.product_id = ss.product_id WHERE c.name = 'Snacks' GROUP BY p.product_id, p.name HAVING COALESCE(SUM(ss.reserved),0) = 0;",
+    "sale_specific": false,
+    "day": 4
+  },
+  {
+    "id": "q0101",
+    "question": "Find the average delivery time in minutes per rider for orders delivered in San Francisco stores over the last 30 days.",
+    "sql": "SELECT r.rider_id, r.name, AVG(EXTRACT(EPOCH FROM (o.delivered_at - o.created_at))/60) AS avg_delivery_time_minutes FROM riders r JOIN orders o ON r.rider_id = o.rider_id JOIN stores s ON r.store_id = s.store_id WHERE s.city = 'San Francisco' AND o.status = 'delivered' AND o.delivered_at >= '2026-09-25T12:00:00+00:00' GROUP BY r.rider_id, r.name ORDER BY avg_delivery_time_minutes ASC;",
+    "sale_specific": false,
+    "day": 14
+  },
+  {
+    "id": "q0102",
+    "question": "For each store in Los Angeles, what is the total revenue from orders paid by credit card during the last 60 days?",
+    "sql": "SELECT s.store_id, s.name, COALESCE(SUM(o.total),0) AS credit_card_revenue FROM stores s LEFT JOIN orders o ON s.store_id = o.store_id AND o.payment_mode = 'credit_card' AND o.status = 'delivered' AND o.delivered_at >= '2026-08-26T12:00:00+00:00' WHERE s.city = 'Los Angeles' GROUP BY s.store_id, s.name ORDER BY credit_card_revenue DESC;",
+    "sale_specific": false,
+    "day": 8
+  },
+  {
+    "id": "q0103",
+    "question": "What is the total number of orders and total revenue for stores in Houston grouped by payment mode for the last 45 days?",
+    "sql": "SELECT s.store_id, s.name, o.payment_mode, COUNT(o.order_id) AS total_orders, SUM(o.total) AS total_revenue FROM stores s JOIN orders o ON s.store_id = o.store_id WHERE s.city = 'Houston' AND o.status = 'delivered' AND o.delivered_at >= '2026-09-10T12:00:00+00:00' GROUP BY s.store_id, s.name, o.payment_mode ORDER BY total_revenue DESC;",
+    "sale_specific": false,
+    "day": 3
+  },
+  {
+    "id": "q0104",
+    "question": "During the flash sale day on 2026-10-25, which rider had the highest number of delivered orders between 05:00 and 12:00 UTC?",
+    "sql": "SELECT r.rider_id, r.name, COUNT(o.order_id) AS delivered_orders FROM riders r JOIN orders o ON r.rider_id = o.rider_id WHERE o.status = 'delivered' AND o.delivered_at >= '2026-10-25T05:00:00+00:00' AND o.delivered_at < '2026-10-25T12:00:00+00:00' GROUP BY r.rider_id, r.name ORDER BY delivered_orders DESC LIMIT 1;",
+    "sale_specific": true,
+    "day": 11
+  },
+  {
+    "id": "q0105",
+    "question": "Which cities have the highest average order value for delivered orders placed in the last 30 days?",
+    "sql": "SELECT c.city, AVG(o.total) AS avg_order_value FROM customers c JOIN orders o ON c.customer_id = o.customer_id WHERE o.status = 'delivered' AND o.delivered_at >= '2026-09-25T12:00:00+00:00' GROUP BY c.city ORDER BY avg_order_value DESC LIMIT 10;",
+    "sale_specific": false,
+    "day": 3
+  },
+  {
+    "id": "q0106",
+    "question": "For stores in New York, what is the total reserved stock quantity by product category as of 2026-10-25 12:00 UTC?",
+    "sql": "SELECT c.name AS category_name, SUM(ss.reserved) AS total_reserved_stock FROM store_stock ss JOIN products p ON ss.product_id = p.product_id JOIN categories c ON p.category_id = c.category_id JOIN stores s ON ss.store_id = s.store_id WHERE s.city = 'New York' AND ss.updated_at <= '2026-10-25T12:00:00+00:00' GROUP BY c.name ORDER BY total_reserved_stock DESC;",
+    "sale_specific": false,
+    "day": 7
+  },
+  {
+    "id": "q0107",
+    "question": "What is the total revenue per store for orders delivered between 2026-10-01 and 2026-10-15 in Miami?",
+    "sql": "SELECT s.store_id, s.name, SUM(o.total) AS total_revenue FROM orders o JOIN stores s ON o.store_id = s.store_id WHERE o.status = 'delivered' AND s.city = 'Miami' AND o.delivered_at >= '2026-10-01T00:00:00+00:00' AND o.delivered_at < '2026-10-16T00:00:00+00:00' GROUP BY s.store_id, s.name ORDER BY total_revenue DESC;",
+    "sale_specific": false,
+    "day": 9
+  },
+  {
+    "id": "q0108",
+    "question": "Which customers from 'Chicago' currently have orders with status 'pending'?",
+    "sql": "SELECT c.customer_id, c.name FROM customers c JOIN orders o ON c.customer_id = o.customer_id WHERE c.city = 'Chicago' AND o.status = 'pending' GROUP BY c.customer_id, c.name",
+    "sale_specific": false,
+    "day": 5
+  },
+  {
+    "id": "q0109",
+    "question": "Identify customers who have placed orders at more than three different stores in the last 365 days.",
+    "sql": "SELECT customer_id, COUNT(DISTINCT store_id) AS stores_ordered FROM orders WHERE created_at >= '2025-10-25T12:00:00+00:00' GROUP BY customer_id HAVING COUNT(DISTINCT store_id) > 3",
+    "sale_specific": false,
+    "day": 10
+  },
+  {
+    "id": "q0110",
+    "question": "Who are the top 10 customers by total spending in 'San Francisco' during the last 180 days?",
+    "sql": "SELECT c.customer_id, c.name, SUM(o.total) AS total_spent FROM customers c JOIN orders o ON c.customer_id = o.customer_id WHERE c.city = 'San Francisco' AND o.status = 'delivered' AND o.delivered_at >= '2026-04-28T12:00:00+00:00' GROUP BY c.customer_id, c.name ORDER BY total_spent DESC LIMIT 10",
+    "sale_specific": false,
+    "day": 14
+  },
+  {
+    "id": "q0111",
+    "question": "Which customers have cancelled at least one order in the past 90 days?",
+    "sql": "SELECT DISTINCT c.customer_id, c.name FROM customers c JOIN orders o ON c.customer_id = o.customer_id WHERE o.status = 'cancelled' AND o.created_at >= '2026-07-27T12:00:00+00:00'",
+    "sale_specific": false,
+    "day": 5
+  },
+  {
+    "id": "q0112",
+    "question": "Find the last order date for each customer who has placed at least one order.",
+    "sql": "SELECT customer_id, MAX(created_at) AS last_order_date FROM orders GROUP BY customer_id",
+    "sale_specific": false,
+    "day": 11
+  },
+  {
+    "id": "q0113",
+    "question": "Which customers have used more than one payment mode for their orders in the last year?",
+    "sql": "SELECT customer_id FROM orders WHERE created_at >= '2025-10-25T12:00:00+00:00' GROUP BY customer_id HAVING COUNT(DISTINCT payment_mode) > 1",
+    "sale_specific": false,
+    "day": 4
+  },
+  {
+    "id": "q0114",
+    "question": "During the flash sale on 2026-10-25 between 08:00 and 12:00 UTC, which customers placed at least two orders within any single hour?",
+    "sql": "SELECT o.customer_id, date_trunc('hour', o.created_at) AS order_hour, COUNT(*) AS orders_count FROM orders o WHERE o.created_at BETWEEN '2026-10-25T08:00:00+00:00' AND '2026-10-25T12:00:00+00:00' GROUP BY o.customer_id, order_hour HAVING COUNT(*) >= 2",
+    "sale_specific": true,
+    "day": 7
+  },
+  {
+    "id": "q0115",
+    "question": "Which cities had the highest number of distinct customers placing orders during the flash sale on 2026-10-25 from 06:00 to 10:00 UTC?",
+    "sql": "SELECT c.city, COUNT(DISTINCT o.customer_id) AS distinct_customers FROM customers c JOIN orders o ON c.customer_id = o.customer_id WHERE o.created_at BETWEEN '2026-10-25T06:00:00+00:00' AND '2026-10-25T10:00:00+00:00' GROUP BY c.city ORDER BY distinct_customers DESC",
+    "sale_specific": true,
+    "day": 2
+  },
+  {
+    "id": "q0116",
+    "question": "Which customers placed orders from stores in both 'Miami' and 'Atlanta' over the last 60 days?",
+    "sql": "SELECT o.customer_id FROM orders o JOIN stores s ON o.store_id = s.store_id WHERE o.created_at >= '2026-08-26T12:00:00+00:00' AND s.city IN ('Miami', 'Atlanta') GROUP BY o.customer_id HAVING COUNT(DISTINCT s.city) = 2",
+    "sale_specific": false,
+    "day": 7
+  },
+  {
+    "id": "q0117",
+    "question": "What is the average number of orders per customer for those living in 'Houston' over the last 120 days?",
+    "sql": "SELECT AVG(order_count) AS avg_orders_per_customer FROM (SELECT c.customer_id, COUNT(o.order_id) AS order_count FROM customers c LEFT JOIN orders o ON c.customer_id = o.customer_id AND o.created_at >= '2026-06-27T12:00:00+00:00' WHERE c.city = 'Houston' GROUP BY c.customer_id) sub",
+    "sale_specific": false,
+    "day": 10
+  },
+  {
+    "id": "q0118",
+    "question": "Find customers who placed orders with a total delivered value over $500 within the last 90 days in 'Seattle'.",
+    "sql": "SELECT c.customer_id, c.name, SUM(o.total) AS delivered_spent FROM customers c JOIN orders o ON c.customer_id = o.customer_id JOIN stores s ON o.store_id = s.store_id WHERE s.city = 'Seattle' AND o.status = 'delivered' AND o.delivered_at >= '2026-07-27T12:00:00+00:00' GROUP BY c.customer_id, c.name HAVING SUM(o.total) > 500",
+    "sale_specific": false,
+    "day": 11
+  },
+  {
+    "id": "q0119",
+    "question": "Which customers placed multiple orders during the flash sale on 2026-10-25 between 05:00 and 09:00 UTC in stores located in 'Denver'?",
+    "sql": "SELECT o.customer_id, COUNT(*) AS order_count FROM orders o JOIN stores s ON o.store_id = s.store_id WHERE s.city = 'Denver' AND o.created_at BETWEEN '2026-10-25T05:00:00+00:00' AND '2026-10-25T09:00:00+00:00' GROUP BY o.customer_id HAVING COUNT(*) > 1",
+    "sale_specific": true,
+    "day": 5
+  },
+  {
+    "id": "q0120",
+    "question": "Which customers have ordered products from at least two different categories in the last 180 days?",
+    "sql": "SELECT o.customer_id FROM orders o JOIN order_items oi ON o.order_id = oi.order_id JOIN products p ON oi.product_id = p.product_id WHERE o.created_at >= '2026-04-28T12:00:00+00:00' GROUP BY o.customer_id HAVING COUNT(DISTINCT p.category_id) >= 2",
+    "sale_specific": false,
+    "day": 12
+  },
+  {
+    "id": "q0121",
+    "question": "Identify customers who have used both 'credit card' and 'digital wallet' payment modes during the past 6 months.",
+    "sql": "SELECT customer_id FROM orders WHERE payment_mode IN ('credit card', 'digital wallet') AND created_at >= '2026-04-25T12:00:00+00:00' GROUP BY customer_id HAVING COUNT(DISTINCT payment_mode) = 2",
+    "sale_specific": false,
+    "day": 8
+  },
+  {
+    "id": "q0122",
+    "question": "During the flash sale on 2026-10-25 from 07:00 to 11:00 UTC, which customers placed orders totaling more than $300?",
+    "sql": "SELECT o.customer_id, SUM(o.total) AS total_order_value FROM orders o WHERE o.created_at BETWEEN '2026-10-25T07:00:00+00:00' AND '2026-10-25T11:00:00+00:00' GROUP BY o.customer_id HAVING SUM(o.total) > 300",
+    "sale_specific": true,
+    "day": 5
+  },
+  {
+    "id": "q0123",
+    "question": "Who are the customers with the highest average order value in 'Boston' during the last 30 days?",
+    "sql": "SELECT c.customer_id, c.name, AVG(o.total) AS avg_order_value FROM customers c JOIN orders o ON c.customer_id = o.customer_id JOIN stores s ON o.store_id = s.store_id WHERE s.city = 'Boston' AND o.status = 'delivered' AND o.delivered_at >= '2026-09-25T12:00:00+00:00' GROUP BY c.customer_id, c.name ORDER BY avg_order_value DESC LIMIT 10",
+    "sale_specific": false,
+    "day": 4
+  },
+  {
+    "id": "q0124",
+    "question": "Which customers have orders currently marked as 'processing' in stores located in 'Austin'?",
+    "sql": "SELECT DISTINCT c.customer_id, c.name FROM customers c JOIN orders o ON c.customer_id = o.customer_id JOIN stores s ON o.store_id = s.store_id WHERE s.city = 'Austin' AND o.status = 'processing'",
+    "sale_specific": false,
+    "day": 11
+  },
+  {
+    "id": "q0125",
+    "question": "Find customers who ordered from stores across at least three different cities in the last year.",
+    "sql": "SELECT o.customer_id FROM orders o JOIN stores s ON o.store_id = s.store_id WHERE o.created_at >= '2025-10-25T12:00:00+00:00' GROUP BY o.customer_id HAVING COUNT(DISTINCT s.city) >= 3",
+    "sale_specific": false,
+    "day": 8
+  },
+  {
+    "id": "q0126",
+    "question": "Which customers placed orders during the flash sale on 2026-10-25 between 09:00 and 13:00 UTC with a total quantity of items ordered exceeding 10?",
+    "sql": "SELECT o.customer_id, SUM(oi.qty) AS total_qty FROM orders o JOIN order_items oi ON o.order_id = oi.order_id WHERE o.created_at BETWEEN '2026-10-25T09:00:00+00:00' AND '2026-10-25T13:00:00+00:00' GROUP BY o.customer_id HAVING SUM(oi.qty) > 10",
+    "sale_specific": true,
+    "day": 12
+  },
+  {
+    "id": "q0127",
+    "question": "Which customers have placed orders in the last 45 days for which the total order value exceeded the average order value of their city?",
+    "sql": "WITH city_avg AS ( SELECT c.city, AVG(o.total) AS avg_total FROM orders o JOIN customers c ON o.customer_id = c.customer_id WHERE o.created_at >= '2026-09-10T12:00:00+00:00' AND o.status = 'delivered' GROUP BY c.city ) SELECT DISTINCT c.customer_id, c.name FROM customers c JOIN orders o ON c.customer_id = o.customer_id JOIN city_avg ca ON ca.city = c.city WHERE o.created_at >= '2026-09-10T12:00:00+00:00' AND o.status = 'delivered' AND o.total > ca.avg_total",
+    "sale_specific": false,
+    "day": 11
+  },
+  {
+    "id": "q0128",
+    "question": "During the flash sale on 2026-10-25 from 06:00 to 10:00 UTC, which customers placed orders using more than one payment mode?",
+    "sql": "SELECT o.customer_id FROM orders o WHERE o.created_at BETWEEN '2026-10-25T06:00:00+00:00' AND '2026-10-25T10:00:00+00:00' GROUP BY o.customer_id HAVING COUNT(DISTINCT o.payment_mode) > 1",
+    "sale_specific": true,
+    "day": 13
+  },
+  {
+    "id": "q0129",
+    "question": "Which products currently have zero stock available in each store as of 2026-10-25 12:00 UTC?",
+    "sql": "SELECT s.store_id, s.name AS store_name, p.product_id, p.name AS product_name FROM stores s JOIN store_stock ss ON s.store_id = ss.store_id JOIN products p ON ss.product_id = p.product_id WHERE ss.qty = 0 AND ss.updated_at <= '2026-10-25T12:00:00+00:00' AND p.is_active = true ORDER BY s.store_id, p.product_id;",
+    "sale_specific": false,
+    "day": 4
+  },
+  {
+    "id": "q0130",
+    "question": "Which store stock entries have been updated within the last 15 minutes before 2026-10-25 12:00 UTC?",
+    "sql": "SELECT store_id, product_id, qty, reserved, updated_at FROM store_stock WHERE updated_at BETWEEN '2026-10-25T11:45:00+00:00' AND '2026-10-25T12:00:00+00:00' ORDER BY updated_at DESC;",
+    "sale_specific": false,
+    "day": 1
+  },
+  {
+    "id": "q0131",
+    "question": "List stores that have any product with fewer than 10 units in stock as of 2026-10-25 12:00 UTC.",
+    "sql": "SELECT DISTINCT s.store_id, s.name FROM stores s JOIN store_stock ss ON s.store_id = ss.store_id WHERE ss.qty < 10 AND ss.updated_at <= '2026-10-25T12:00:00+00:00' ORDER BY s.store_id;",
+    "sale_specific": false,
+    "day": 6
+  },
+  {
+    "id": "q0132",
+    "question": "What is the total reserved stock quantity grouped by store as of 2026-10-25 12:00 UTC?",
+    "sql": "SELECT s.store_id, s.name AS store_name, SUM(ss.reserved) AS total_reserved FROM stores s JOIN store_stock ss ON s.store_id = ss.store_id WHERE ss.updated_at <= '2026-10-25T12:00:00+00:00' GROUP BY s.store_id, s.name ORDER BY total_reserved DESC;",
+    "sale_specific": false,
+    "day": 8
+  },
+  {
+    "id": "q0133",
+    "question": "Identify categories with the smallest total available stock summed across all stores as of 2026-10-25 12:00 UTC.",
+    "sql": "SELECT c.category_id, c.name, SUM(ss.qty) AS total_stock FROM categories c JOIN products p ON c.category_id = p.category_id JOIN store_stock ss ON p.product_id = ss.product_id WHERE ss.updated_at <= '2026-10-25T12:00:00+00:00' GROUP BY c.category_id, c.name ORDER BY total_stock ASC LIMIT 10;",
+    "sale_specific": false,
+    "day": 10
+  },
+  {
+    "id": "q0134",
+    "question": "Which stores stock the highest number of distinct active products as of 2026-10-25 12:00 UTC?",
+    "sql": "SELECT s.store_id, s.name, COUNT(DISTINCT ss.product_id) AS distinct_products FROM stores s JOIN store_stock ss ON s.store_id = ss.store_id JOIN products p ON ss.product_id = p.product_id WHERE p.is_active = true AND ss.qty > 0 AND ss.updated_at <= '2026-10-25T12:00:00+00:00' GROUP BY s.store_id, s.name ORDER BY distinct_products DESC LIMIT 10;",
+    "sale_specific": false,
+    "day": 9
+  },
+  {
+    "id": "q0135",
+    "question": "Which products have not seen any stock update in the last 24 hours before 2026-10-25 12:00 UTC?",
+    "sql": "SELECT DISTINCT p.product_id, p.name FROM products p JOIN store_stock ss ON p.product_id = ss.product_id WHERE ss.updated_at < '2026-10-24T12:00:00+00:00' ORDER BY p.product_id;",
+    "sale_specific": false,
+    "day": 11
+  },
+  {
+    "id": "q0136",
+    "question": "During the flash sale on 2026-10-25 between 06:00 and 12:00 UTC, which active products in stores are completely sold out (zero stock)?",
+    "sql": "SELECT s.store_id, s.name AS store_name, p.product_id, p.name AS product_name FROM stores s JOIN store_stock ss ON s.store_id = ss.store_id JOIN products p ON ss.product_id = p.product_id WHERE ss.qty = 0 AND p.is_active = true AND ss.updated_at <= '2026-10-25T12:00:00+00:00' ORDER BY s.store_id, p.product_id;",
+    "sale_specific": true,
+    "day": 4
+  },
+  {
+    "id": "q0137",
+    "question": "During the flash sale on 2026-10-25, which stores have stock quantities less than their reserved quantities as of 12:00 UTC?",
+    "sql": "SELECT s.store_id, s.name, ss.product_id, ss.qty, ss.reserved FROM stores s JOIN store_stock ss ON s.store_id = ss.store_id WHERE ss.qty < ss.reserved AND ss.updated_at <= '2026-10-25T12:00:00+00:00' ORDER BY s.store_id;",
+    "sale_specific": true,
+    "day": 2
+  },
+  {
+    "id": "q0138",
+    "question": "For each city, what is the average number of orders delivered per store in September 2026?",
+    "sql": "SELECT st.city, st.store_id, COUNT(o.order_id) AS delivered_orders FROM stores st LEFT JOIN orders o ON st.store_id = o.store_id AND o.status = 'delivered' AND o.delivered_at BETWEEN '2026-09-01T00:00:00+00:00' AND '2026-09-30T23:59:59+00:00' GROUP BY st.city, st.store_id ORDER BY st.city, delivered_orders DESC;",
+    "sale_specific": false,
+    "day": 7
+  },
+  {
+    "id": "q0139",
+    "question": "Which riders have delivered more than 50 orders in stores located in Chicago during the first two weeks of October 2026?",
+    "sql": "SELECT r.rider_id, r.name, COUNT(o.order_id) AS delivered_orders FROM riders r JOIN orders o ON r.rider_id = o.rider_id JOIN stores s ON r.store_id = s.store_id WHERE s.city = 'Chicago' AND o.status = 'delivered' AND o.delivered_at BETWEEN '2026-10-01T00:00:00+00:00' AND '2026-10-15T23:59:59+00:00' GROUP BY r.rider_id, r.name HAVING COUNT(o.order_id) > 50 ORDER BY delivered_orders DESC;",
+    "sale_specific": false,
+    "day": 4
+  },
+  {
+    "id": "q0140",
+    "question": "What is the total revenue generated by each payment mode across all stores in Seattle for orders created during October 2026?",
+    "sql": "SELECT o.payment_mode, SUM(o.total) AS total_revenue FROM orders o JOIN stores s ON o.store_id = s.store_id WHERE s.city = 'Seattle' AND o.created_at BETWEEN '2026-10-01T00:00:00+00:00' AND '2026-10-31T23:59:59+00:00' GROUP BY o.payment_mode ORDER BY total_revenue DESC;",
+    "sale_specific": false,
+    "day": 8
+  },
+  {
+    "id": "q0141",
+    "question": "Find the average price of active products per category that are stocked in New York stores as of 2026-10-25 12:00 UTC.",
+    "sql": "SELECT c.category_id, c.name, AVG(p.price) AS avg_price FROM categories c JOIN products p ON c.category_id = p.category_id JOIN store_stock ss ON p.product_id = ss.product_id JOIN stores s ON ss.store_id = s.store_id WHERE p.is_active = true AND s.city = 'New York' AND ss.updated_at <= '2026-10-25T12:00:00+00:00' GROUP BY c.category_id, c.name ORDER BY avg_price DESC;",
+    "sale_specific": false,
+    "day": 9
+  },
+  {
+    "id": "q0142",
+    "question": "Which customers in Miami placed orders totaling over $1000 during October 2026?",
+    "sql": "SELECT c.customer_id, c.name, SUM(o.total) AS total_spent FROM customers c JOIN orders o ON c.customer_id = o.customer_id JOIN stores s ON o.store_id = s.store_id WHERE s.city = 'Miami' AND o.created_at BETWEEN '2026-10-01T00:00:00+00:00' AND '2026-10-31T23:59:59+00:00' GROUP BY c.customer_id, c.name HAVING SUM(o.total) > 1000 ORDER BY total_spent DESC;",
+    "sale_specific": false,
+    "day": 14
+  },
+  {
+    "id": "q0143",
+    "question": "During the flash sale on 2026-10-25 from 06:00 to 11:00 UTC, which stores processed more than 200 orders?",
+    "sql": "SELECT s.store_id, s.name, COUNT(o.order_id) AS order_count FROM stores s JOIN orders o ON s.store_id = o.store_id WHERE o.created_at BETWEEN '2026-10-25T06:00:00+00:00' AND '2026-10-25T11:00:00+00:00' GROUP BY s.store_id, s.name HAVING COUNT(o.order_id) > 200 ORDER BY order_count DESC;",
+    "sale_specific": true,
+    "day": 12
+  },
+  {
+    "id": "q0144",
+    "question": "List the top 5 products by total quantity ordered across all stores during the flash sale on 2026-10-25 between 07:00 and 12:00 UTC.",
+    "sql": "SELECT p.product_id, p.name, SUM(oi.qty) AS total_qty FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id WHERE o.created_at BETWEEN '2026-10-25T07:00:00+00:00' AND '2026-10-25T12:00:00+00:00' GROUP BY p.product_id, p.name ORDER BY total_qty DESC LIMIT 5;",
+    "sale_specific": true,
+    "day": 1
+  },
+  {
+    "id": "q0145",
+    "question": "Which stores in Los Angeles have the highest average order total for delivered orders in the last 60 days before 2026-10-25?",
+    "sql": "SELECT s.store_id, s.name, AVG(o.total) AS avg_order_total FROM stores s JOIN orders o ON s.store_id = o.store_id WHERE s.city = 'Los Angeles' AND o.status = 'delivered' AND o.delivered_at BETWEEN '2026-08-26T12:00:00+00:00' AND '2026-10-25T12:00:00+00:00' GROUP BY s.store_id, s.name ORDER BY avg_order_total DESC LIMIT 10;",
+    "sale_specific": false,
+    "day": 9
+  },
+  {
+    "id": "q0146",
+    "question": "Which products in the 'Beverages' category have a reserved stock quantity exceeding 50 units across all stores as of 2026-10-25 12:00 UTC?",
+    "sql": "SELECT p.product_id, p.name, SUM(ss.reserved) AS total_reserved FROM products p JOIN categories c ON p.category_id = c.category_id JOIN store_stock ss ON p.product_id = ss.product_id WHERE c.name = 'Beverages' AND ss.updated_at <= '2026-10-25T12:00:00+00:00' GROUP BY p.product_id, p.name HAVING SUM(ss.reserved) > 50 ORDER BY total_reserved DESC;",
+    "sale_specific": false,
+    "day": 3
+  },
+  {
+    "id": "q0147",
+    "question": "Find stores in Boston with at least 5 active riders currently marked as 'available'.",
+    "sql": "SELECT s.store_id, s.name, COUNT(r.rider_id) AS available_riders FROM stores s JOIN riders r ON s.store_id = r.store_id WHERE s.city = 'Boston' AND r.status = 'available' GROUP BY s.store_id, s.name HAVING COUNT(r.rider_id) >= 5 ORDER BY available_riders DESC;",
+    "sale_specific": false,
+    "day": 6
+  },
+  {
+    "id": "q0148",
+    "question": "During the flash sale on 2026-10-25 between 08:00 and 12:00 UTC, which customers placed orders with total quantity exceeding 20 items?",
+    "sql": "SELECT c.customer_id, c.name, SUM(oi.qty) AS total_quantity FROM customers c JOIN orders o ON c.customer_id = o.customer_id JOIN order_items oi ON o.order_id = oi.order_id WHERE o.created_at BETWEEN '2026-10-25T08:00:00+00:00' AND '2026-10-25T12:00:00+00:00' GROUP BY c.customer_id, c.name HAVING SUM(oi.qty) > 20 ORDER BY total_quantity DESC;",
+    "sale_specific": true,
+    "day": 4
+  },
+  {
+    "id": "q0149",
+    "question": "Which categories have the highest average product price among products stocked in stores in San Francisco as of 2026-10-25 12:00 UTC?",
+    "sql": "SELECT c.category_id, c.name, AVG(p.price) AS avg_price FROM categories c JOIN products p ON c.category_id = p.category_id JOIN store_stock ss ON p.product_id = ss.product_id JOIN stores s ON ss.store_id = s.store_id WHERE s.city = 'San Francisco' AND ss.updated_at <= '2026-10-25T12:00:00+00:00' GROUP BY c.category_id, c.name ORDER BY avg_price DESC LIMIT 5;",
+    "sale_specific": false,
+    "day": 1
+  },
+  {
+    "id": "q0150",
+    "question": "What are the last 20 orders placed by a specific customer, sorted by creation time descending?",
+    "sql": "SELECT order_id, customer_id, store_id, status, total, payment_mode, created_at FROM orders WHERE customer_id = 42 ORDER BY created_at DESC LIMIT 20;",
+    "sale_specific": false,
+    "day": 5
+  },
+  {
+    "id": "q0151",
+    "question": "How many orders were delivered yesterday for each store in Chicago?",
+    "sql": "SELECT store_id, COUNT(*) AS delivered_orders FROM orders WHERE delivered_at::date = '2026-10-24' AND store_id IN (SELECT store_id FROM stores WHERE city = 'Chicago') GROUP BY store_id;",
+    "sale_specific": false,
+    "day": 11
+  },
+  {
+    "id": "q0152",
+    "question": "Which orders are currently in the 'packing' status and not yet assigned to any rider?",
+    "sql": "SELECT order_id, store_id, status FROM orders WHERE status = 'packing' AND rider_id IS NULL;",
+    "sale_specific": false,
+    "day": 1
+  },
+  {
+    "id": "q0153",
+    "question": "Count the number of cancelled orders grouped by payment mode over the last 30 days.",
+    "sql": "SELECT payment_mode, COUNT(*) AS cancelled_count FROM orders WHERE status = 'cancelled' AND created_at >= '2026-09-25T12:00:00+00:00' GROUP BY payment_mode;",
+    "sale_specific": false,
+    "day": 14
+  },
+  {
+    "id": "q0154",
+    "question": "Which stores have the highest number of open orders (status not delivered or cancelled) as of 2026-10-25 12:00 UTC?",
+    "sql": "SELECT store_id, COUNT(*) AS open_orders FROM orders WHERE status NOT IN ('delivered', 'cancelled') AND created_at <= '2026-10-25T12:00:00+00:00' GROUP BY store_id ORDER BY open_orders DESC LIMIT 10;",
+    "sale_specific": false,
+    "day": 5
+  },
+  {
+    "id": "q0155",
+    "question": "Identify orders that contain more than four distinct order items.",
+    "sql": "SELECT order_id, COUNT(order_item_id) AS item_count FROM order_items GROUP BY order_id HAVING COUNT(order_item_id) > 4;",
+    "sale_specific": false,
+    "day": 11
+  },
+  {
+    "id": "q0156",
+    "question": "What is the average total value of delivered orders per city during September 2026?",
+    "sql": "SELECT s.city, AVG(o.total) AS avg_order_value FROM orders o JOIN stores s ON o.store_id = s.store_id WHERE o.status = 'delivered' AND o.delivered_at >= '2026-09-01T00:00:00+00:00' AND o.delivered_at < '2026-10-01T00:00:00+00:00' GROUP BY s.city;",
+    "sale_specific": false,
+    "day": 3
+  },
+  {
+    "id": "q0157",
+    "question": "List the orders without an assigned rider that were placed within the last 7 days.",
+    "sql": "SELECT order_id, created_at FROM orders WHERE rider_id IS NULL AND created_at >= '2026-10-18T12:00:00+00:00';",
+    "sale_specific": false,
+    "day": 2
+  },
+  {
+    "id": "q0158",
+    "question": "During the flash sale on 2026-10-25 between 06:00 and 12:00 UTC, how many orders were placed per minute across all stores?",
+    "sql": "SELECT date_trunc('minute', created_at) AS minute, COUNT(*) AS orders_count FROM orders WHERE created_at >= '2026-10-25T06:00:00+00:00' AND created_at < '2026-10-25T12:00:00+00:00' GROUP BY minute ORDER BY minute;",
+    "sale_specific": true,
+    "day": 12
+  },
+  {
+    "id": "q0159",
+    "question": "During the flash sale on 2026-10-25 from 07:00 to 10:00 UTC, how many placed orders are waiting (status 'placed') at each store?",
+    "sql": "SELECT store_id, COUNT(*) AS waiting_orders FROM orders WHERE status = 'placed' AND created_at >= '2026-10-25T07:00:00+00:00' AND created_at < '2026-10-25T10:00:00+00:00' GROUP BY store_id;",
+    "sale_specific": true,
+    "day": 8
+  },
+  {
+    "id": "q0160",
+    "question": "Which customers have placed orders in the last 90 days from at least three different stores?",
+    "sql": "SELECT customer_id FROM orders WHERE created_at >= '2026-07-27T12:00:00+00:00' GROUP BY customer_id HAVING COUNT(DISTINCT store_id) >= 3;",
+    "sale_specific": false,
+    "day": 9
+  },
+  {
+    "id": "q0161",
+    "question": "What is the total revenue generated by each payment mode in stores located in New York during October 2026?",
+    "sql": "SELECT payment_mode, SUM(total) AS total_revenue FROM orders o JOIN stores s ON o.store_id = s.store_id WHERE s.city = 'New York' AND o.created_at >= '2026-10-01T00:00:00+00:00' AND o.created_at < '2026-11-01T00:00:00+00:00' GROUP BY payment_mode;",
+    "sale_specific": false,
+    "day": 6
+  },
+  {
+    "id": "q0162",
+    "question": "Which orders delivered in the last month have order totals above the average delivered order value in their city?",
+    "sql": "WITH avg_city AS (SELECT s.city, AVG(o.total) AS avg_total FROM orders o JOIN stores s ON o.store_id = s.store_id WHERE o.status = 'delivered' AND o.delivered_at >= '2026-09-25T12:00:00+00:00' GROUP BY s.city) SELECT o.order_id, o.total, s.city FROM orders o JOIN stores s ON o.store_id = s.store_id JOIN avg_city a ON s.city = a.city WHERE o.status = 'delivered' AND o.delivered_at >= '2026-09-25T12:00:00+00:00' AND o.total > a.avg_total;",
+    "sale_specific": false,
+    "day": 2
+  },
+  {
+    "id": "q0163",
+    "question": "Which products currently have no stock (qty = 0) or less in stores located in San Francisco as of 2026-10-25 12:00 UTC?",
+    "sql": "SELECT ss.store_id, ss.product_id FROM store_stock ss JOIN stores s ON ss.store_id = s.store_id WHERE s.city = 'San Francisco' AND ss.qty <= 0 AND ss.updated_at <= '2026-10-25T12:00:00+00:00';",
+    "sale_specific": false,
+    "day": 1
+  },
+  {
+    "id": "q0164",
+    "question": "Find the stores with more than 5 active riders available as of 2026-10-25 12:00 UTC.",
+    "sql": "SELECT store_id, COUNT(rider_id) AS available_riders FROM riders WHERE status = 'available' GROUP BY store_id HAVING COUNT(rider_id) > 5;",
+    "sale_specific": false,
+    "day": 4
+  },
+  {
+    "id": "q0165",
+    "question": "During the flash sale on 2026-10-25 from 06:00 to 12:00 UTC, which products had the highest total quantity ordered?",
+    "sql": "SELECT oi.product_id, SUM(oi.qty) AS total_qty FROM order_items oi JOIN orders o ON oi.order_id = o.order_id WHERE o.created_at >= '2026-10-25T06:00:00+00:00' AND o.created_at < '2026-10-25T12:00:00+00:00' GROUP BY oi.product_id ORDER BY total_qty DESC LIMIT 10;",
+    "sale_specific": true,
+    "day": 2
+  },
+  {
+    "id": "q0166",
+    "question": "Which stores have the largest sum of reserved stock quantities across all products as of 2026-10-25 12:00 UTC?",
+    "sql": "SELECT store_id, SUM(reserved) AS total_reserved FROM store_stock WHERE updated_at <= '2026-10-25T12:00:00+00:00' GROUP BY store_id ORDER BY total_reserved DESC LIMIT 5;",
+    "sale_specific": false,
+    "day": 10
+  },
+  {
+    "id": "q0167",
+    "question": "For each city, what is the average number of delivered orders per store during September 2026?",
+    "sql": "SELECT s.city, AVG(store_orders) AS avg_delivered_orders_per_store FROM (SELECT store_id, COUNT(*) AS store_orders FROM orders WHERE status = 'delivered' AND delivered_at >= '2026-09-01T00:00:00+00:00' AND delivered_at < '2026-10-01T00:00:00+00:00' GROUP BY store_id) o JOIN stores s ON o.store_id = s.store_id GROUP BY s.city;",
+    "sale_specific": false,
+    "day": 5
+  },
+  {
+    "id": "q0168",
+    "question": "Which riders delivered more than 30 orders in stores located in Austin during October 2026?",
+    "sql": "SELECT rider_id, COUNT(*) AS deliveries FROM orders o JOIN stores s ON o.store_id = s.store_id WHERE s.city = 'Austin' AND o.status = 'delivered' AND o.delivered_at >= '2026-10-01T00:00:00+00:00' AND o.delivered_at < '2026-11-01T00:00:00+00:00' GROUP BY rider_id HAVING COUNT(*) > 30;",
+    "sale_specific": false,
+    "day": 2
+  },
+  {
+    "id": "q0169",
+    "question": "During the flash sale on 2026-10-25 from 08:00 to 12:00 UTC, which customers ordered more than 15 total items?",
+    "sql": "SELECT o.customer_id, SUM(oi.qty) AS total_qty FROM orders o JOIN order_items oi ON o.order_id = oi.order_id WHERE o.created_at >= '2026-10-25T08:00:00+00:00' AND o.created_at < '2026-10-25T12:00:00+00:00' GROUP BY o.customer_id HAVING SUM(oi.qty) > 15;",
+    "sale_specific": true,
+    "day": 7
+  },
+  {
+    "id": "q0170",
+    "question": "Which categories have the highest average product price among active products stocked in Boston stores as of 2026-10-25 12:00 UTC?",
+    "sql": "SELECT c.category_id, c.name, AVG(p.price) AS avg_price FROM categories c JOIN products p ON c.category_id = p.category_id JOIN store_stock ss ON p.product_id = ss.product_id JOIN stores s ON ss.store_id = s.store_id WHERE p.is_active = TRUE AND s.city = 'Boston' AND ss.updated_at <= '2026-10-25T12:00:00+00:00' GROUP BY c.category_id, c.name ORDER BY avg_price DESC;",
+    "sale_specific": false,
+    "day": 14
+  },
+  {
+    "id": "q0171",
+    "question": "Which orders placed in the last 24 hours have more than 3 distinct products from different categories?",
+    "sql": "SELECT o.order_id FROM orders o JOIN order_items oi ON o.order_id = oi.order_id JOIN products p ON oi.product_id = p.product_id WHERE o.created_at >= '2026-10-24T12:00:00+00:00' GROUP BY o.order_id HAVING COUNT(DISTINCT p.category_id) > 3;",
+    "sale_specific": false,
+    "day": 2
+  },
+  {
+    "id": "q0172",
+    "question": "Identify stores in Seattle where the total value of orders paid by 'digital wallet' exceeded $10,000 in October 2026.",
+    "sql": "SELECT s.store_id, SUM(o.total) AS total_digital_wallet_sales FROM orders o JOIN stores s ON o.store_id = s.store_id WHERE s.city = 'Seattle' AND o.payment_mode = 'digital wallet' AND o.created_at >= '2026-10-01T00:00:00+00:00' AND o.created_at < '2026-11-01T00:00:00+00:00' GROUP BY s.store_id HAVING SUM(o.total) > 10000;",
+    "sale_specific": false,
+    "day": 2
+  },
+  {
+    "id": "q0173",
+    "question": "How many riders currently have the status 'idle' grouped by each store in New York as of 2026-10-25 12:00 UTC?",
+    "sql": "SELECT s.store_id, s.name AS store_name, COUNT(r.rider_id) AS idle_riders FROM riders r JOIN stores s ON r.store_id = s.store_id WHERE r.status = 'idle' AND s.city = 'New York' GROUP BY s.store_id, s.name ORDER BY idle_riders DESC;",
+    "sale_specific": false,
+    "day": 12
+  },
+  {
+    "id": "q0174",
+    "question": "For each rider, count the number of orders they have delivered in stores located in Los Angeles during October 2026.",
+    "sql": "SELECT r.rider_id, r.name, COUNT(o.order_id) AS delivered_orders FROM riders r JOIN orders o ON r.rider_id = o.rider_id JOIN stores s ON r.store_id = s.store_id WHERE o.status = 'delivered' AND s.city = 'Los Angeles' AND o.delivered_at >= '2026-10-01' AND o.delivered_at < '2026-11-01' GROUP BY r.rider_id, r.name ORDER BY delivered_orders DESC;",
+    "sale_specific": false,
+    "day": 12
+  },
+  {
+    "id": "q0175",
+    "question": "Which riders currently have the highest number of active orders out for delivery at stores in Chicago as of 2026-10-25 12:00 UTC?",
+    "sql": "SELECT r.rider_id, r.name, COUNT(o.order_id) AS active_orders FROM riders r JOIN orders o ON r.rider_id = o.rider_id JOIN stores s ON r.store_id = s.store_id WHERE o.status = 'out_for_delivery' AND s.city = 'Chicago' GROUP BY r.rider_id, r.name ORDER BY active_orders DESC LIMIT 10;",
+    "sale_specific": false,
+    "day": 1
+  },
+  {
+    "id": "q0176",
+    "question": "Calculate the average delivery time in minutes for each rider who delivered orders in the last 90 days before 2026-10-25.",
+    "sql": "SELECT r.rider_id, r.name, AVG(EXTRACT(EPOCH FROM (o.delivered_at - o.created_at))/60) AS avg_delivery_duration_minutes FROM riders r JOIN orders o ON r.rider_id = o.rider_id WHERE o.status = 'delivered' AND o.delivered_at >= '2026-07-27' AND o.delivered_at < '2026-10-25' GROUP BY r.rider_id, r.name ORDER BY avg_delivery_duration_minutes;",
+    "sale_specific": false,
+    "day": 7
+  },
+  {
+    "id": "q0177",
+    "question": "List all riders working at stores located in Bengaluru along with their current status.",
+    "sql": "SELECT r.rider_id, r.name, r.status, s.name AS store_name FROM riders r JOIN stores s ON r.store_id = s.store_id WHERE s.city = 'Bengaluru';",
+    "sale_specific": false,
+    "day": 14
+  },
+  {
+    "id": "q0178",
+    "question": "Count the number of riders assigned to each city as of 2026-10-25 12:00 UTC.",
+    "sql": "SELECT s.city, COUNT(r.rider_id) AS rider_count FROM riders r JOIN stores s ON r.store_id = s.store_id GROUP BY s.city ORDER BY rider_count DESC;",
+    "sale_specific": false,
+    "day": 5
+  },
+  {
+    "id": "q0179",
+    "question": "During the flash sale on 2026-10-25 between 07:00 and 11:00 UTC, which riders had more than two active deliveries (status 'out_for_delivery')?",
+    "sql": "SELECT r.rider_id, r.name, COUNT(o.order_id) AS active_deliveries FROM riders r JOIN orders o ON r.rider_id = o.rider_id WHERE o.status = 'out_for_delivery' AND o.created_at >= '2026-10-25 07:00:00+00' AND o.created_at < '2026-10-25 11:00:00+00' GROUP BY r.rider_id, r.name HAVING COUNT(o.order_id) > 2 ORDER BY active_deliveries DESC;",
+    "sale_specific": true,
+    "day": 11
+  },
+  {
+    "id": "q0180",
+    "question": "Which stores had more active orders (status 'out_for_delivery') than idle riders during the flash sale on 2026-10-25 from 06:00 to 12:00 UTC?",
+    "sql": "WITH active_orders AS ( SELECT store_id, COUNT(order_id) AS active_order_count FROM orders WHERE status = 'out_for_delivery' AND created_at >= '2026-10-25 06:00:00+00' AND created_at < '2026-10-25 12:00:00+00' GROUP BY store_id ), idle_riders AS ( SELECT store_id, COUNT(rider_id) AS idle_rider_count FROM riders WHERE status = 'idle' GROUP BY store_id ) SELECT s.store_id, s.name, COALESCE(a.active_order_count,0) AS active_orders, COALESCE(i.idle_rider_count,0) AS idle_riders FROM stores s LEFT JOIN active_orders a ON s.store_id = a.store_id LEFT JOIN idle_riders i ON s.store_id = i.store_id WHERE COALESCE(a.active_order_count,0) > COALESCE(i.idle_rider_count,0) ORDER BY active_orders DESC;",
+    "sale_specific": true,
+    "day": 4
+  },
+  {
+    "id": "q0181",
+    "question": "Find the number of riders with status 'available' in stores located in Seattle as of 2026-10-25 12:00 UTC.",
+    "sql": "SELECT s.store_id, s.name, COUNT(r.rider_id) AS available_riders FROM riders r JOIN stores s ON r.store_id = s.store_id WHERE r.status = 'available' AND s.city = 'Seattle' GROUP BY s.store_id, s.name ORDER BY available_riders DESC;",
+    "sale_specific": false,
+    "day": 14
+  },
+  {
+    "id": "q0182",
+    "question": "What is the maximum number of orders assigned to a single rider in stores located in Austin during the last 30 days before 2026-10-25?",
+    "sql": "SELECT r.rider_id, r.name, COUNT(o.order_id) AS total_orders FROM riders r JOIN orders o ON r.rider_id = o.rider_id JOIN stores s ON r.store_id = s.store_id WHERE s.city = 'Austin' AND o.created_at >= '2026-09-25' AND o.created_at < '2026-10-25' GROUP BY r.rider_id, r.name ORDER BY total_orders DESC LIMIT 1;",
+    "sale_specific": false,
+    "day": 13
+  },
+  {
+    "id": "q0183",
+    "question": "Which riders have delivered orders in more than one city during the last 90 days before 2026-10-25?",
+    "sql": "SELECT r.rider_id, r.name, COUNT(DISTINCT s.city) AS cities_worked FROM riders r JOIN orders o ON r.rider_id = o.rider_id JOIN stores s ON o.store_id = s.store_id WHERE o.status = 'delivered' AND o.delivered_at >= '2026-07-27' AND o.delivered_at < '2026-10-25' GROUP BY r.rider_id, r.name HAVING COUNT(DISTINCT s.city) > 1 ORDER BY cities_worked DESC;",
+    "sale_specific": false,
+    "day": 8
+  },
+  {
+    "id": "q0184",
+    "question": "During the flash sale on 2026-10-25 between 09:00 and 12:00 UTC, which riders handled orders totaling more than $3000 in value?",
+    "sql": "SELECT r.rider_id, r.name, SUM(o.total) AS total_order_value FROM riders r JOIN orders o ON r.rider_id = o.rider_id WHERE o.created_at >= '2026-10-25 09:00:00+00' AND o.created_at < '2026-10-25 12:00:00+00' GROUP BY r.rider_id, r.name HAVING SUM(o.total) > 3000 ORDER BY total_order_value DESC;",
+    "sale_specific": true,
+    "day": 6
+  },
+  {
+    "id": "q0185",
+    "question": "List stores in Miami and the count of riders currently assigned there with status 'busy' as of 2026-10-25 12:00 UTC.",
+    "sql": "SELECT s.store_id, s.name, COUNT(r.rider_id) AS busy_riders FROM stores s JOIN riders r ON s.store_id = r.store_id WHERE s.city = 'Miami' AND r.status = 'busy' GROUP BY s.store_id, s.name ORDER BY busy_riders DESC;",
+    "sale_specific": false,
+    "day": 13
+  },
+  {
+    "id": "q0186",
+    "question": "How many riders are assigned to each store city with the status 'available' or 'idle' as of 2026-10-25 12:00 UTC?",
+    "sql": "SELECT s.city, COUNT(r.rider_id) AS rider_count FROM riders r JOIN stores s ON r.store_id = s.store_id WHERE r.status IN ('available', 'idle') GROUP BY s.city ORDER BY rider_count DESC;",
+    "sale_specific": false,
+    "day": 2
+  },
+  {
+    "id": "q0187",
+    "question": "During the flash sale on 2026-10-25 between 08:00 and 11:00 UTC, which riders had the highest average order total for orders assigned to them?",
+    "sql": "SELECT r.rider_id, r.name, AVG(o.total) AS avg_order_total FROM riders r JOIN orders o ON r.rider_id = o.rider_id WHERE o.created_at >= '2026-10-25 08:00:00+00' AND o.created_at < '2026-10-25 11:00:00+00' GROUP BY r.rider_id, r.name ORDER BY avg_order_total DESC LIMIT 10;",
+    "sale_specific": true,
+    "day": 3
+  },
+  {
+    "id": "q0188",
+    "question": "Which riders have handled orders totaling over 5000 USD in stores located in Boston during October 2026?",
+    "sql": "SELECT r.rider_id, r.name, SUM(o.total) AS total_revenue FROM riders r JOIN orders o ON r.rider_id = o.rider_id JOIN stores s ON r.store_id = s.store_id WHERE s.city = 'Boston' AND o.created_at >= '2026-10-01' AND o.created_at < '2026-11-01' GROUP BY r.rider_id, r.name HAVING SUM(o.total) > 5000 ORDER BY total_revenue DESC;",
+    "sale_specific": true,
+    "day": 1
+  },
+  {
+    "id": "q0189",
+    "question": "For each store in Philadelphia, count the number of riders who are currently 'idle' and the total number of orders in 'placed' status as of 2026-10-25 12:00 UTC.",
+    "sql": "WITH idle_riders AS ( SELECT store_id, COUNT(rider_id) AS idle_count FROM riders WHERE status = 'idle' GROUP BY store_id ), placed_orders AS ( SELECT store_id, COUNT(order_id) AS placed_count FROM orders WHERE status = 'placed' GROUP BY store_id ) SELECT s.store_id, s.name, COALESCE(i.idle_count,0) AS idle_riders, COALESCE(p.placed_count,0) AS placed_orders FROM stores s LEFT JOIN idle_riders i ON s.store_id = i.store_id LEFT JOIN placed_orders p ON s.store_id = p.store_id WHERE s.city = 'Philadelphia' ORDER BY s.name;",
+    "sale_specific": false,
+    "day": 6
+  },
+  {
+    "id": "q0190",
+    "question": "Which riders have had at least 5 orders delivered in stores located in Houston during the week before 2026-10-25?",
+    "sql": "SELECT r.rider_id, r.name, COUNT(o.order_id) AS delivered_count FROM riders r JOIN orders o ON r.rider_id = o.rider_id JOIN stores s ON r.store_id = s.store_id WHERE s.city = 'Houston' AND o.status = 'delivered' AND o.delivered_at >= '2026-10-18' AND o.delivered_at < '2026-10-25' GROUP BY r.rider_id, r.name HAVING COUNT(o.order_id) >= 5 ORDER BY delivered_count DESC;",
+    "sale_specific": false,
+    "day": 7
+  },
+  {
+    "id": "q0191",
+    "question": "During the flash sale on 2026-10-25 from 06:00 to 10:00 UTC, which riders have more active deliveries than the average number of idle riders per store?",
+    "sql": "WITH avg_idle AS ( SELECT AVG(idle_count) AS avg_idle_riders FROM ( SELECT store_id, COUNT(rider_id) AS idle_count FROM riders WHERE status = 'idle' GROUP BY store_id ) sub ), rider_active_orders AS ( SELECT r.rider_id, r.name, s.store_id, COUNT(o.order_id) AS active_orders FROM riders r JOIN orders o ON r.rider_id = o.rider_id JOIN stores s ON r.store_id = s.store_id WHERE o.status = 'out_for_delivery' AND o.created_at >= '2026-10-25 06:00:00+00' AND o.created_at < '2026-10-25 10:00:00+00' GROUP BY r.rider_id, r.name, s.store_id ) SELECT rao.rider_id, rao.name, rao.active_orders FROM rider_active_orders rao, avg_idle WHERE rao.active_orders > avg_idle.avg_idle_riders ORDER BY rao.active_orders DESC;",
+    "sale_specific": true,
+    "day": 12
+  },
+  {
+    "id": "q0192",
+    "question": "What is the total revenue from delivered orders by each payment mode in New York during October 2026?",
+    "sql": "SELECT payment_mode, SUM(total) AS delivered_revenue FROM orders JOIN stores ON orders.store_id = stores.store_id WHERE status = 'delivered' AND stores.city = 'New York' AND orders.delivered_at >= '2026-10-01T00:00:00+00:00' AND orders.delivered_at < '2026-11-01T00:00:00+00:00' GROUP BY payment_mode ORDER BY delivered_revenue DESC;",
+    "sale_specific": false,
+    "day": 13
+  },
+  {
+    "id": "q0193",
+    "question": "How many orders were delivered daily per store in Chicago during the first two weeks of October 2026?",
+    "sql": "SELECT stores.name AS store_name, date_trunc('day', orders.delivered_at) AS delivery_date, COUNT(*) AS delivered_orders FROM orders JOIN stores ON orders.store_id = stores.store_id WHERE orders.status = 'delivered' AND stores.city = 'Chicago' AND orders.delivered_at >= '2026-10-01T00:00:00+00:00' AND orders.delivered_at < '2026-10-15T00:00:00+00:00' GROUP BY stores.name, delivery_date ORDER BY stores.name, delivery_date;",
+    "sale_specific": false,
+    "day": 9
+  },
+  {
+    "id": "q0194",
+    "question": "Which stores in Los Angeles have total delivered revenue exceeding the average revenue of all LA stores in September 2026?",
+    "sql": "WITH store_revenue AS (SELECT store_id, SUM(total) AS total_revenue FROM orders WHERE status = 'delivered' AND delivered_at >= '2026-09-01T00:00:00+00:00' AND delivered_at < '2026-10-01T00:00:00+00:00' GROUP BY store_id), avg_revenue AS (SELECT AVG(total_revenue) AS avg_rev FROM store_revenue) SELECT stores.name, sr.total_revenue FROM store_revenue sr JOIN stores ON sr.store_id = stores.store_id, avg_revenue WHERE stores.city = 'Los Angeles' AND sr.total_revenue > avg_revenue.avg_rev ORDER BY sr.total_revenue DESC;",
+    "sale_specific": false,
+    "day": 5
+  },
+  {
+    "id": "q0195",
+    "question": "What is the total cancelled order value per city for orders placed in October 2026?",
+    "sql": "SELECT stores.city, SUM(orders.total) AS cancelled_order_value FROM orders JOIN stores ON orders.store_id = stores.store_id WHERE orders.status = 'cancelled' AND orders.created_at >= '2026-10-01T00:00:00+00:00' AND orders.created_at < '2026-11-01T00:00:00+00:00' GROUP BY stores.city ORDER BY cancelled_order_value DESC;",
+    "sale_specific": false,
+    "day": 13
+  },
+  {
+    "id": "q0196",
+    "question": "Which payment modes have the highest average order value for delivered orders in stores located in Miami during October 2026?",
+    "sql": "SELECT payment_mode, AVG(total) AS avg_order_value FROM orders JOIN stores ON orders.store_id = stores.store_id WHERE status = 'delivered' AND stores.city = 'Miami' AND orders.delivered_at >= '2026-10-01T00:00:00+00:00' AND orders.delivered_at < '2026-11-01T00:00:00+00:00' GROUP BY payment_mode ORDER BY avg_order_value DESC;",
+    "sale_specific": false,
+    "day": 12
+  },
+  {
+    "id": "q0197",
+    "question": "During the flash sale on 2026-10-25 from 05:00 to 11:00 UTC, what is the hourly delivered revenue across all stores in Seattle?",
+    "sql": "SELECT date_trunc('hour', delivered_at) AS hour, SUM(total) AS delivered_revenue FROM orders WHERE status = 'delivered' AND delivered_at >= '2026-10-25T05:00:00+00:00' AND delivered_at < '2026-10-25T11:00:00+00:00' GROUP BY hour ORDER BY hour;",
+    "sale_specific": true,
+    "day": 3
+  },
+  {
+    "id": "q0198",
+    "question": "During the flash sale period on 2026-10-25 between 07:00 and 11:00 UTC, how much order value is still awaiting delivery in stores located in Austin?",
+    "sql": "SELECT SUM(total) AS awaiting_delivery_value FROM orders JOIN stores ON orders.store_id = stores.store_id WHERE status IN ('placed', 'out_for_delivery') AND stores.city = 'Austin' AND orders.created_at >= '2026-10-25T07:00:00+00:00' AND orders.created_at < '2026-10-25T11:00:00+00:00';",
+    "sale_specific": true,
+    "day": 14
+  },
+  {
+    "id": "q0199",
+    "question": "Which riders handled the highest total delivered revenue in stores located in Philadelphia during October 2026?",
+    "sql": "SELECT riders.name AS rider_name, SUM(orders.total) AS delivered_revenue FROM orders JOIN riders ON orders.rider_id = riders.rider_id JOIN stores ON orders.store_id = stores.store_id WHERE orders.status = 'delivered' AND stores.city = 'Philadelphia' AND orders.delivered_at >= '2026-10-01T00:00:00+00:00' AND orders.delivered_at < '2026-11-01T00:00:00+00:00' GROUP BY riders.name ORDER BY delivered_revenue DESC LIMIT 10;",
+    "sale_specific": false,
+    "day": 7
+  },
+  {
+    "id": "q0200",
+    "question": "What is the average number of distinct products per delivered order in stores located in San Francisco during September 2026?",
+    "sql": "SELECT AVG(product_count) AS avg_distinct_products FROM (SELECT order_items.order_id, COUNT(DISTINCT product_id) AS product_count FROM orders JOIN order_items ON orders.order_id = order_items.order_id JOIN stores ON orders.store_id = stores.store_id WHERE orders.status = 'delivered' AND stores.city = 'San Francisco' AND orders.delivered_at >= '2026-09-01T00:00:00+00:00' AND orders.delivered_at < '2026-10-01T00:00:00+00:00' GROUP BY order_items.order_id) sub;",
+    "sale_specific": false,
+    "day": 1
+  },
+  {
+    "id": "q0201",
+    "question": "Which categories have the highest total quantity sold in stores located in Boston during October 2026?",
+    "sql": "SELECT categories.name AS category_name, SUM(order_items.qty) AS total_qty_sold FROM order_items JOIN products ON order_items.product_id = products.product_id JOIN categories ON products.category_id = categories.category_id JOIN orders ON order_items.order_id = orders.order_id JOIN stores ON orders.store_id = stores.store_id WHERE orders.status = 'delivered' AND stores.city = 'Boston' AND orders.delivered_at >= '2026-10-01T00:00:00+00:00' AND orders.delivered_at < '2026-11-01T00:00:00+00:00' GROUP BY categories.name ORDER BY total_qty_sold DESC LIMIT 5;",
+    "sale_specific": false,
+    "day": 10
+  },
+  {
+    "id": "q0202",
+    "question": "For each store in Denver, what is the count of orders delivered each week from August to October 2026?",
+    "sql": "SELECT stores.name AS store_name, date_trunc('week', orders.delivered_at) AS week_start, COUNT(*) AS delivered_orders FROM orders JOIN stores ON orders.store_id = stores.store_id WHERE orders.status = 'delivered' AND stores.city = 'Denver' AND orders.delivered_at >= '2026-08-01T00:00:00+00:00' AND orders.delivered_at < '2026-11-01T00:00:00+00:00' GROUP BY stores.name, week_start ORDER BY stores.name, week_start;",
+    "sale_specific": false,
+    "day": 5
+  },
+  {
+    "id": "q0203",
+    "question": "Which stores in Houston had delivered revenue above the city average during the first quarter of 2026?",
+    "sql": "WITH store_revenue AS (SELECT store_id, SUM(total) AS total_revenue FROM orders WHERE status = 'delivered' AND delivered_at >= '2026-01-01T00:00:00+00:00' AND delivered_at < '2026-04-01T00:00:00+00:00' GROUP BY store_id), avg_revenue AS (SELECT AVG(total_revenue) AS avg_rev FROM store_revenue) SELECT stores.name, sr.total_revenue FROM store_revenue sr JOIN stores ON sr.store_id = stores.store_id, avg_revenue WHERE stores.city = 'Houston' AND sr.total_revenue > avg_revenue.avg_rev ORDER BY sr.total_revenue DESC;",
+    "sale_specific": false,
+    "day": 4
+  },
+  {
+    "id": "q0204",
+    "question": "During the flash sale on 2026-10-25 from 06:00 to 12:00 UTC, which customers placed orders with more than 10 items total?",
+    "sql": "SELECT customers.name, SUM(order_items.qty) AS total_items_ordered FROM orders JOIN customers ON orders.customer_id = customers.customer_id JOIN order_items ON orders.order_id = order_items.order_id WHERE orders.created_at >= '2026-10-25T06:00:00+00:00' AND orders.created_at < '2026-10-25T12:00:00+00:00' GROUP BY customers.name HAVING SUM(order_items.qty) > 10 ORDER BY total_items_ordered DESC;",
+    "sale_specific": true,
+    "day": 9
+  },
+  {
+    "id": "q0205",
+    "question": "What is the average delivery duration in minutes per rider for orders delivered in stores located in Miami in September 2026?",
+    "sql": "SELECT riders.name AS rider_name, AVG(EXTRACT(EPOCH FROM (orders.delivered_at - orders.created_at))/60) AS avg_delivery_minutes FROM orders JOIN riders ON orders.rider_id = riders.rider_id JOIN stores ON orders.store_id = stores.store_id WHERE orders.status = 'delivered' AND stores.city = 'Miami' AND orders.delivered_at >= '2026-09-01T00:00:00+00:00' AND orders.delivered_at < '2026-10-01T00:00:00+00:00' GROUP BY riders.name ORDER BY avg_delivery_minutes;",
+    "sale_specific": false,
+    "day": 8
+  },
+  {
+    "id": "q0206",
+    "question": "Which stores in Seattle have more than 10 products with zero or negative stock as of 2026-10-25 12:00 UTC?",
+    "sql": "SELECT stores.name, COUNT(*) AS zero_or_less_stock_products FROM store_stock JOIN stores ON store_stock.store_id = stores.store_id WHERE (qty - reserved) <= 0 AND stores.city = 'Seattle' AND updated_at <= '2026-10-25T12:00:00+00:00' GROUP BY stores.name HAVING COUNT(*) > 10 ORDER BY zero_or_less_stock_products DESC;",
+    "sale_specific": false,
+    "day": 5
+  },
+  {
+    "id": "q0207",
+    "question": "For each city, what is the total delivered revenue handled by riders who completed more than 20 deliveries in October 2026?",
+    "sql": "SELECT stores.city, SUM(orders.total) AS total_revenue FROM orders JOIN stores ON orders.store_id = stores.store_id WHERE orders.status = 'delivered' AND orders.rider_id IN (SELECT rider_id FROM orders WHERE status = 'delivered' AND delivered_at >= '2026-10-01T00:00:00+00:00' AND delivered_at < '2026-11-01T00:00:00+00:00' GROUP BY rider_id HAVING COUNT(*) > 20) AND orders.delivered_at >= '2026-10-01T00:00:00+00:00' AND orders.delivered_at < '2026-11-01T00:00:00+00:00' GROUP BY stores.city ORDER BY total_revenue DESC;",
+    "sale_specific": false,
+    "day": 6
+  },
+  {
+    "id": "q0208",
+    "question": "Which riders in stores located in Chicago delivered orders with an average value above $150 during October 2026?",
+    "sql": "SELECT riders.name, AVG(orders.total) AS avg_order_value FROM orders JOIN riders ON orders.rider_id = riders.rider_id JOIN stores ON orders.store_id = stores.store_id WHERE orders.status = 'delivered' AND stores.city = 'Chicago' AND orders.delivered_at >= '2026-10-01T00:00:00+00:00' AND orders.delivered_at < '2026-11-01T00:00:00+00:00' GROUP BY riders.name HAVING AVG(orders.total) > 150 ORDER BY avg_order_value DESC;",
+    "sale_specific": false,
+    "day": 3
+  },
+  {
+    "id": "q0209",
+    "question": "During the flash sale on 2026-10-25 from 06:00 to 12:00 UTC, which stores had more orders placed than the average daily orders in the previous week?",
+    "sql": "WITH flash_sale_orders AS (SELECT store_id, COUNT(*) AS flash_orders FROM orders WHERE created_at >= '2026-10-25T06:00:00+00:00' AND created_at < '2026-10-25T12:00:00+00:00' GROUP BY store_id), daily_avg_orders AS (SELECT store_id, AVG(daily_count) AS avg_daily_orders FROM (SELECT store_id, date_trunc('day', created_at) AS day, COUNT(*) AS daily_count FROM orders WHERE created_at >= '2026-10-18T00:00:00+00:00' AND created_at < '2026-10-25T00:00:00+00:00' GROUP BY store_id, day) sub GROUP BY store_id) SELECT stores.name, f.flash_orders, d.avg_daily_orders FROM flash_sale_orders f JOIN daily_avg_orders d ON f.store_id = d.store_id JOIN stores ON stores.store_id = f.store_id WHERE f.flash_orders > d.avg_daily_orders ORDER BY (f.flash_orders - d.avg_daily_orders) DESC;",
+    "sale_specific": true,
+    "day": 7
+  },
+  {
+    "id": "q0210",
+    "question": "How many distinct customers placed orders in stores located in Austin with total order value above $200 during October 2026?",
+    "sql": "SELECT stores.city, COUNT(DISTINCT orders.customer_id) AS distinct_customers FROM orders JOIN stores ON orders.store_id = stores.store_id WHERE stores.city = 'Austin' AND orders.total > 200 AND orders.created_at >= '2026-10-01T00:00:00+00:00' AND orders.created_at < '2026-11-01T00:00:00+00:00' GROUP BY stores.city;",
+    "sale_specific": false,
+    "day": 7
+  },
+  {
+    "id": "q0211",
+    "question": "Which riders have delivered orders across multiple cities during the last 90 days before 2026-10-25?",
+    "sql": "SELECT riders.name, COUNT(DISTINCT stores.city) AS cities_delivered FROM orders JOIN riders ON orders.rider_id = riders.rider_id JOIN stores ON orders.store_id = stores.store_id WHERE orders.status = 'delivered' AND orders.delivered_at >= '2026-07-27T12:00:00+00:00' AND orders.delivered_at < '2026-10-25T12:00:00+00:00' GROUP BY riders.name HAVING COUNT(DISTINCT stores.city) > 1 ORDER BY cities_delivered DESC;",
+    "sale_specific": false,
+    "day": 7
+  },
+  {
+    "id": "q0212",
+    "question": "During the flash sale on 2026-10-25 from 07:00 to 12:00 UTC, which riders handled orders totaling over $4000 in value?",
+    "sql": "SELECT riders.name, SUM(orders.total) AS total_order_value FROM orders JOIN riders ON orders.rider_id = riders.rider_id WHERE orders.created_at >= '2026-10-25T07:00:00+00:00' AND orders.created_at < '2026-10-25T12:00:00+00:00' GROUP BY riders.name HAVING SUM(orders.total) > 4000 ORDER BY total_order_value DESC;",
+    "sale_specific": true,
+    "day": 11
+  },
+  {
+    "id": "q0213",
+    "question": "What is the total quantity of active products currently stocked per store in Seattle as of 2026-10-25 12:00 UTC?",
+    "sql": "SELECT stores.name, SUM(store_stock.qty) AS total_stock_qty FROM store_stock JOIN stores ON store_stock.store_id = stores.store_id JOIN products ON store_stock.product_id = products.product_id WHERE stores.city = 'Seattle' AND products.is_active = TRUE AND store_stock.updated_at <= '2026-10-25T12:00:00+00:00' GROUP BY stores.name ORDER BY total_stock_qty DESC;",
+    "sale_specific": false,
+    "day": 5
+  },
+  {
+    "id": "q0214",
+    "question": "What are the hourly counts of delivered orders and total revenue for each store in New York during October 2026?",
+    "sql": "SELECT store_id, date_trunc('hour', delivered_at) AS hour, COUNT(*) AS delivered_orders, SUM(total) AS total_revenue FROM orders WHERE delivered_at BETWEEN '2026-10-01T00:00:00+00:00' AND '2026-10-31T23:59:59+00:00' AND status = 'delivered' AND store_id IN (SELECT store_id FROM stores WHERE city = 'New York') GROUP BY store_id, hour ORDER BY store_id, hour;",
+    "sale_specific": false,
+    "day": 10
+  },
+  {
+    "id": "q0215",
+    "question": "Which twenty products have the highest sum of units sold in the Chicago store during September 2026?",
+    "sql": "SELECT oi.product_id, p.name, SUM(oi.qty) AS total_units_sold FROM order_items oi JOIN orders o ON oi.order_id = o.order_id JOIN products p ON oi.product_id = p.product_id WHERE o.store_id = (SELECT store_id FROM stores WHERE city = 'Chicago' LIMIT 1) AND o.created_at BETWEEN '2026-09-01T00:00:00+00:00' AND '2026-09-30T23:59:59+00:00' AND o.status = 'delivered' GROUP BY oi.product_id, p.name ORDER BY total_units_sold DESC LIMIT 20;",
+    "sale_specific": false,
+    "day": 3
+  },
+  {
+    "id": "q0216",
+    "question": "What are the total revenue and average quantity sold per order line for each product category in stores located in Boston in October 2026?",
+    "sql": "SELECT c.name AS category_name, SUM(oi.qty * oi.unit_price) AS total_revenue, AVG(oi.qty) AS avg_qty_per_order_line FROM order_items oi JOIN products p ON oi.product_id = p.product_id JOIN categories c ON p.category_id = c.category_id JOIN orders o ON oi.order_id = o.order_id JOIN stores s ON o.store_id = s.store_id WHERE s.city = 'Boston' AND o.created_at BETWEEN '2026-10-01T00:00:00+00:00' AND '2026-10-31T23:59:59+00:00' AND o.status = 'delivered' GROUP BY c.name ORDER BY total_revenue DESC;",
+    "sale_specific": false,
+    "day": 4
+  },
+  {
+    "id": "q0217",
+    "question": "List the brands with the highest total units sold across all stores in Seattle during October 2026.",
+    "sql": "SELECT p.brand, SUM(oi.qty) AS units_sold FROM order_items oi JOIN products p ON oi.product_id = p.product_id JOIN orders o ON oi.order_id = o.order_id JOIN stores s ON o.store_id = s.store_id WHERE s.city = 'Seattle' AND o.created_at BETWEEN '2026-10-01T00:00:00+00:00' AND '2026-10-31T23:59:59+00:00' AND o.status = 'delivered' GROUP BY p.brand ORDER BY units_sold DESC;",
+    "sale_specific": false,
+    "day": 7
+  },
+  {
+    "id": "q0218",
+    "question": "Rank cities by total delivered order revenue for October 2026, showing the top five cities.",
+    "sql": "SELECT s.city, SUM(o.total) AS total_revenue FROM orders o JOIN stores s ON o.store_id = s.store_id WHERE o.status = 'delivered' AND o.created_at BETWEEN '2026-10-01T00:00:00+00:00' AND '2026-10-31T23:59:59+00:00' GROUP BY s.city ORDER BY total_revenue DESC LIMIT 5;",
+    "sale_specific": false,
+    "day": 9
+  },
+  {
+    "id": "q0219",
+    "question": "For each store in Philadelphia, how many distinct products were sold in delivered orders during October 2026?",
+    "sql": "SELECT o.store_id, COUNT(DISTINCT oi.product_id) AS distinct_products_sold FROM orders o JOIN order_items oi ON o.order_id = oi.order_id WHERE o.status = 'delivered' AND o.created_at BETWEEN '2026-10-01T00:00:00+00:00' AND '2026-10-31T23:59:59+00:00' AND o.store_id IN (SELECT store_id FROM stores WHERE city = 'Philadelphia') GROUP BY o.store_id ORDER BY distinct_products_sold DESC;",
+    "sale_specific": false,
+    "day": 10
+  },
+  {
+    "id": "q0220",
+    "question": "During the flash sale on 2026-10-25 from 10:00 to 12:00 UTC, which products sold the most units in stores located in Los Angeles?",
+    "sql": "SELECT oi.product_id, p.name, SUM(oi.qty) AS units_sold FROM order_items oi JOIN orders o ON oi.order_id = o.order_id JOIN products p ON oi.product_id = p.product_id JOIN stores s ON o.store_id = s.store_id WHERE s.city = 'Los Angeles' AND o.created_at BETWEEN '2026-10-25T10:00:00+00:00' AND '2026-10-25T12:00:00+00:00' AND o.status = 'delivered' GROUP BY oi.product_id, p.name ORDER BY units_sold DESC LIMIT 15;",
+    "sale_specific": true,
+    "day": 5
+  },
+  {
+    "id": "q0221",
+    "question": "Which stores in Miami generated the highest revenue during the flash sale on 2026-10-25 between 07:00 and 10:00 UTC?",
+    "sql": "SELECT s.store_id, s.name, SUM(o.total) AS revenue FROM orders o JOIN stores s ON o.store_id = s.store_id WHERE s.city = 'Miami' AND o.created_at BETWEEN '2026-10-25T07:00:00+00:00' AND '2026-10-25T10:00:00+00:00' AND o.status = 'delivered' GROUP BY s.store_id, s.name ORDER BY revenue DESC LIMIT 10;",
+    "sale_specific": true,
+    "day": 12
+  },
+  {
+    "id": "q0222",
+    "question": "What is the count of distinct customers who placed orders with total value exceeding $150 in stores located in Houston during October 2026?",
+    "sql": "SELECT COUNT(DISTINCT o.customer_id) AS distinct_customers FROM orders o JOIN stores s ON o.store_id = s.store_id WHERE s.city = 'Houston' AND o.total > 150 AND o.created_at BETWEEN '2026-10-01T00:00:00+00:00' AND '2026-10-31T23:59:59+00:00' AND o.status = 'delivered';",
+    "sale_specific": false,
+    "day": 4
+  },
+  {
+    "id": "q0223",
+    "question": "For each city, what is the total quantity of active products currently stocked across all stores as of 2026-10-25 12:00 UTC?",
+    "sql": "SELECT st.city, SUM(ss.qty) AS total_active_stock FROM store_stock ss JOIN stores st ON ss.store_id = st.store_id JOIN products p ON ss.product_id = p.product_id WHERE p.is_active = TRUE AND ss.updated_at <= '2026-10-25T12:00:00+00:00' GROUP BY st.city ORDER BY total_active_stock DESC;",
+    "sale_specific": false,
+    "day": 1
+  },
+  {
+    "id": "q0224",
+    "question": "During the flash sale on 2026-10-25 between 09:30 and 11:30 UTC, which stores had more delivered orders than the daily average of the previous week in stores located in Seattle?",
+    "sql": "WITH daily_avg AS ( SELECT store_id, AVG(daily_count) AS avg_daily_orders FROM ( SELECT store_id, date_trunc('day', delivered_at) AS day, COUNT(*) AS daily_count FROM orders WHERE status = 'delivered' AND delivered_at BETWEEN '2026-10-18T00:00:00+00:00' AND '2026-10-24T23:59:59+00:00' AND store_id IN (SELECT store_id FROM stores WHERE city = 'Seattle') GROUP BY store_id, day ) sub GROUP BY store_id ) SELECT o.store_id, s.name, COUNT(*) AS delivered_orders_flash_sale FROM orders o JOIN stores s ON o.store_id = s.store_id JOIN daily_avg da ON o.store_id = da.store_id WHERE o.status = 'delivered' AND o.delivered_at BETWEEN '2026-10-25T09:30:00+00:00' AND '2026-10-25T11:30:00+00:00' AND s.city = 'Seattle' GROUP BY o.store_id, s.name, da.avg_daily_orders HAVING COUNT(*) > da.avg_daily_orders ORDER BY delivered_orders_flash_sale DESC;",
+    "sale_specific": true,
+    "day": 14
+  },
+  {
+    "id": "q0225",
+    "question": "Which stores in Dallas have at least five active products with zero or negative stock as of 2026-10-25 12:00 UTC?",
+    "sql": "SELECT s.store_id, s.name, COUNT(ss.product_id) AS zero_or_negative_stock_products FROM stores s JOIN store_stock ss ON s.store_id = ss.store_id JOIN products p ON ss.product_id = p.product_id WHERE s.city = 'Dallas' AND p.is_active = TRUE AND ss.qty <= 0 AND ss.updated_at <= '2026-10-25T12:00:00+00:00' GROUP BY s.store_id, s.name HAVING COUNT(ss.product_id) >= 5 ORDER BY zero_or_negative_stock_products DESC;",
+    "sale_specific": false,
+    "day": 14
+  },
+  {
+    "id": "q0226",
+    "question": "During the flash sale on 2026-10-25 from 08:00 to 11:00 UTC, which customers placed orders with more than 5 items total in stores located in Portland?",
+    "sql": "SELECT o.customer_id, c.name, SUM(oi.qty) AS total_items FROM orders o JOIN order_items oi ON o.order_id = oi.order_id JOIN customers c ON o.customer_id = c.customer_id JOIN stores s ON o.store_id = s.store_id WHERE s.city = 'Portland' AND o.created_at BETWEEN '2026-10-25T08:00:00+00:00' AND '2026-10-25T11:00:00+00:00' AND o.status = 'delivered' GROUP BY o.customer_id, c.name HAVING SUM(oi.qty) > 5 ORDER BY total_items DESC;",
+    "sale_specific": true,
+    "day": 4
+  },
+  {
+    "id": "q0227",
+    "question": "For each store in Nashville, what is the count of orders delivered weekly from September to October 2026?",
+    "sql": "SELECT o.store_id, date_trunc('week', o.delivered_at) AS week_start, COUNT(*) AS delivered_orders FROM orders o JOIN stores s ON o.store_id = s.store_id WHERE s.city = 'Nashville' AND o.status = 'delivered' AND o.delivered_at BETWEEN '2026-09-01T00:00:00+00:00' AND '2026-10-31T23:59:59+00:00' GROUP BY o.store_id, week_start ORDER BY o.store_id, week_start;",
+    "sale_specific": false,
+    "day": 1
+  },
+  {
+    "id": "q0228",
+    "question": "During the flash sale on 2026-10-25 from 07:00 to 09:30 UTC, which customers placed orders with more than 8 total items in stores located in Phoenix?",
+    "sql": "SELECT o.customer_id, c.name, SUM(oi.qty) AS total_items FROM orders o JOIN order_items oi ON o.order_id = oi.order_id JOIN customers c ON o.customer_id = c.customer_id JOIN stores s ON o.store_id = s.store_id WHERE s.city = 'Phoenix' AND o.created_at BETWEEN '2026-10-25T07:00:00+00:00' AND '2026-10-25T09:30:00+00:00' AND o.status = 'delivered' GROUP BY o.customer_id, c.name HAVING SUM(oi.qty) > 8 ORDER BY total_items DESC;",
+    "sale_specific": true,
+    "day": 14
+  }
+]

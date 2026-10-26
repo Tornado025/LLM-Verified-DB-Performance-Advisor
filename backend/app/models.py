@@ -1,6 +1,6 @@
 """Shared data contracts for advisor modules."""
 
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from typing import Any, Literal, Self
 
 
@@ -174,6 +174,7 @@ class ProposeResult(Model):
     saturated: bool
     usage: dict
     rejected: list
+    distinct_plan_curve: list[int] = field(default_factory=list)
 
 
 CandidateKind = Literal["index", "stats", "rewrite"]

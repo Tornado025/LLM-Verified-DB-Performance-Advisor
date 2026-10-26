@@ -131,7 +131,33 @@ Propose (`db`): mock provider on `recent_orders` ⇒ `saturated=True` within `k_
 Real API test `@pytest.mark.llm`: one call, response parses, all candidates pass `safety.check` or are cleanly rejected.
 
 ## 9.10 Done checklist
-- [ ] Mock proposer reproducible (same seed ⇒ same kept list)
-- [ ] OpenRouter provider tested with mocked HTTP; one real call logged in `docs/PROGRESS.md` (model, tokens)
-- [ ] `questions.json` generated (≥ 200 valid items)
-- [ ] Commit `step 09: llm, safety, proposer`
+- [x] Mock proposer reproducible (same seed ⇒ same kept list)
+- [x] OpenRouter provider tested with mocked HTTP; one real call logged in `docs/PROGRESS.md` (model, tokens)
+- [x] `questions.json` generated (≥ 200 valid items)
+- [x] Commit `step 09: llm, safety, proposer`
+
+
+## Implementation clarifications
+
+- Catalog.original_sql must be set to the concrete baseline for rewrite safety;
+  missing baseline fails closed. sqlglot qualification resolves aliases/columns
+  and expands stars before output name/count checks. This is not equivalence.
+- get_provider remains mock by default. Local ignored .env selects GPT-4.1 Nano
+  for explicitly requested real tests; the key is never committed or logged.
+- First mock sample caps all-good fixtures at three, resolving the text's conflict
+  between all-good and the 1–3 candidate cap. Trusted fixture tags are removed
+  before constructing mock output; untrusted LLM comments are rejected outright.
+- MockProvider receives job_seed/params; literals are adapted without a DB call.
+- Index duplication is enforced in propose per table/keys/predicate, ignoring
+  explicit index names/INCLUDE differences as required by section 9.6.
+- ProposeResult has a default-empty distinct_plan_curve field for RQ4. Updated
+  shared provider/propose signatures and Catalog context in the contracts.
+- With at most three HTTP attempts, exponential backoff sleeps 1s then 2s;
+  there is no fourth attempt after a 4s sleep. Format fallback/parse retry are
+  separately bounded. An optional hard HTTP-request cap is used in setup scripts.
+- Paid requests cap output at 8192 tokens and prompts at 50000 encoded bytes.
+- Generated 228 validated questions before user requested the cheaper model; this
+  exceeds the >=200 acceptance threshold. Preserved original Mini provenance;
+  configured Nano for future tests rather than regenerating and spending again.
+- Questions use seeded day assignments, not deterministic model generations.
+  They are safety/EXPLAIN validated workload material, not semantic ground truth.
