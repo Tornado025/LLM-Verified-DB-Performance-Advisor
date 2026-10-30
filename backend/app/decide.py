@@ -6,6 +6,7 @@ import hashlib
 from collections.abc import Callable
 
 from app.config import Settings
+from app.errors import BudgetExceeded
 from app.guard import run_guard
 from app.models import Candidate, Decision, RaceResult
 from app.sandbox import InvalidDDL
@@ -83,6 +84,8 @@ def decide(
                 seed=_guard_seed(shape, candidate),
                 progress=progress,
             )
+        except BudgetExceeded:
+            raise
         except InvalidDDL as exc:
             candidate.status, candidate.reason = "rejected_invalid_ddl", str(exc)
             continue

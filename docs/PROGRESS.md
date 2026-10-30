@@ -1375,3 +1375,85 @@ relative change above 5%; CPU is measured whole-host utilization, not worker dut
   and `git diff --check` passed; no `qc_sbx_*` clone remains. The revised Step
   12 acceptance is satisfied by these checks and the recorded full-profile
   measurements. The requested Step 12 commit has not yet been made.
+
+## 2026-10-30 step 13 — pipeline and evidence in progress
+
+- Implemented the blocking `run_job` orchestrator for selected report shapes:
+  baseline clone/plan/timings, safe mock or configured LLM proposal, plan and
+  DDL filtering, tiered rewrite equivalence, racing, guarded decisions, ordered
+  events, and JSON Schema 2020-12 evidence cards. The code stores every raw
+  proposal's candidate status and every final card in SQLite. A single scratch
+  clone validates accepted DDL transactionally before racing; rollback removes
+  each trial DDL. Job-local clone tracking cleans only this job's clones.
+- Added monotonic per-job/per-shape budgets and cooperative cancellation.
+  The pipeline polls the store for cancellation, propagates a stop event to
+  `run_block`, and checks it between paired report measurements. Unknown or
+  incomplete evidence yields a `block` decision. No code applies changes to
+  `qc_live` in this step. The evidence schema and `jsonschema` dependency were
+  already present in requirements, so no new package download was needed.
+- Real PostgreSQL acceptance checks passed: all eight mock dry-run shapes
+  saved schema-valid cards; a reduced-profile three-shape full job completed;
+  cancellation after the first proposal, provider-error isolation, and both
+  immediate and 20-second budget exhaustion worked. The three-shape measured
+  run is saved as `experiments/results/step13_mock_run.json` with three cards
+  and 41 ordered events. It used `MIN_RUNS=3`, `MAX_RUNS=6`, `MAX_BLOCKS=12`,
+  `BLOCK_SECONDS=2`, `MIN_SAMPLES_PER_BLOCK=1`, `GUARD_PROFILES=normal`, the mock
+  provider, seed 1234, and a 1200-second job budget. These are smoke settings,
+  not a four-profile safety claim. It took 74.31 seconds:
+
+  | Shape | Observe | Propose | Filter | Equivalence | Race | Guard/decide | Decision |
+  |---|---:|---:|---:|---:|---:|---:|---|
+  | recent_orders | 0.509 s | 0.011 s | 0.690 s | 0.001 s | 2.953 s | 64.813 s | BLOCK: guard unproven |
+  | delivered_yesterday | 0.526 s | 0.020 s | 0.013 s | 1.300 s | 0.704 s | <0.001 s | BLOCK: no proven report gain |
+  | payout_report | 0.636 s | 0.016 s | 0.008 s | 1.269 s | 0.752 s | <0.001 s | tested rewrite selected |
+
+  All three saved cards validated against `docs/evidence_card.schema.json`,
+  event IDs increased strictly, and no `qc_sbx_*` clone remained. Earlier
+  final checks passed Ruff, mypy, 198 non-DB/non-LLM tests, and all six
+  PostgreSQL pipeline acceptance tests (dry run, full run, cancellation,
+  immediate budget, 20-second budget, and provider-error isolation).
+  Step 13 is not committed or pushed.
+
+## 2026-10-30 step 14 — apply, monitor, revert
+
+- Implemented explicit approval records bound to candidate SQL, selected-evidence
+  checks, live safety rechecking, weak-rewrite confirmation, and idempotent apply.
+  Indexes use deterministic managed names, CREATE INDEX CONCURRENTLY, validity
+  checks, a 5-second lock timeout, and a Python cancellation deadline. Failed
+  builds attempt cleanup and retain an audit result. Statistics and approved
+  rewrites are supported; plain ANALYZE has no undo, and rewrites are stored for
+  application adoption without executing their SELECT. Concrete rewrite SQL is
+  retained where recovering parameter placeholders would be ambiguous.
+- Added window differences over live pg_stat_statements counters, insufficient
+  sample handling, reset detection/rebaselining, optional z gating, per-group
+  consecutive regression counts, capped window history, and at most one revert
+  per interval. A process-local single live traffic generator supports normal
+  and flash profiles, stops cooperatively, and reports errors. Baseline fallback
+  intentionally writes ordinary order traffic to qc_live; it performs no bulk
+  clone preparation. Revert retries three times and verifies managed index removal.
+- The natural qty-index/flash10 demo measured no regression in 12 windows and
+  therefore did not automatically revert. It safely removed the index during
+  final cleanup. Evidence: `experiments/results/step14_natural_demo.json`.
+  pg_stat_statements combines identical stock SQL under whichever query comment
+  was first recorded, so stock_decrement can have no separately attributable
+  counters. Such groups remain insufficient; missing pre-change baselines are
+  never silently learned from post-change traffic.
+- Added an explicitly labelled controlled-delay demo: a trusted tagged probe
+  sleeps 1 ms during the pre-change baseline and 10 ms afterwards, alongside
+  flash10 traffic. This tests the real monitoring/revert lifecycle, not index
+  causality. Recorded baseline mean was 2.273 ms; measured windows were:
+
+  | Window | Calls | Statement mean | Change vs baseline | Consecutive | Action |
+  |---|---:|---:|---:|---:|---|
+  | 1 | 151 | 10.419 ms | +358.33% | 1 | watching |
+  | 2 | 146 | 10.539 ms | +363.62% | 2 | automatic revert |
+
+  The applied row ended `reverted`, the index was absent, and the live traffic
+  thread stopped without error. Evidence: `experiments/results/step14_demo.json`.
+  The threshold stayed at 5%; these are statement latency measurements, not
+  full transaction latency or proof that the qty index is harmful.
+- Validation: 201 non-DB/non-LLM tests passed; all six PostgreSQL monitor tests
+  passed, including apply/idempotency/manual revert, safety and evidence rejection,
+  invalid-build cleanup, rewrite with no index changes, weak confirmation, and the
+  controlled auto-revert demo. Ruff and mypy passed. No commit or push was made;
+  Step 13 changes remain uncommitted separately in the same working tree.

@@ -247,10 +247,20 @@ API error body: `{"error": {"code": "...", "message": "...", "detail": {...}}}`.
 | `workload` | `load_profiles() -> dict[str, ProfileSpec]`; `load_pools(dbname, profile) -> dict`; `build_schedule(profile, seconds, seed, base_rate, pools) -> list[Arrival]` (list-compatible `Schedule` preserves duration/profile/seed/pools); `run_block(dbname, schedule, workers, *, stop_event=None, record_timeline=False) -> BlockResult`; `prepare_clone(dbname, profile, seed) -> dict` (sandbox only) |
 | `benchbase` | `load_ch(db, scale) -> None`; `run_profile(db, profile, out_dir, seconds, active_warehouses=None) -> dict`; `parse_results(out_dir) -> dict[str, dict]` (per transaction, latencies in ms); `parse_summary(out_dir) -> dict` (elapsed time, requests, throughput and goodput; missing values remain null) |
 | `pipeline` | `run_job(job_id, params, store)` (blocking; call from a thread) |
-| `monitor` | `apply(store, candidate_id)`, `revert(store, applied_id, reason)`, `MonitorThread(store).start()` |
+| `monitor` | `apply(store, candidate_id, approver="human", *, confirm=False) -> dict`; `revert(store, applied_id, reason, actor="human") -> dict`; `MonitorThread(store, interval_s=60, min_calls=30, consecutive=2, *, z_gate=False)` with `start()`, `stop()`, `evaluate()`; `LiveTraffic(profile="normal", *, seconds=60, seed=1234)` with `start()`, `stop()`, `latest`, `error`; `snapshot(shape_id) -> dict` and pure `evaluate_window(...) -> dict` (statement latency, not transaction latency) |
 | `simulate` | `run_rq2(trials, seed, noise_levels, ...) -> dict` and `python -m app.simulate` |
 
 ## 0.8 SQL tagging convention
+
+Pipeline jobs use `Store.is_cancelled(job_id)` and a job-local cooperative stop
+event. `sandbox.track_clones()` tracks only that job's clone names, count and
+creation seconds; final cleanup must never drop another job's clones. Evidence
+cards are validated against `docs/evidence_card.schema.json` before persistence.
+
+Live apply records `Store.save_approval(candidate_id, approver, confirmed, digest)`
+before DDL; `get_approval(candidate_id)` returns that audit record. Approval binds
+the exact candidate SQL with SHA-256. Plain ANALYZE has no undo. Rewrites store
+the approved concrete SQL when sampler placeholders cannot be recovered reliably.
 
 Every SQL statement the workload or measurement code sends to PostgreSQL starts with a tag comment so
 `pg_stat_statements` rows can be grouped without parsing:

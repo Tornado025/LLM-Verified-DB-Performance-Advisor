@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DB Performance Advisor evidence card",
+  "type": "object",
+  "required": ["job_id", "shape_id", "created_at", "settings", "baseline", "propose", "candidates", "decision", "budget"],
+  "properties": {
+    "job_id": {"type": "string", "pattern": "^[0-9]{8}-[0-9]{6}-[0-9a-f]{4}$"},
+    "shape_id": {"type": "string", "minLength": 1},
+    "created_at": {"type": "string", "format": "date-time"},
+    "settings": {
+      "type": "object",
+      "required": ["delta", "alpha", "metric", "profiles", "seed", "llm"],
+      "properties": {
+        "delta": {"type": "number", "exclusiveMinimum": 0},
+        "alpha": {"type": "number", "exclusiveMinimum": 0},
+        "metric": {"enum": ["time", "buffers"]},
+        "profiles": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["normal", "flash5", "flash10", "flash20"]}},
+        "seed": {"type": "integer", "minimum": 0},
+        "llm": {
+          "type": "object",
+          "required": ["provider", "model", "temperature", "usage"],
+          "properties": {
+            "provider": {"enum": ["mock", "openrouter", "ollama"]},
+            "model": {"type": "string"},
+            "temperature": {"type": "number"},
+            "usage": {"type": "object"}
+          }
+        }
+      }
+    },
+    "baseline": {
+      "type": "object",
+      "required": ["sql", "signature", "plan", "time_ms"],
+      "properties": {
+        "sql": {"type": "string"},
+        "signature": {"type": ["string", "null"]},
+        "plan": {"type": "object"},
+        "time_ms": {
+          "type": "object",
+          "required": ["mean", "sd", "n"],
+          "properties": {
+            "mean": {"type": ["number", "null"]},
+            "sd": {"type": ["number", "null"]},
+            "n": {"type": "integer", "minimum": 0}
+          }
+        }
+      }
+    },
+    "propose": {
+      "type": "object",
+      "required": ["samples", "saturated", "usage", "rejected", "distinct_plan_curve"],
+      "properties": {
+        "samples": {"type": "integer", "minimum": 0},
+        "saturated": {"type": "boolean"},
+        "usage": {"type": "object"},
+        "rejected": {"type": "array"},
+        "distinct_plan_curve": {"type": "array", "items": {"type": "integer", "minimum": 0}}
+      }
+    },
+    "candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "job_id", "shape_id", "kind", "sql", "status", "signature", "equiv", "speedup", "guard"],
+        "properties": {
+          "id": {"type": "string"},
+          "job_id": {"type": "string"},
+          "shape_id": {"type": "string"},
+          "kind": {"enum": ["index", "stats", "rewrite"]},
+          "sql": {"type": "string"},
+          "status": {"enum": ["proposed", "rejected_safety", "rejected_invalid_ddl", "skipped_duplicate", "skipped_noplan", "rejected_equiv", "dropped_race", "failed_guard", "blocked_unproven", "selected", "approved", "applied", "reverted", "blocked_by_human"]},
+          "signature": {"type": ["string", "null"]},
+          "plan_before": {"type": ["object", "null"]},
+          "plan_after": {"type": ["object", "null"]},
+          "equiv": {"type": ["object", "null"]},
+          "speedup": {"type": ["object", "null"]},
+          "guard": {"type": ["object", "null"]}
+        }
+      }
+    },
+    "decision": {
+      "type": "object",
+      "required": ["action", "candidate_id", "reason"],
+      "properties": {
+        "action": {"enum": ["apply_rewrite", "apply_index", "block"]},
+        "candidate_id": {"type": ["string", "null"]},
+        "reason": {"type": "string"}
+      }
+    },
+    "budget": {
+      "type": "object",
+      "required": ["seconds", "stage_seconds", "paired_runs", "llm_calls", "clones_created", "clone_seconds", "guard_blocks"],
+      "properties": {
+        "seconds": {"type": "number", "minimum": 0},
+        "stage_seconds": {"type": "object"},
+        "paired_runs": {"type": "integer", "minimum": 0},
+        "llm_calls": {"type": "integer", "minimum": 0},
+        "clones_created": {"type": "integer", "minimum": 0},
+        "clone_seconds": {"type": "number", "minimum": 0},
+        "guard_blocks": {"type": "integer", "minimum": 0}
+      }
+    }
+  }
+}

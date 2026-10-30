@@ -75,6 +75,7 @@ def race(
 
     runs = 0
     clone_count = 0
+    round_index = 0
     stop_all = False
     batch_size = max(1, settings.max_clones - 1)
     with single_clone(settings) as baseline_db:
@@ -106,6 +107,7 @@ def race(
                             # Keep ownership until the group's finally block cleans up.
 
                     while time.perf_counter() - start < budget_s and not stop_all:
+                        dropped_before = set(dropped)
                         pending = [
                             candidate
                             for candidate in group
@@ -182,17 +184,6 @@ def race(
                                 )
                                 dropped[candidate.id] = reason
                                 candidate.status, candidate.reason = "dropped_race", reason
-                            if progress is not None:
-                                progress(
-                                    {
-                                        "candidate_id": candidate.id,
-                                        "n_runs": int(test.d.size),
-                                        "state": test.state,
-                                        "seconds": time.perf_counter() - start,
-                                        "dropped": dropped.get(candidate.id),
-                                    }
-                                )
-
                         leader_id = best_leader(
                             {key: value for key, value in states.items() if key not in dropped}
                         )
@@ -228,6 +219,21 @@ def race(
                                         "dropped_race",
                                         leader_drop_reason,
                                     )
+                        round_index += 1
+                        if progress is not None:
+                            progress(
+                                {
+                                    "round": round_index,
+                                    "alive": [c.id for c in eligible if c.id not in dropped],
+                                    "leader": leader_id,
+                                    "bounds": {
+                                        cid: [summary.lower, summary.upper]
+                                        for cid, summary in states.items()
+                                    },
+                                    "dropped_now": sorted(set(dropped) - dropped_before),
+                                    "seconds": time.perf_counter() - start,
+                                }
+                            )
                         if not progressed or stop_all:
                             break
                 finally:

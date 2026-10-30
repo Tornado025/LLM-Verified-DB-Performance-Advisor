@@ -131,7 +131,14 @@ def propose(
                 "propose",
                 "info",
                 "Proposal sample completed",
-                {"sample_idx": i, "raw": len(result.candidates), "ok": ok_count, "new": new},
+                {
+                    "sample": i,
+                    "raw": len(result.candidates),
+                    "accepted": ok_count,
+                    "new_plans": new,
+                    "cumulative_distinct": len(seen),
+                    "saturated": stale + (0 if new else 1) >= patience,
+                },
             )
         stale = 0 if new else stale + 1
         if stale >= patience:

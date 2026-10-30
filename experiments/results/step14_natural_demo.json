@@ -1,0 +1,2829 @@
+{
+  "job_id": "20261030-064404-ef7e",
+  "demo_only": true,
+  "automatic_revert": false,
+  "final_state": "reverted",
+  "index_absent": true,
+  "windows": [
+    {
+      "taken_at": "2026-10-30T06:45:10.119730+00:00",
+      "cumulative": {
+        "groups": {
+          "shape:recent_orders": {
+            "calls": 0,
+            "total_ms": 0.0,
+            "sum_sq_ms": 0.0
+          },
+          "txn:place_order": {
+            "calls": 10505,
+            "total_ms": 570.3075829999999,
+            "sum_sq_ms": 205.07272283275066
+          },
+          "txn:update_status": {
+            "calls": 1455,
+            "total_ms": 248.53889699999982,
+            "sum_sq_ms": 322.38064579537684
+          },
+          "txn:order_status": {
+            "calls": 989,
+            "total_ms": 190.91904400000013,
+            "sum_sq_ms": 281.56890400733806
+          },
+          "txn:stock_decrement": {
+            "calls": 0,
+            "total_ms": 0.0,
+            "sum_sq_ms": 0.0
+          },
+          "txn:picker_queue_read": {
+            "calls": 208,
+            "total_ms": 4778.176885000001,
+            "sum_sq_ms": 122665.23974475994
+          }
+        },
+        "taken_at": "2026-10-30T06:45:10.119730+00:00"
+      },
+      "groups": {
+        "shape:recent_orders": {
+          "calls": 0,
+          "total_ms": 0.0,
+          "mean_ms": null,
+          "sd_ms": null,
+          "state": "insufficient",
+          "streak": 0
+        },
+        "txn:place_order": {
+          "calls": 3797,
+          "total_ms": 80.31278399999985,
+          "mean_ms": 0.0211516418224914,
+          "sd_ms": 0.026337292675292362,
+          "rel": -0.710435266588876,
+          "z": -121.41493090679353,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:update_status": {
+          "calls": 546,
+          "total_ms": 17.104997999999938,
+          "mean_ms": 0.031327835164835054,
+          "sd_ms": 0.06193469290636236,
+          "rel": -0.8769540577768381,
+          "z": -84.23687819202509,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:order_status": {
+          "calls": 624,
+          "total_ms": 26.77276599999999,
+          "mean_ms": 0.0429050737179487,
+          "sd_ms": 0.08003670269961394,
+          "rel": -0.9045951446608417,
+          "z": -126.96836695528113,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:stock_decrement": {
+          "calls": 0,
+          "total_ms": 0.0,
+          "mean_ms": null,
+          "sd_ms": null,
+          "state": "insufficient",
+          "streak": 0
+        },
+        "txn:picker_queue_read": {
+          "calls": 76,
+          "total_ms": 1144.0195870000016,
+          "mean_ms": 15.0528893026316,
+          "sd_ms": 1.5825675443553129,
+          "rel": -0.45324838056930694,
+          "z": -68.74016846637062,
+          "state": "clean",
+          "streak": 0
+        }
+      },
+      "reset": false,
+      "state": "healthy",
+      "revert": false,
+      "streak": 0
+    },
+    {
+      "taken_at": "2026-10-30T06:45:15.129141+00:00",
+      "cumulative": {
+        "groups": {
+          "shape:recent_orders": {
+            "calls": 0,
+            "total_ms": 0.0,
+            "sum_sq_ms": 0.0
+          },
+          "txn:place_order": {
+            "calls": 14320,
+            "total_ms": 649.7430350000006,
+            "sum_sq_ms": 214.49386000849083
+          },
+          "txn:update_status": {
+            "calls": 2056,
+            "total_ms": 257.77343599999983,
+            "sum_sq_ms": 323.1946707847155
+          },
+          "txn:order_status": {
+            "calls": 1567,
+            "total_ms": 202.2341360000003,
+            "sum_sq_ms": 282.98900177922246
+          },
+          "txn:stock_decrement": {
+            "calls": 0,
+            "total_ms": 0.0,
+            "sum_sq_ms": 0.0
+          },
+          "txn:picker_queue_read": {
+            "calls": 284,
+            "total_ms": 5934.991015,
+            "sum_sq_ms": 140471.21719658453
+          }
+        },
+        "taken_at": "2026-10-30T06:45:15.129141+00:00"
+      },
+      "groups": {
+        "shape:recent_orders": {
+          "calls": 0,
+          "total_ms": 0.0,
+          "mean_ms": null,
+          "sd_ms": null,
+          "state": "insufficient",
+          "streak": 0
+        },
+        "txn:place_order": {
+          "calls": 3815,
+          "total_ms": 79.43545200000074,
+          "mean_ms": 0.020821874705111595,
+          "sd_ms": 0.04512148200306171,
+          "rel": -0.7149497590445066,
+          "z": -71.48877514313055,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:update_status": {
+          "calls": 601,
+          "total_ms": 9.234539000000012,
+          "mean_ms": 0.015365289517470902,
+          "sd_ms": 0.033441871590065744,
+          "rel": -0.9396499465647379,
+          "z": -175.3782948583656,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:order_status": {
+          "calls": 578,
+          "total_ms": 11.315092000000163,
+          "mean_ms": 0.019576283737024504,
+          "sd_ms": 0.04553773902381565,
+          "rel": -0.9564696583372183,
+          "z": -227.0919963446779,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:stock_decrement": {
+          "calls": 0,
+          "total_ms": 0.0,
+          "mean_ms": null,
+          "sd_ms": null,
+          "state": "insufficient",
+          "streak": 0
+        },
+        "txn:picker_queue_read": {
+          "calls": 76,
+          "total_ms": 1156.8141299999988,
+          "mean_ms": 15.221238552631563,
+          "sd_ms": 1.6134044507111855,
+          "rel": -0.4471335926892598,
+          "z": -66.5166907312965,
+          "state": "clean",
+          "streak": 0
+        }
+      },
+      "reset": false,
+      "state": "healthy",
+      "revert": false,
+      "streak": 0
+    },
+    {
+      "taken_at": "2026-10-30T06:45:20.139332+00:00",
+      "cumulative": {
+        "groups": {
+          "shape:recent_orders": {
+            "calls": 0,
+            "total_ms": 0.0,
+            "sum_sq_ms": 0.0
+          },
+          "txn:place_order": {
+            "calls": 17837,
+            "total_ms": 745.1414990000003,
+            "sum_sq_ms": 225.43428277650895
+          },
+          "txn:update_status": {
+            "calls": 2567,
+            "total_ms": 265.4821529999997,
+            "sum_sq_ms": 323.5794833178425
+          },
+          "txn:order_status": {
+            "calls": 2128,
+            "total_ms": 209.02823600000042,
+            "sum_sq_ms": 283.177965964529
+          },
+          "txn:stock_decrement": {
+            "calls": 0,
+            "total_ms": 0.0,
+            "sum_sq_ms": 0.0
+          },
+          "txn:picker_queue_read": {
+            "calls": 366,
+            "total_ms": 7369.662720999999,
+            "sum_sq_ms": 166775.3427550754
+          }
+        },
+        "taken_at": "2026-10-30T06:45:20.139332+00:00"
+      },
+      "groups": {
+        "shape:recent_orders": {
+          "calls": 0,
+          "total_ms": 0.0,
+          "mean_ms": null,
+          "sd_ms": null,
+          "state": "insufficient",
+          "streak": 0
+        },
+        "txn:place_order": {
+          "calls": 3517,
+          "total_ms": 95.39846399999965,
+          "mean_ms": 0.027124954222348494,
+          "sd_ms": 0.048733588983711974,
+          "rel": -0.6286609709024408,
+          "z": -55.882098084387984,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:update_status": {
+          "calls": 511,
+          "total_ms": 7.708716999999865,
+          "mean_ms": 0.01508555185909954,
+          "sd_ms": 0.022923436039902018,
+          "rel": -0.9407486686299076,
+          "z": -236.1932248411367,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:order_status": {
+          "calls": 561,
+          "total_ms": 6.794100000000128,
+          "mean_ms": 0.012110695187166004,
+          "sd_ms": 0.01379005500341305,
+          "rel": -0.973070338254544,
+          "z": -751.6191586520717,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:stock_decrement": {
+          "calls": 0,
+          "total_ms": 0.0,
+          "mean_ms": null,
+          "sd_ms": null,
+          "state": "insufficient",
+          "streak": 0
+        },
+        "txn:picker_queue_read": {
+          "calls": 82,
+          "total_ms": 1434.6717059999992,
+          "mean_ms": 17.495996414634135,
+          "sd_ms": 3.8304214474514007,
+          "rel": -0.3645097508567703,
+          "z": -23.72462224043955,
+          "state": "clean",
+          "streak": 0
+        }
+      },
+      "reset": false,
+      "state": "healthy",
+      "revert": false,
+      "streak": 0
+    },
+    {
+      "taken_at": "2026-10-30T06:45:25.150863+00:00",
+      "cumulative": {
+        "groups": {
+          "shape:recent_orders": {
+            "calls": 0,
+            "total_ms": 0.0,
+            "sum_sq_ms": 0.0
+          },
+          "txn:place_order": {
+            "calls": 21598,
+            "total_ms": 823.3324820000004,
+            "sum_sq_ms": 228.86602931822216
+          },
+          "txn:update_status": {
+            "calls": 3080,
+            "total_ms": 271.4771349999998,
+            "sum_sq_ms": 323.8615577849572
+          },
+          "txn:order_status": {
+            "calls": 2738,
+            "total_ms": 214.4895540000008,
+            "sum_sq_ms": 283.23861473038124
+          },
+          "txn:stock_decrement": {
+            "calls": 0,
+            "total_ms": 0.0,
+            "sum_sq_ms": 0.0
+          },
+          "txn:picker_queue_read": {
+            "calls": 439,
+            "total_ms": 8514.397710999996,
+            "sum_sq_ms": 184960.85183304801
+          }
+        },
+        "taken_at": "2026-10-30T06:45:25.150863+00:00"
+      },
+      "groups": {
+        "shape:recent_orders": {
+          "calls": 0,
+          "total_ms": 0.0,
+          "mean_ms": null,
+          "sd_ms": null,
+          "state": "insufficient",
+          "streak": 0
+        },
+        "txn:place_order": {
+          "calls": 3761,
+          "total_ms": 78.19098300000007,
+          "mean_ms": 0.020789944961446444,
+          "sd_ms": 0.02191424336803493,
+          "rel": -0.7153868753586857,
+          "z": -146.23945870965346,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:update_status": {
+          "calls": 513,
+          "total_ms": 5.994982000000107,
+          "mean_ms": 0.011686124756335492,
+          "sd_ms": 0.0203294675431048,
+          "rel": -0.954100555495939,
+          "z": -270.6387108338964,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:order_status": {
+          "calls": 610,
+          "total_ms": 5.461318000000375,
+          "mean_ms": 0.008952980327869467,
+          "sd_ms": 0.004389572822490327,
+          "rel": -0.9800919164327786,
+          "z": -2479.9769343504568,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:stock_decrement": {
+          "calls": 0,
+          "total_ms": 0.0,
+          "mean_ms": null,
+          "sd_ms": null,
+          "state": "insufficient",
+          "streak": 0
+        },
+        "txn:picker_queue_read": {
+          "calls": 73,
+          "total_ms": 1144.7349899999972,
+          "mean_ms": 15.681301232876674,
+          "sd_ms": 1.792583151693148,
+          "rel": -0.4304231784686714,
+          "z": -56.4816740104143,
+          "state": "clean",
+          "streak": 0
+        }
+      },
+      "reset": false,
+      "state": "healthy",
+      "revert": false,
+      "streak": 0
+    },
+    {
+      "taken_at": "2026-10-30T06:45:30.158402+00:00",
+      "cumulative": {
+        "groups": {
+          "shape:recent_orders": {
+            "calls": 0,
+            "total_ms": 0.0,
+            "sum_sq_ms": 0.0
+          },
+          "txn:place_order": {
+            "calls": 25275,
+            "total_ms": 901.1626920000022,
+            "sum_sq_ms": 234.51989735266227
+          },
+          "txn:update_status": {
+            "calls": 3577,
+            "total_ms": 277.5138169999999,
+            "sum_sq_ms": 324.0878819976373
+          },
+          "txn:order_status": {
+            "calls": 3341,
+            "total_ms": 220.06672000000083,
+            "sum_sq_ms": 283.3047437640656
+          },
+          "txn:stock_decrement": {
+            "calls": 0,
+            "total_ms": 0.0,
+            "sum_sq_ms": 0.0
+          },
+          "txn:picker_queue_read": {
+            "calls": 498,
+            "total_ms": 9459.198922000001,
+            "sum_sq_ms": 200290.75115880914
+          }
+        },
+        "taken_at": "2026-10-30T06:45:30.158402+00:00"
+      },
+      "groups": {
+        "shape:recent_orders": {
+          "calls": 0,
+          "total_ms": 0.0,
+          "mean_ms": null,
+          "sd_ms": null,
+          "state": "insufficient",
+          "streak": 0
+        },
+        "txn:place_order": {
+          "calls": 3677,
+          "total_ms": 77.83021000000178,
+          "mean_ms": 0.02116676910524933,
+          "sd_ms": 0.033009068029768864,
+          "rel": -0.710228174976991,
+          "z": -95.303722769297,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:update_status": {
+          "calls": 497,
+          "total_ms": 6.0366820000000985,
+          "mean_ms": 0.012146241448692351,
+          "sd_ms": 0.017545641290301752,
+          "rel": -0.9522933609788022,
+          "z": -308.0653076186493,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:order_status": {
+          "calls": 603,
+          "total_ms": 5.577166000000034,
+          "mean_ms": 0.009249031509121118,
+          "sd_ms": 0.004911429391864647,
+          "rel": -0.9794336092053869,
+          "z": -2202.2363613971775,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:stock_decrement": {
+          "calls": 0,
+          "total_ms": 0.0,
+          "mean_ms": null,
+          "sd_ms": null,
+          "state": "insufficient",
+          "streak": 0
+        },
+        "txn:picker_queue_read": {
+          "calls": 59,
+          "total_ms": 944.8012110000054,
+          "mean_ms": 16.01357984745772,
+          "sd_ms": 1.8422981845077349,
+          "rel": -0.4183541419553547,
+          "z": -48.02196696399617,
+          "state": "clean",
+          "streak": 0
+        }
+      },
+      "reset": false,
+      "state": "healthy",
+      "revert": false,
+      "streak": 0
+    },
+    {
+      "taken_at": "2026-10-30T06:45:35.168642+00:00",
+      "cumulative": {
+        "groups": {
+          "shape:recent_orders": {
+            "calls": 0,
+            "total_ms": 0.0,
+            "sum_sq_ms": 0.0
+          },
+          "txn:place_order": {
+            "calls": 28983,
+            "total_ms": 987.3300160000031,
+            "sum_sq_ms": 238.90093359380617
+          },
+          "txn:update_status": {
+            "calls": 4084,
+            "total_ms": 284.0618550000001,
+            "sum_sq_ms": 324.3800052871332
+          },
+          "txn:order_status": {
+            "calls": 3924,
+            "total_ms": 225.97135000000057,
+            "sum_sq_ms": 283.38728942385296
+          },
+          "txn:stock_decrement": {
+            "calls": 0,
+            "total_ms": 0.0,
+            "sum_sq_ms": 0.0
+          },
+          "txn:picker_queue_read": {
+            "calls": 578,
+            "total_ms": 10784.809090999997,
+            "sum_sq_ms": 222818.8622847549
+          }
+        },
+        "taken_at": "2026-10-30T06:45:35.168642+00:00"
+      },
+      "groups": {
+        "shape:recent_orders": {
+          "calls": 0,
+          "total_ms": 0.0,
+          "mean_ms": null,
+          "sd_ms": null,
+          "state": "insufficient",
+          "streak": 0
+        },
+        "txn:place_order": {
+          "calls": 3708,
+          "total_ms": 86.16732400000092,
+          "mean_ms": 0.02323822114347382,
+          "sd_ms": 0.025327738005671955,
+          "rel": -0.6818701183184959,
+          "z": -119.74945145094195,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:update_status": {
+          "calls": 507,
+          "total_ms": 6.54803800000019,
+          "mean_ms": 0.012915262327416549,
+          "sd_ms": 0.020233043695681817,
+          "rel": -0.9492728873931228,
+          "z": -268.96571617729586,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:order_status": {
+          "calls": 583,
+          "total_ms": 5.904629999999742,
+          "mean_ms": 0.010128010291594753,
+          "sd_ms": 0.0062458914632182085,
+          "rel": -0.9774790887647657,
+          "z": -1699.3604039141658,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:stock_decrement": {
+          "calls": 0,
+          "total_ms": 0.0,
+          "mean_ms": null,
+          "sd_ms": null,
+          "state": "insufficient",
+          "streak": 0
+        },
+        "txn:picker_queue_read": {
+          "calls": 80,
+          "total_ms": 1325.610168999996,
+          "mean_ms": 16.57012711249995,
+          "sd_ms": 2.651843990493406,
+          "rel": -0.39813921096543736,
+          "z": -36.97104822036949,
+          "state": "clean",
+          "streak": 0
+        }
+      },
+      "reset": false,
+      "state": "healthy",
+      "revert": false,
+      "streak": 0
+    },
+    {
+      "taken_at": "2026-10-30T06:45:40.183830+00:00",
+      "cumulative": {
+        "groups": {
+          "shape:recent_orders": {
+            "calls": 0,
+            "total_ms": 0.0,
+            "sum_sq_ms": 0.0
+          },
+          "txn:place_order": {
+            "calls": 32602,
+            "total_ms": 1067.5697850000033,
+            "sum_sq_ms": 247.4439054521372
+          },
+          "txn:update_status": {
+            "calls": 4605,
+            "total_ms": 289.44073400000013,
+            "sum_sq_ms": 324.5972012605862
+          },
+          "txn:order_status": {
+            "calls": 4499,
+            "total_ms": 230.75636000000063,
+            "sum_sq_ms": 283.438226591923
+          },
+          "txn:stock_decrement": {
+            "calls": 0,
+            "total_ms": 0.0,
+            "sum_sq_ms": 0.0
+          },
+          "txn:picker_queue_read": {
+            "calls": 647,
+            "total_ms": 11847.155673999996,
+            "sum_sq_ms": 239707.86864722337
+          }
+        },
+        "taken_at": "2026-10-30T06:45:40.183830+00:00"
+      },
+      "groups": {
+        "shape:recent_orders": {
+          "calls": 0,
+          "total_ms": 0.0,
+          "mean_ms": null,
+          "sd_ms": null,
+          "state": "insufficient",
+          "streak": 0
+        },
+        "txn:place_order": {
+          "calls": 3619,
+          "total_ms": 80.23976900000025,
+          "mean_ms": 0.022171806852721816,
+          "sd_ms": 0.04323193327569738,
+          "rel": -0.6964692672828596,
+          "z": -70.79294968124323,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:update_status": {
+          "calls": 521,
+          "total_ms": 5.37887900000004,
+          "mean_ms": 0.01032414395393482,
+          "sd_ms": 0.017615189982821182,
+          "rel": -0.9594499902793983,
+          "z": -316.53151890970133,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:order_status": {
+          "calls": 575,
+          "total_ms": 4.785010000000057,
+          "mean_ms": 0.00832175652173923,
+          "sd_ms": 0.004397129477869725,
+          "rel": -0.981495522363079,
+          "z": -2407.083556558094,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:stock_decrement": {
+          "calls": 0,
+          "total_ms": 0.0,
+          "mean_ms": null,
+          "sd_ms": null,
+          "state": "insufficient",
+          "streak": 0
+        },
+        "txn:picker_queue_read": {
+          "calls": 69,
+          "total_ms": 1062.3465829999986,
+          "mean_ms": 15.396327289855053,
+          "sd_ms": 2.7787252716635202,
+          "rel": -0.4407740128972074,
+          "z": -36.276443758774164,
+          "state": "clean",
+          "streak": 0
+        }
+      },
+      "reset": false,
+      "state": "healthy",
+      "revert": false,
+      "streak": 0
+    },
+    {
+      "taken_at": "2026-10-30T06:45:45.199678+00:00",
+      "cumulative": {
+        "groups": {
+          "shape:recent_orders": {
+            "calls": 0,
+            "total_ms": 0.0,
+            "sum_sq_ms": 0.0
+          },
+          "txn:place_order": {
+            "calls": 35928,
+            "total_ms": 1133.9665910000049,
+            "sum_sq_ms": 250.1799795911532
+          },
+          "txn:update_status": {
+            "calls": 5116,
+            "total_ms": 294.437277,
+            "sum_sq_ms": 324.83416162147256
+          },
+          "txn:order_status": {
+            "calls": 5098,
+            "total_ms": 235.52987000000041,
+            "sum_sq_ms": 283.483422973303
+          },
+          "txn:stock_decrement": {
+            "calls": 0,
+            "total_ms": 0.0,
+            "sum_sq_ms": 0.0
+          },
+          "txn:picker_queue_read": {
+            "calls": 711,
+            "total_ms": 12845.362711,
+            "sum_sq_ms": 255487.10651007458
+          }
+        },
+        "taken_at": "2026-10-30T06:45:45.199678+00:00"
+      },
+      "groups": {
+        "shape:recent_orders": {
+          "calls": 0,
+          "total_ms": 0.0,
+          "mean_ms": null,
+          "sd_ms": null,
+          "state": "insufficient",
+          "streak": 0
+        },
+        "txn:place_order": {
+          "calls": 3326,
+          "total_ms": 66.39680600000156,
+          "mean_ms": 0.019962960312688384,
+          "sd_ms": 0.02059398571742775,
+          "rel": -0.7267082465960752,
+          "z": -148.65489692570216,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:update_status": {
+          "calls": 511,
+          "total_ms": 4.9965429999998605,
+          "mean_ms": 0.00977797064579229,
+          "sd_ms": 0.019186198057306588,
+          "rel": -0.9615951882786834,
+          "z": -288.4542200665166,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:order_status": {
+          "calls": 599,
+          "total_ms": 4.7735099999997885,
+          "mean_ms": 0.00796913188647711,
+          "sd_ms": 0.0034562977839823097,
+          "rel": -0.9822796278173048,
+          "z": -3128.0635701729243,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:stock_decrement": {
+          "calls": 0,
+          "total_ms": 0.0,
+          "mean_ms": null,
+          "sd_ms": null,
+          "state": "insufficient",
+          "streak": 0
+        },
+        "txn:picker_queue_read": {
+          "calls": 64,
+          "total_ms": 998.2070370000038,
+          "mean_ms": 15.596984953125059,
+          "sd_ms": 1.8123608854311086,
+          "rel": -0.43348571759798704,
+          "z": -52.680500112886676,
+          "state": "clean",
+          "streak": 0
+        }
+      },
+      "reset": false,
+      "state": "healthy",
+      "revert": false,
+      "streak": 0
+    },
+    {
+      "taken_at": "2026-10-30T06:45:50.213050+00:00",
+      "cumulative": {
+        "groups": {
+          "shape:recent_orders": {
+            "calls": 0,
+            "total_ms": 0.0,
+            "sum_sq_ms": 0.0
+          },
+          "txn:place_order": {
+            "calls": 39390,
+            "total_ms": 1205.6668150000062,
+            "sum_sq_ms": 256.947115534335
+          },
+          "txn:update_status": {
+            "calls": 5651,
+            "total_ms": 299.8641799999997,
+            "sum_sq_ms": 325.0680385928375
+          },
+          "txn:order_status": {
+            "calls": 5649,
+            "total_ms": 240.11610300000044,
+            "sum_sq_ms": 283.5314338866144
+          },
+          "txn:stock_decrement": {
+            "calls": 0,
+            "total_ms": 0.0,
+            "sum_sq_ms": 0.0
+          },
+          "txn:picker_queue_read": {
+            "calls": 784,
+            "total_ms": 14005.732889000004,
+            "sum_sq_ms": 274876.0910181438
+          }
+        },
+        "taken_at": "2026-10-30T06:45:50.213050+00:00"
+      },
+      "groups": {
+        "shape:recent_orders": {
+          "calls": 0,
+          "total_ms": 0.0,
+          "mean_ms": null,
+          "sd_ms": null,
+          "state": "insufficient",
+          "streak": 0
+        },
+        "txn:place_order": {
+          "calls": 3462,
+          "total_ms": 71.7002240000013,
+          "mean_ms": 0.02071063662622799,
+          "sd_ms": 0.039060968866902114,
+          "rel": -0.7164726018066625,
+          "z": -78.83490057999686,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:update_status": {
+          "calls": 535,
+          "total_ms": 5.426902999999697,
+          "mean_ms": 0.01014374392523308,
+          "sd_ms": 0.018282715243746007,
+          "rel": -0.9601585451920469,
+          "z": -309.27316308522586,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:order_status": {
+          "calls": 551,
+          "total_ms": 4.586233000000021,
+          "mean_ms": 0.008323471869328532,
+          "sd_ms": 0.00422539465392114,
+          "rel": -0.9814917080708653,
+          "z": -2452.0726367845054,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:stock_decrement": {
+          "calls": 0,
+          "total_ms": 0.0,
+          "mean_ms": null,
+          "sd_ms": null,
+          "state": "insufficient",
+          "streak": 0
+        },
+        "txn:picker_queue_read": {
+          "calls": 73,
+          "total_ms": 1160.3701780000047,
+          "mean_ms": 15.895481890411023,
+          "sd_ms": 3.596690559307664,
+          "rel": -0.42264370045595767,
+          "z": -27.641559714684668,
+          "state": "clean",
+          "streak": 0
+        }
+      },
+      "reset": false,
+      "state": "healthy",
+      "revert": false,
+      "streak": 0
+    },
+    {
+      "taken_at": "2026-10-30T06:45:55.224354+00:00",
+      "cumulative": {
+        "groups": {
+          "shape:recent_orders": {
+            "calls": 0,
+            "total_ms": 0.0,
+            "sum_sq_ms": 0.0
+          },
+          "txn:place_order": {
+            "calls": 42685,
+            "total_ms": 1262.0034380000059,
+            "sum_sq_ms": 259.0059536099101
+          },
+          "txn:update_status": {
+            "calls": 6162,
+            "total_ms": 304.2666409999998,
+            "sum_sq_ms": 325.226013089497
+          },
+          "txn:order_status": {
+            "calls": 6212,
+            "total_ms": 243.8476390000007,
+            "sum_sq_ms": 283.5628791645848
+          },
+          "txn:stock_decrement": {
+            "calls": 0,
+            "total_ms": 0.0,
+            "sum_sq_ms": 0.0
+          },
+          "txn:picker_queue_read": {
+            "calls": 849,
+            "total_ms": 14962.211515000008,
+            "sum_sq_ms": 289055.9425643303
+          }
+        },
+        "taken_at": "2026-10-30T06:45:55.224354+00:00"
+      },
+      "groups": {
+        "shape:recent_orders": {
+          "calls": 0,
+          "total_ms": 0.0,
+          "mean_ms": null,
+          "sd_ms": null,
+          "state": "insufficient",
+          "streak": 0
+        },
+        "txn:place_order": {
+          "calls": 3295,
+          "total_ms": 56.33662299999969,
+          "mean_ms": 0.01709760940819414,
+          "sd_ms": 0.018234823861441065,
+          "rel": -0.7659347320742351,
+          "z": -176.12309824122954,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:update_status": {
+          "calls": 511,
+          "total_ms": 4.40246100000013,
+          "mean_ms": 0.008615383561644091,
+          "sd_ms": 0.015327195081267612,
+          "rel": -0.9661614668751077,
+          "z": -362.7943930761095,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:order_status": {
+          "calls": 563,
+          "total_ms": 3.7315360000002613,
+          "mean_ms": 0.0066279502664303045,
+          "sd_ms": 0.0034530196183693335,
+          "rel": -0.9852619146975293,
+          "z": -3044.7036104348686,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:stock_decrement": {
+          "calls": 0,
+          "total_ms": 0.0,
+          "mean_ms": null,
+          "sd_ms": null,
+          "state": "insufficient",
+          "streak": 0
+        },
+        "txn:picker_queue_read": {
+          "calls": 65,
+          "total_ms": 956.4786260000037,
+          "mean_ms": 14.715055784615442,
+          "sd_ms": 1.2722796487716443,
+          "rel": -0.465519182497081,
+          "z": -81.21597630232453,
+          "state": "clean",
+          "streak": 0
+        }
+      },
+      "reset": false,
+      "state": "healthy",
+      "revert": false,
+      "streak": 0
+    },
+    {
+      "taken_at": "2026-10-30T06:46:00.242892+00:00",
+      "cumulative": {
+        "groups": {
+          "shape:recent_orders": {
+            "calls": 0,
+            "total_ms": 0.0,
+            "sum_sq_ms": 0.0
+          },
+          "txn:place_order": {
+            "calls": 46187,
+            "total_ms": 1320.2989930000053,
+            "sum_sq_ms": 260.82133380917935
+          },
+          "txn:update_status": {
+            "calls": 6693,
+            "total_ms": 308.58382799999976,
+            "sum_sq_ms": 325.37630602858763
+          },
+          "txn:order_status": {
+            "calls": 6788,
+            "total_ms": 247.72150600000046,
+            "sum_sq_ms": 283.6079869092978
+          },
+          "txn:stock_decrement": {
+            "calls": 0,
+            "total_ms": 0.0,
+            "sum_sq_ms": 0.0
+          },
+          "txn:picker_queue_read": {
+            "calls": 936,
+            "total_ms": 16247.527478999998,
+            "sum_sq_ms": 308211.32006975764
+          }
+        },
+        "taken_at": "2026-10-30T06:46:00.242892+00:00"
+      },
+      "groups": {
+        "shape:recent_orders": {
+          "calls": 0,
+          "total_ms": 0.0,
+          "mean_ms": null,
+          "sd_ms": null,
+          "state": "insufficient",
+          "streak": 0
+        },
+        "txn:place_order": {
+          "calls": 3502,
+          "total_ms": 58.29555499999947,
+          "mean_ms": 0.01664636065105639,
+          "sd_ms": 0.015533271216111191,
+          "rel": -0.7721123010383499,
+          "z": -214.86913402659673,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:update_status": {
+          "calls": 531,
+          "total_ms": 4.317186999999933,
+          "mean_ms": 0.008130295668549779,
+          "sd_ms": 0.014728742051463054,
+          "rel": -0.968066740461769,
+          "z": -385.61151351600773,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:order_status": {
+          "calls": 576,
+          "total_ms": 3.8738669999997626,
+          "mean_ms": 0.0067254635416662545,
+          "sd_ms": 0.005751538658751161,
+          "rel": -0.9850450816027142,
+          "z": -1848.5086216209454,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:stock_decrement": {
+          "calls": 0,
+          "total_ms": 0.0,
+          "mean_ms": null,
+          "sd_ms": null,
+          "state": "insufficient",
+          "streak": 0
+        },
+        "txn:picker_queue_read": {
+          "calls": 87,
+          "total_ms": 1285.3159639999903,
+          "mean_ms": 14.773746712643566,
+          "sd_ms": 1.3831706353880902,
+          "rel": -0.4633874083705247,
+          "z": -86.03157710825577,
+          "state": "clean",
+          "streak": 0
+        }
+      },
+      "reset": false,
+      "state": "healthy",
+      "revert": false,
+      "streak": 0
+    },
+    {
+      "taken_at": "2026-10-30T06:46:05.254880+00:00",
+      "cumulative": {
+        "groups": {
+          "shape:recent_orders": {
+            "calls": 0,
+            "total_ms": 0.0,
+            "sum_sq_ms": 0.0
+          },
+          "txn:place_order": {
+            "calls": 49584,
+            "total_ms": 1389.718523000005,
+            "sum_sq_ms": 265.67672262641725
+          },
+          "txn:update_status": {
+            "calls": 7169,
+            "total_ms": 312.92598699999985,
+            "sum_sq_ms": 325.4305120922388
+          },
+          "txn:order_status": {
+            "calls": 7343,
+            "total_ms": 252.14154900000042,
+            "sum_sq_ms": 283.65177367620686
+          },
+          "txn:stock_decrement": {
+            "calls": 0,
+            "total_ms": 0.0,
+            "sum_sq_ms": 0.0
+          },
+          "txn:picker_queue_read": {
+            "calls": 992,
+            "total_ms": 17123.71652,
+            "sum_sq_ms": 322111.6392478279
+          }
+        },
+        "taken_at": "2026-10-30T06:46:05.254880+00:00"
+      },
+      "groups": {
+        "shape:recent_orders": {
+          "calls": 0,
+          "total_ms": 0.0,
+          "mean_ms": null,
+          "sd_ms": null,
+          "state": "insufficient",
+          "streak": 0
+        },
+        "txn:place_order": {
+          "calls": 3397,
+          "total_ms": 69.41952999999967,
+          "mean_ms": 0.020435540182513885,
+          "sd_ms": 0.031807316669619,
+          "rel": -0.720238655952952,
+          "z": -96.40411759228003,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:update_status": {
+          "calls": 476,
+          "total_ms": 4.342159000000095,
+          "mean_ms": 0.009122182773109442,
+          "sd_ms": 0.005537514463679008,
+          "rel": -0.9641709180176907,
+          "z": -967.1764638013836,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:order_status": {
+          "calls": 555,
+          "total_ms": 4.420042999999964,
+          "mean_ms": 0.007964041441441376,
+          "sd_ms": 0.003933080145491423,
+          "rel": -0.9822909470653602,
+          "z": -2646.0132341642375,
+          "state": "clean",
+          "streak": 0
+        },
+        "txn:stock_decrement": {
+          "calls": 0,
+          "total_ms": 0.0,
+          "mean_ms": null,
+          "sd_ms": null,
+          "state": "insufficient",
+          "streak": 0
+        },
+        "txn:picker_queue_read": {
+          "calls": 56,
+          "total_ms": 876.1890410000033,
+          "mean_ms": 15.646232875000058,
+          "sd_ms": 1.848075253865533,
+          "rel": -0.4316969327011204,
+          "z": -48.126370979976244,
+          "state": "clean",
+          "streak": 0
+        }
+      },
+      "reset": false,
+      "state": "healthy",
+      "revert": false,
+      "streak": 0
+    }
+  ],
+  "events": [
+    {
+      "id": 1,
+      "job_id": "20261030-064404-ef7e",
+      "ts": "2026-10-30T06:44:04.395318+00:00",
+      "step": "apply",
+      "level": "info",
+      "message": "Human approval recorded",
+      "data": {
+        "candidate_id": "20261030-064404-ef7e:recent_orders:01",
+        "approver": "human-approved-demo",
+        "confirmed": false
+      }
+    },
+    {
+      "id": 2,
+      "job_id": "20261030-064404-ef7e",
+      "ts": "2026-10-30T06:45:05.109587+00:00",
+      "step": "apply",
+      "level": "result",
+      "message": "Approved change applied",
+      "data": {
+        "candidate_id": "20261030-064404-ef7e:recent_orders:01",
+        "applied_id": "ce162c958df94091b0fce122cb64d59f",
+        "statement_latency": true,
+        "no_undo": false
+      }
+    },
+    {
+      "id": 3,
+      "job_id": "20261030-064404-ef7e",
+      "ts": "2026-10-30T06:45:10.120327+00:00",
+      "step": "monitor",
+      "level": "info",
+      "message": "Statement latency window measured",
+      "data": {
+        "applied_id": "ce162c958df94091b0fce122cb64d59f",
+        "window": {
+          "taken_at": "2026-10-30T06:45:10.119730+00:00",
+          "cumulative": {
+            "groups": {
+              "shape:recent_orders": {
+                "calls": 0,
+                "total_ms": 0.0,
+                "sum_sq_ms": 0.0
+              },
+              "txn:place_order": {
+                "calls": 10505,
+                "total_ms": 570.3075829999999,
+                "sum_sq_ms": 205.07272283275066
+              },
+              "txn:update_status": {
+                "calls": 1455,
+                "total_ms": 248.53889699999982,
+                "sum_sq_ms": 322.38064579537684
+              },
+              "txn:order_status": {
+                "calls": 989,
+                "total_ms": 190.91904400000013,
+                "sum_sq_ms": 281.56890400733806
+              },
+              "txn:stock_decrement": {
+                "calls": 0,
+                "total_ms": 0.0,
+                "sum_sq_ms": 0.0
+              },
+              "txn:picker_queue_read": {
+                "calls": 208,
+                "total_ms": 4778.176885000001,
+                "sum_sq_ms": 122665.23974475994
+              }
+            },
+            "taken_at": "2026-10-30T06:45:10.119730+00:00"
+          },
+          "groups": {
+            "shape:recent_orders": {
+              "calls": 0,
+              "total_ms": 0.0,
+              "mean_ms": null,
+              "sd_ms": null,
+              "state": "insufficient",
+              "streak": 0
+            },
+            "txn:place_order": {
+              "calls": 3797,
+              "total_ms": 80.31278399999985,
+              "mean_ms": 0.0211516418224914,
+              "sd_ms": 0.026337292675292362,
+              "rel": -0.710435266588876,
+              "z": -121.41493090679353,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:update_status": {
+              "calls": 546,
+              "total_ms": 17.104997999999938,
+              "mean_ms": 0.031327835164835054,
+              "sd_ms": 0.06193469290636236,
+              "rel": -0.8769540577768381,
+              "z": -84.23687819202509,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:order_status": {
+              "calls": 624,
+              "total_ms": 26.77276599999999,
+              "mean_ms": 0.0429050737179487,
+              "sd_ms": 0.08003670269961394,
+              "rel": -0.9045951446608417,
+              "z": -126.96836695528113,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:stock_decrement": {
+              "calls": 0,
+              "total_ms": 0.0,
+              "mean_ms": null,
+              "sd_ms": null,
+              "state": "insufficient",
+              "streak": 0
+            },
+            "txn:picker_queue_read": {
+              "calls": 76,
+              "total_ms": 1144.0195870000016,
+              "mean_ms": 15.0528893026316,
+              "sd_ms": 1.5825675443553129,
+              "rel": -0.45324838056930694,
+              "z": -68.74016846637062,
+              "state": "clean",
+              "streak": 0
+            }
+          },
+          "reset": false,
+          "state": "healthy",
+          "revert": false,
+          "streak": 0
+        }
+      }
+    },
+    {
+      "id": 4,
+      "job_id": "20261030-064404-ef7e",
+      "ts": "2026-10-30T06:45:15.129464+00:00",
+      "step": "monitor",
+      "level": "info",
+      "message": "Statement latency window measured",
+      "data": {
+        "applied_id": "ce162c958df94091b0fce122cb64d59f",
+        "window": {
+          "taken_at": "2026-10-30T06:45:15.129141+00:00",
+          "cumulative": {
+            "groups": {
+              "shape:recent_orders": {
+                "calls": 0,
+                "total_ms": 0.0,
+                "sum_sq_ms": 0.0
+              },
+              "txn:place_order": {
+                "calls": 14320,
+                "total_ms": 649.7430350000006,
+                "sum_sq_ms": 214.49386000849083
+              },
+              "txn:update_status": {
+                "calls": 2056,
+                "total_ms": 257.77343599999983,
+                "sum_sq_ms": 323.1946707847155
+              },
+              "txn:order_status": {
+                "calls": 1567,
+                "total_ms": 202.2341360000003,
+                "sum_sq_ms": 282.98900177922246
+              },
+              "txn:stock_decrement": {
+                "calls": 0,
+                "total_ms": 0.0,
+                "sum_sq_ms": 0.0
+              },
+              "txn:picker_queue_read": {
+                "calls": 284,
+                "total_ms": 5934.991015,
+                "sum_sq_ms": 140471.21719658453
+              }
+            },
+            "taken_at": "2026-10-30T06:45:15.129141+00:00"
+          },
+          "groups": {
+            "shape:recent_orders": {
+              "calls": 0,
+              "total_ms": 0.0,
+              "mean_ms": null,
+              "sd_ms": null,
+              "state": "insufficient",
+              "streak": 0
+            },
+            "txn:place_order": {
+              "calls": 3815,
+              "total_ms": 79.43545200000074,
+              "mean_ms": 0.020821874705111595,
+              "sd_ms": 0.04512148200306171,
+              "rel": -0.7149497590445066,
+              "z": -71.48877514313055,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:update_status": {
+              "calls": 601,
+              "total_ms": 9.234539000000012,
+              "mean_ms": 0.015365289517470902,
+              "sd_ms": 0.033441871590065744,
+              "rel": -0.9396499465647379,
+              "z": -175.3782948583656,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:order_status": {
+              "calls": 578,
+              "total_ms": 11.315092000000163,
+              "mean_ms": 0.019576283737024504,
+              "sd_ms": 0.04553773902381565,
+              "rel": -0.9564696583372183,
+              "z": -227.0919963446779,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:stock_decrement": {
+              "calls": 0,
+              "total_ms": 0.0,
+              "mean_ms": null,
+              "sd_ms": null,
+              "state": "insufficient",
+              "streak": 0
+            },
+            "txn:picker_queue_read": {
+              "calls": 76,
+              "total_ms": 1156.8141299999988,
+              "mean_ms": 15.221238552631563,
+              "sd_ms": 1.6134044507111855,
+              "rel": -0.4471335926892598,
+              "z": -66.5166907312965,
+              "state": "clean",
+              "streak": 0
+            }
+          },
+          "reset": false,
+          "state": "healthy",
+          "revert": false,
+          "streak": 0
+        }
+      }
+    },
+    {
+      "id": 5,
+      "job_id": "20261030-064404-ef7e",
+      "ts": "2026-10-30T06:45:20.140238+00:00",
+      "step": "monitor",
+      "level": "info",
+      "message": "Statement latency window measured",
+      "data": {
+        "applied_id": "ce162c958df94091b0fce122cb64d59f",
+        "window": {
+          "taken_at": "2026-10-30T06:45:20.139332+00:00",
+          "cumulative": {
+            "groups": {
+              "shape:recent_orders": {
+                "calls": 0,
+                "total_ms": 0.0,
+                "sum_sq_ms": 0.0
+              },
+              "txn:place_order": {
+                "calls": 17837,
+                "total_ms": 745.1414990000003,
+                "sum_sq_ms": 225.43428277650895
+              },
+              "txn:update_status": {
+                "calls": 2567,
+                "total_ms": 265.4821529999997,
+                "sum_sq_ms": 323.5794833178425
+              },
+              "txn:order_status": {
+                "calls": 2128,
+                "total_ms": 209.02823600000042,
+                "sum_sq_ms": 283.177965964529
+              },
+              "txn:stock_decrement": {
+                "calls": 0,
+                "total_ms": 0.0,
+                "sum_sq_ms": 0.0
+              },
+              "txn:picker_queue_read": {
+                "calls": 366,
+                "total_ms": 7369.662720999999,
+                "sum_sq_ms": 166775.3427550754
+              }
+            },
+            "taken_at": "2026-10-30T06:45:20.139332+00:00"
+          },
+          "groups": {
+            "shape:recent_orders": {
+              "calls": 0,
+              "total_ms": 0.0,
+              "mean_ms": null,
+              "sd_ms": null,
+              "state": "insufficient",
+              "streak": 0
+            },
+            "txn:place_order": {
+              "calls": 3517,
+              "total_ms": 95.39846399999965,
+              "mean_ms": 0.027124954222348494,
+              "sd_ms": 0.048733588983711974,
+              "rel": -0.6286609709024408,
+              "z": -55.882098084387984,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:update_status": {
+              "calls": 511,
+              "total_ms": 7.708716999999865,
+              "mean_ms": 0.01508555185909954,
+              "sd_ms": 0.022923436039902018,
+              "rel": -0.9407486686299076,
+              "z": -236.1932248411367,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:order_status": {
+              "calls": 561,
+              "total_ms": 6.794100000000128,
+              "mean_ms": 0.012110695187166004,
+              "sd_ms": 0.01379005500341305,
+              "rel": -0.973070338254544,
+              "z": -751.6191586520717,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:stock_decrement": {
+              "calls": 0,
+              "total_ms": 0.0,
+              "mean_ms": null,
+              "sd_ms": null,
+              "state": "insufficient",
+              "streak": 0
+            },
+            "txn:picker_queue_read": {
+              "calls": 82,
+              "total_ms": 1434.6717059999992,
+              "mean_ms": 17.495996414634135,
+              "sd_ms": 3.8304214474514007,
+              "rel": -0.3645097508567703,
+              "z": -23.72462224043955,
+              "state": "clean",
+              "streak": 0
+            }
+          },
+          "reset": false,
+          "state": "healthy",
+          "revert": false,
+          "streak": 0
+        }
+      }
+    },
+    {
+      "id": 6,
+      "job_id": "20261030-064404-ef7e",
+      "ts": "2026-10-30T06:45:25.151276+00:00",
+      "step": "monitor",
+      "level": "info",
+      "message": "Statement latency window measured",
+      "data": {
+        "applied_id": "ce162c958df94091b0fce122cb64d59f",
+        "window": {
+          "taken_at": "2026-10-30T06:45:25.150863+00:00",
+          "cumulative": {
+            "groups": {
+              "shape:recent_orders": {
+                "calls": 0,
+                "total_ms": 0.0,
+                "sum_sq_ms": 0.0
+              },
+              "txn:place_order": {
+                "calls": 21598,
+                "total_ms": 823.3324820000004,
+                "sum_sq_ms": 228.86602931822216
+              },
+              "txn:update_status": {
+                "calls": 3080,
+                "total_ms": 271.4771349999998,
+                "sum_sq_ms": 323.8615577849572
+              },
+              "txn:order_status": {
+                "calls": 2738,
+                "total_ms": 214.4895540000008,
+                "sum_sq_ms": 283.23861473038124
+              },
+              "txn:stock_decrement": {
+                "calls": 0,
+                "total_ms": 0.0,
+                "sum_sq_ms": 0.0
+              },
+              "txn:picker_queue_read": {
+                "calls": 439,
+                "total_ms": 8514.397710999996,
+                "sum_sq_ms": 184960.85183304801
+              }
+            },
+            "taken_at": "2026-10-30T06:45:25.150863+00:00"
+          },
+          "groups": {
+            "shape:recent_orders": {
+              "calls": 0,
+              "total_ms": 0.0,
+              "mean_ms": null,
+              "sd_ms": null,
+              "state": "insufficient",
+              "streak": 0
+            },
+            "txn:place_order": {
+              "calls": 3761,
+              "total_ms": 78.19098300000007,
+              "mean_ms": 0.020789944961446444,
+              "sd_ms": 0.02191424336803493,
+              "rel": -0.7153868753586857,
+              "z": -146.23945870965346,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:update_status": {
+              "calls": 513,
+              "total_ms": 5.994982000000107,
+              "mean_ms": 0.011686124756335492,
+              "sd_ms": 0.0203294675431048,
+              "rel": -0.954100555495939,
+              "z": -270.6387108338964,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:order_status": {
+              "calls": 610,
+              "total_ms": 5.461318000000375,
+              "mean_ms": 0.008952980327869467,
+              "sd_ms": 0.004389572822490327,
+              "rel": -0.9800919164327786,
+              "z": -2479.9769343504568,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:stock_decrement": {
+              "calls": 0,
+              "total_ms": 0.0,
+              "mean_ms": null,
+              "sd_ms": null,
+              "state": "insufficient",
+              "streak": 0
+            },
+            "txn:picker_queue_read": {
+              "calls": 73,
+              "total_ms": 1144.7349899999972,
+              "mean_ms": 15.681301232876674,
+              "sd_ms": 1.792583151693148,
+              "rel": -0.4304231784686714,
+              "z": -56.4816740104143,
+              "state": "clean",
+              "streak": 0
+            }
+          },
+          "reset": false,
+          "state": "healthy",
+          "revert": false,
+          "streak": 0
+        }
+      }
+    },
+    {
+      "id": 7,
+      "job_id": "20261030-064404-ef7e",
+      "ts": "2026-10-30T06:45:30.159162+00:00",
+      "step": "monitor",
+      "level": "info",
+      "message": "Statement latency window measured",
+      "data": {
+        "applied_id": "ce162c958df94091b0fce122cb64d59f",
+        "window": {
+          "taken_at": "2026-10-30T06:45:30.158402+00:00",
+          "cumulative": {
+            "groups": {
+              "shape:recent_orders": {
+                "calls": 0,
+                "total_ms": 0.0,
+                "sum_sq_ms": 0.0
+              },
+              "txn:place_order": {
+                "calls": 25275,
+                "total_ms": 901.1626920000022,
+                "sum_sq_ms": 234.51989735266227
+              },
+              "txn:update_status": {
+                "calls": 3577,
+                "total_ms": 277.5138169999999,
+                "sum_sq_ms": 324.0878819976373
+              },
+              "txn:order_status": {
+                "calls": 3341,
+                "total_ms": 220.06672000000083,
+                "sum_sq_ms": 283.3047437640656
+              },
+              "txn:stock_decrement": {
+                "calls": 0,
+                "total_ms": 0.0,
+                "sum_sq_ms": 0.0
+              },
+              "txn:picker_queue_read": {
+                "calls": 498,
+                "total_ms": 9459.198922000001,
+                "sum_sq_ms": 200290.75115880914
+              }
+            },
+            "taken_at": "2026-10-30T06:45:30.158402+00:00"
+          },
+          "groups": {
+            "shape:recent_orders": {
+              "calls": 0,
+              "total_ms": 0.0,
+              "mean_ms": null,
+              "sd_ms": null,
+              "state": "insufficient",
+              "streak": 0
+            },
+            "txn:place_order": {
+              "calls": 3677,
+              "total_ms": 77.83021000000178,
+              "mean_ms": 0.02116676910524933,
+              "sd_ms": 0.033009068029768864,
+              "rel": -0.710228174976991,
+              "z": -95.303722769297,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:update_status": {
+              "calls": 497,
+              "total_ms": 6.0366820000000985,
+              "mean_ms": 0.012146241448692351,
+              "sd_ms": 0.017545641290301752,
+              "rel": -0.9522933609788022,
+              "z": -308.0653076186493,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:order_status": {
+              "calls": 603,
+              "total_ms": 5.577166000000034,
+              "mean_ms": 0.009249031509121118,
+              "sd_ms": 0.004911429391864647,
+              "rel": -0.9794336092053869,
+              "z": -2202.2363613971775,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:stock_decrement": {
+              "calls": 0,
+              "total_ms": 0.0,
+              "mean_ms": null,
+              "sd_ms": null,
+              "state": "insufficient",
+              "streak": 0
+            },
+            "txn:picker_queue_read": {
+              "calls": 59,
+              "total_ms": 944.8012110000054,
+              "mean_ms": 16.01357984745772,
+              "sd_ms": 1.8422981845077349,
+              "rel": -0.4183541419553547,
+              "z": -48.02196696399617,
+              "state": "clean",
+              "streak": 0
+            }
+          },
+          "reset": false,
+          "state": "healthy",
+          "revert": false,
+          "streak": 0
+        }
+      }
+    },
+    {
+      "id": 8,
+      "job_id": "20261030-064404-ef7e",
+      "ts": "2026-10-30T06:45:35.169700+00:00",
+      "step": "monitor",
+      "level": "info",
+      "message": "Statement latency window measured",
+      "data": {
+        "applied_id": "ce162c958df94091b0fce122cb64d59f",
+        "window": {
+          "taken_at": "2026-10-30T06:45:35.168642+00:00",
+          "cumulative": {
+            "groups": {
+              "shape:recent_orders": {
+                "calls": 0,
+                "total_ms": 0.0,
+                "sum_sq_ms": 0.0
+              },
+              "txn:place_order": {
+                "calls": 28983,
+                "total_ms": 987.3300160000031,
+                "sum_sq_ms": 238.90093359380617
+              },
+              "txn:update_status": {
+                "calls": 4084,
+                "total_ms": 284.0618550000001,
+                "sum_sq_ms": 324.3800052871332
+              },
+              "txn:order_status": {
+                "calls": 3924,
+                "total_ms": 225.97135000000057,
+                "sum_sq_ms": 283.38728942385296
+              },
+              "txn:stock_decrement": {
+                "calls": 0,
+                "total_ms": 0.0,
+                "sum_sq_ms": 0.0
+              },
+              "txn:picker_queue_read": {
+                "calls": 578,
+                "total_ms": 10784.809090999997,
+                "sum_sq_ms": 222818.8622847549
+              }
+            },
+            "taken_at": "2026-10-30T06:45:35.168642+00:00"
+          },
+          "groups": {
+            "shape:recent_orders": {
+              "calls": 0,
+              "total_ms": 0.0,
+              "mean_ms": null,
+              "sd_ms": null,
+              "state": "insufficient",
+              "streak": 0
+            },
+            "txn:place_order": {
+              "calls": 3708,
+              "total_ms": 86.16732400000092,
+              "mean_ms": 0.02323822114347382,
+              "sd_ms": 0.025327738005671955,
+              "rel": -0.6818701183184959,
+              "z": -119.74945145094195,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:update_status": {
+              "calls": 507,
+              "total_ms": 6.54803800000019,
+              "mean_ms": 0.012915262327416549,
+              "sd_ms": 0.020233043695681817,
+              "rel": -0.9492728873931228,
+              "z": -268.96571617729586,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:order_status": {
+              "calls": 583,
+              "total_ms": 5.904629999999742,
+              "mean_ms": 0.010128010291594753,
+              "sd_ms": 0.0062458914632182085,
+              "rel": -0.9774790887647657,
+              "z": -1699.3604039141658,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:stock_decrement": {
+              "calls": 0,
+              "total_ms": 0.0,
+              "mean_ms": null,
+              "sd_ms": null,
+              "state": "insufficient",
+              "streak": 0
+            },
+            "txn:picker_queue_read": {
+              "calls": 80,
+              "total_ms": 1325.610168999996,
+              "mean_ms": 16.57012711249995,
+              "sd_ms": 2.651843990493406,
+              "rel": -0.39813921096543736,
+              "z": -36.97104822036949,
+              "state": "clean",
+              "streak": 0
+            }
+          },
+          "reset": false,
+          "state": "healthy",
+          "revert": false,
+          "streak": 0
+        }
+      }
+    },
+    {
+      "id": 9,
+      "job_id": "20261030-064404-ef7e",
+      "ts": "2026-10-30T06:45:40.184906+00:00",
+      "step": "monitor",
+      "level": "info",
+      "message": "Statement latency window measured",
+      "data": {
+        "applied_id": "ce162c958df94091b0fce122cb64d59f",
+        "window": {
+          "taken_at": "2026-10-30T06:45:40.183830+00:00",
+          "cumulative": {
+            "groups": {
+              "shape:recent_orders": {
+                "calls": 0,
+                "total_ms": 0.0,
+                "sum_sq_ms": 0.0
+              },
+              "txn:place_order": {
+                "calls": 32602,
+                "total_ms": 1067.5697850000033,
+                "sum_sq_ms": 247.4439054521372
+              },
+              "txn:update_status": {
+                "calls": 4605,
+                "total_ms": 289.44073400000013,
+                "sum_sq_ms": 324.5972012605862
+              },
+              "txn:order_status": {
+                "calls": 4499,
+                "total_ms": 230.75636000000063,
+                "sum_sq_ms": 283.438226591923
+              },
+              "txn:stock_decrement": {
+                "calls": 0,
+                "total_ms": 0.0,
+                "sum_sq_ms": 0.0
+              },
+              "txn:picker_queue_read": {
+                "calls": 647,
+                "total_ms": 11847.155673999996,
+                "sum_sq_ms": 239707.86864722337
+              }
+            },
+            "taken_at": "2026-10-30T06:45:40.183830+00:00"
+          },
+          "groups": {
+            "shape:recent_orders": {
+              "calls": 0,
+              "total_ms": 0.0,
+              "mean_ms": null,
+              "sd_ms": null,
+              "state": "insufficient",
+              "streak": 0
+            },
+            "txn:place_order": {
+              "calls": 3619,
+              "total_ms": 80.23976900000025,
+              "mean_ms": 0.022171806852721816,
+              "sd_ms": 0.04323193327569738,
+              "rel": -0.6964692672828596,
+              "z": -70.79294968124323,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:update_status": {
+              "calls": 521,
+              "total_ms": 5.37887900000004,
+              "mean_ms": 0.01032414395393482,
+              "sd_ms": 0.017615189982821182,
+              "rel": -0.9594499902793983,
+              "z": -316.53151890970133,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:order_status": {
+              "calls": 575,
+              "total_ms": 4.785010000000057,
+              "mean_ms": 0.00832175652173923,
+              "sd_ms": 0.004397129477869725,
+              "rel": -0.981495522363079,
+              "z": -2407.083556558094,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:stock_decrement": {
+              "calls": 0,
+              "total_ms": 0.0,
+              "mean_ms": null,
+              "sd_ms": null,
+              "state": "insufficient",
+              "streak": 0
+            },
+            "txn:picker_queue_read": {
+              "calls": 69,
+              "total_ms": 1062.3465829999986,
+              "mean_ms": 15.396327289855053,
+              "sd_ms": 2.7787252716635202,
+              "rel": -0.4407740128972074,
+              "z": -36.276443758774164,
+              "state": "clean",
+              "streak": 0
+            }
+          },
+          "reset": false,
+          "state": "healthy",
+          "revert": false,
+          "streak": 0
+        }
+      }
+    },
+    {
+      "id": 10,
+      "job_id": "20261030-064404-ef7e",
+      "ts": "2026-10-30T06:45:45.200862+00:00",
+      "step": "monitor",
+      "level": "info",
+      "message": "Statement latency window measured",
+      "data": {
+        "applied_id": "ce162c958df94091b0fce122cb64d59f",
+        "window": {
+          "taken_at": "2026-10-30T06:45:45.199678+00:00",
+          "cumulative": {
+            "groups": {
+              "shape:recent_orders": {
+                "calls": 0,
+                "total_ms": 0.0,
+                "sum_sq_ms": 0.0
+              },
+              "txn:place_order": {
+                "calls": 35928,
+                "total_ms": 1133.9665910000049,
+                "sum_sq_ms": 250.1799795911532
+              },
+              "txn:update_status": {
+                "calls": 5116,
+                "total_ms": 294.437277,
+                "sum_sq_ms": 324.83416162147256
+              },
+              "txn:order_status": {
+                "calls": 5098,
+                "total_ms": 235.52987000000041,
+                "sum_sq_ms": 283.483422973303
+              },
+              "txn:stock_decrement": {
+                "calls": 0,
+                "total_ms": 0.0,
+                "sum_sq_ms": 0.0
+              },
+              "txn:picker_queue_read": {
+                "calls": 711,
+                "total_ms": 12845.362711,
+                "sum_sq_ms": 255487.10651007458
+              }
+            },
+            "taken_at": "2026-10-30T06:45:45.199678+00:00"
+          },
+          "groups": {
+            "shape:recent_orders": {
+              "calls": 0,
+              "total_ms": 0.0,
+              "mean_ms": null,
+              "sd_ms": null,
+              "state": "insufficient",
+              "streak": 0
+            },
+            "txn:place_order": {
+              "calls": 3326,
+              "total_ms": 66.39680600000156,
+              "mean_ms": 0.019962960312688384,
+              "sd_ms": 0.02059398571742775,
+              "rel": -0.7267082465960752,
+              "z": -148.65489692570216,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:update_status": {
+              "calls": 511,
+              "total_ms": 4.9965429999998605,
+              "mean_ms": 0.00977797064579229,
+              "sd_ms": 0.019186198057306588,
+              "rel": -0.9615951882786834,
+              "z": -288.4542200665166,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:order_status": {
+              "calls": 599,
+              "total_ms": 4.7735099999997885,
+              "mean_ms": 0.00796913188647711,
+              "sd_ms": 0.0034562977839823097,
+              "rel": -0.9822796278173048,
+              "z": -3128.0635701729243,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:stock_decrement": {
+              "calls": 0,
+              "total_ms": 0.0,
+              "mean_ms": null,
+              "sd_ms": null,
+              "state": "insufficient",
+              "streak": 0
+            },
+            "txn:picker_queue_read": {
+              "calls": 64,
+              "total_ms": 998.2070370000038,
+              "mean_ms": 15.596984953125059,
+              "sd_ms": 1.8123608854311086,
+              "rel": -0.43348571759798704,
+              "z": -52.680500112886676,
+              "state": "clean",
+              "streak": 0
+            }
+          },
+          "reset": false,
+          "state": "healthy",
+          "revert": false,
+          "streak": 0
+        }
+      }
+    },
+    {
+      "id": 11,
+      "job_id": "20261030-064404-ef7e",
+      "ts": "2026-10-30T06:45:50.214233+00:00",
+      "step": "monitor",
+      "level": "info",
+      "message": "Statement latency window measured",
+      "data": {
+        "applied_id": "ce162c958df94091b0fce122cb64d59f",
+        "window": {
+          "taken_at": "2026-10-30T06:45:50.213050+00:00",
+          "cumulative": {
+            "groups": {
+              "shape:recent_orders": {
+                "calls": 0,
+                "total_ms": 0.0,
+                "sum_sq_ms": 0.0
+              },
+              "txn:place_order": {
+                "calls": 39390,
+                "total_ms": 1205.6668150000062,
+                "sum_sq_ms": 256.947115534335
+              },
+              "txn:update_status": {
+                "calls": 5651,
+                "total_ms": 299.8641799999997,
+                "sum_sq_ms": 325.0680385928375
+              },
+              "txn:order_status": {
+                "calls": 5649,
+                "total_ms": 240.11610300000044,
+                "sum_sq_ms": 283.5314338866144
+              },
+              "txn:stock_decrement": {
+                "calls": 0,
+                "total_ms": 0.0,
+                "sum_sq_ms": 0.0
+              },
+              "txn:picker_queue_read": {
+                "calls": 784,
+                "total_ms": 14005.732889000004,
+                "sum_sq_ms": 274876.0910181438
+              }
+            },
+            "taken_at": "2026-10-30T06:45:50.213050+00:00"
+          },
+          "groups": {
+            "shape:recent_orders": {
+              "calls": 0,
+              "total_ms": 0.0,
+              "mean_ms": null,
+              "sd_ms": null,
+              "state": "insufficient",
+              "streak": 0
+            },
+            "txn:place_order": {
+              "calls": 3462,
+              "total_ms": 71.7002240000013,
+              "mean_ms": 0.02071063662622799,
+              "sd_ms": 0.039060968866902114,
+              "rel": -0.7164726018066625,
+              "z": -78.83490057999686,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:update_status": {
+              "calls": 535,
+              "total_ms": 5.426902999999697,
+              "mean_ms": 0.01014374392523308,
+              "sd_ms": 0.018282715243746007,
+              "rel": -0.9601585451920469,
+              "z": -309.27316308522586,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:order_status": {
+              "calls": 551,
+              "total_ms": 4.586233000000021,
+              "mean_ms": 0.008323471869328532,
+              "sd_ms": 0.00422539465392114,
+              "rel": -0.9814917080708653,
+              "z": -2452.0726367845054,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:stock_decrement": {
+              "calls": 0,
+              "total_ms": 0.0,
+              "mean_ms": null,
+              "sd_ms": null,
+              "state": "insufficient",
+              "streak": 0
+            },
+            "txn:picker_queue_read": {
+              "calls": 73,
+              "total_ms": 1160.3701780000047,
+              "mean_ms": 15.895481890411023,
+              "sd_ms": 3.596690559307664,
+              "rel": -0.42264370045595767,
+              "z": -27.641559714684668,
+              "state": "clean",
+              "streak": 0
+            }
+          },
+          "reset": false,
+          "state": "healthy",
+          "revert": false,
+          "streak": 0
+        }
+      }
+    },
+    {
+      "id": 12,
+      "job_id": "20261030-064404-ef7e",
+      "ts": "2026-10-30T06:45:55.225004+00:00",
+      "step": "monitor",
+      "level": "info",
+      "message": "Statement latency window measured",
+      "data": {
+        "applied_id": "ce162c958df94091b0fce122cb64d59f",
+        "window": {
+          "taken_at": "2026-10-30T06:45:55.224354+00:00",
+          "cumulative": {
+            "groups": {
+              "shape:recent_orders": {
+                "calls": 0,
+                "total_ms": 0.0,
+                "sum_sq_ms": 0.0
+              },
+              "txn:place_order": {
+                "calls": 42685,
+                "total_ms": 1262.0034380000059,
+                "sum_sq_ms": 259.0059536099101
+              },
+              "txn:update_status": {
+                "calls": 6162,
+                "total_ms": 304.2666409999998,
+                "sum_sq_ms": 325.226013089497
+              },
+              "txn:order_status": {
+                "calls": 6212,
+                "total_ms": 243.8476390000007,
+                "sum_sq_ms": 283.5628791645848
+              },
+              "txn:stock_decrement": {
+                "calls": 0,
+                "total_ms": 0.0,
+                "sum_sq_ms": 0.0
+              },
+              "txn:picker_queue_read": {
+                "calls": 849,
+                "total_ms": 14962.211515000008,
+                "sum_sq_ms": 289055.9425643303
+              }
+            },
+            "taken_at": "2026-10-30T06:45:55.224354+00:00"
+          },
+          "groups": {
+            "shape:recent_orders": {
+              "calls": 0,
+              "total_ms": 0.0,
+              "mean_ms": null,
+              "sd_ms": null,
+              "state": "insufficient",
+              "streak": 0
+            },
+            "txn:place_order": {
+              "calls": 3295,
+              "total_ms": 56.33662299999969,
+              "mean_ms": 0.01709760940819414,
+              "sd_ms": 0.018234823861441065,
+              "rel": -0.7659347320742351,
+              "z": -176.12309824122954,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:update_status": {
+              "calls": 511,
+              "total_ms": 4.40246100000013,
+              "mean_ms": 0.008615383561644091,
+              "sd_ms": 0.015327195081267612,
+              "rel": -0.9661614668751077,
+              "z": -362.7943930761095,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:order_status": {
+              "calls": 563,
+              "total_ms": 3.7315360000002613,
+              "mean_ms": 0.0066279502664303045,
+              "sd_ms": 0.0034530196183693335,
+              "rel": -0.9852619146975293,
+              "z": -3044.7036104348686,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:stock_decrement": {
+              "calls": 0,
+              "total_ms": 0.0,
+              "mean_ms": null,
+              "sd_ms": null,
+              "state": "insufficient",
+              "streak": 0
+            },
+            "txn:picker_queue_read": {
+              "calls": 65,
+              "total_ms": 956.4786260000037,
+              "mean_ms": 14.715055784615442,
+              "sd_ms": 1.2722796487716443,
+              "rel": -0.465519182497081,
+              "z": -81.21597630232453,
+              "state": "clean",
+              "streak": 0
+            }
+          },
+          "reset": false,
+          "state": "healthy",
+          "revert": false,
+          "streak": 0
+        }
+      }
+    },
+    {
+      "id": 13,
+      "job_id": "20261030-064404-ef7e",
+      "ts": "2026-10-30T06:46:00.244580+00:00",
+      "step": "monitor",
+      "level": "info",
+      "message": "Statement latency window measured",
+      "data": {
+        "applied_id": "ce162c958df94091b0fce122cb64d59f",
+        "window": {
+          "taken_at": "2026-10-30T06:46:00.242892+00:00",
+          "cumulative": {
+            "groups": {
+              "shape:recent_orders": {
+                "calls": 0,
+                "total_ms": 0.0,
+                "sum_sq_ms": 0.0
+              },
+              "txn:place_order": {
+                "calls": 46187,
+                "total_ms": 1320.2989930000053,
+                "sum_sq_ms": 260.82133380917935
+              },
+              "txn:update_status": {
+                "calls": 6693,
+                "total_ms": 308.58382799999976,
+                "sum_sq_ms": 325.37630602858763
+              },
+              "txn:order_status": {
+                "calls": 6788,
+                "total_ms": 247.72150600000046,
+                "sum_sq_ms": 283.6079869092978
+              },
+              "txn:stock_decrement": {
+                "calls": 0,
+                "total_ms": 0.0,
+                "sum_sq_ms": 0.0
+              },
+              "txn:picker_queue_read": {
+                "calls": 936,
+                "total_ms": 16247.527478999998,
+                "sum_sq_ms": 308211.32006975764
+              }
+            },
+            "taken_at": "2026-10-30T06:46:00.242892+00:00"
+          },
+          "groups": {
+            "shape:recent_orders": {
+              "calls": 0,
+              "total_ms": 0.0,
+              "mean_ms": null,
+              "sd_ms": null,
+              "state": "insufficient",
+              "streak": 0
+            },
+            "txn:place_order": {
+              "calls": 3502,
+              "total_ms": 58.29555499999947,
+              "mean_ms": 0.01664636065105639,
+              "sd_ms": 0.015533271216111191,
+              "rel": -0.7721123010383499,
+              "z": -214.86913402659673,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:update_status": {
+              "calls": 531,
+              "total_ms": 4.317186999999933,
+              "mean_ms": 0.008130295668549779,
+              "sd_ms": 0.014728742051463054,
+              "rel": -0.968066740461769,
+              "z": -385.61151351600773,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:order_status": {
+              "calls": 576,
+              "total_ms": 3.8738669999997626,
+              "mean_ms": 0.0067254635416662545,
+              "sd_ms": 0.005751538658751161,
+              "rel": -0.9850450816027142,
+              "z": -1848.5086216209454,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:stock_decrement": {
+              "calls": 0,
+              "total_ms": 0.0,
+              "mean_ms": null,
+              "sd_ms": null,
+              "state": "insufficient",
+              "streak": 0
+            },
+            "txn:picker_queue_read": {
+              "calls": 87,
+              "total_ms": 1285.3159639999903,
+              "mean_ms": 14.773746712643566,
+              "sd_ms": 1.3831706353880902,
+              "rel": -0.4633874083705247,
+              "z": -86.03157710825577,
+              "state": "clean",
+              "streak": 0
+            }
+          },
+          "reset": false,
+          "state": "healthy",
+          "revert": false,
+          "streak": 0
+        }
+      }
+    },
+    {
+      "id": 14,
+      "job_id": "20261030-064404-ef7e",
+      "ts": "2026-10-30T06:46:05.256549+00:00",
+      "step": "monitor",
+      "level": "info",
+      "message": "Statement latency window measured",
+      "data": {
+        "applied_id": "ce162c958df94091b0fce122cb64d59f",
+        "window": {
+          "taken_at": "2026-10-30T06:46:05.254880+00:00",
+          "cumulative": {
+            "groups": {
+              "shape:recent_orders": {
+                "calls": 0,
+                "total_ms": 0.0,
+                "sum_sq_ms": 0.0
+              },
+              "txn:place_order": {
+                "calls": 49584,
+                "total_ms": 1389.718523000005,
+                "sum_sq_ms": 265.67672262641725
+              },
+              "txn:update_status": {
+                "calls": 7169,
+                "total_ms": 312.92598699999985,
+                "sum_sq_ms": 325.4305120922388
+              },
+              "txn:order_status": {
+                "calls": 7343,
+                "total_ms": 252.14154900000042,
+                "sum_sq_ms": 283.65177367620686
+              },
+              "txn:stock_decrement": {
+                "calls": 0,
+                "total_ms": 0.0,
+                "sum_sq_ms": 0.0
+              },
+              "txn:picker_queue_read": {
+                "calls": 992,
+                "total_ms": 17123.71652,
+                "sum_sq_ms": 322111.6392478279
+              }
+            },
+            "taken_at": "2026-10-30T06:46:05.254880+00:00"
+          },
+          "groups": {
+            "shape:recent_orders": {
+              "calls": 0,
+              "total_ms": 0.0,
+              "mean_ms": null,
+              "sd_ms": null,
+              "state": "insufficient",
+              "streak": 0
+            },
+            "txn:place_order": {
+              "calls": 3397,
+              "total_ms": 69.41952999999967,
+              "mean_ms": 0.020435540182513885,
+              "sd_ms": 0.031807316669619,
+              "rel": -0.720238655952952,
+              "z": -96.40411759228003,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:update_status": {
+              "calls": 476,
+              "total_ms": 4.342159000000095,
+              "mean_ms": 0.009122182773109442,
+              "sd_ms": 0.005537514463679008,
+              "rel": -0.9641709180176907,
+              "z": -967.1764638013836,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:order_status": {
+              "calls": 555,
+              "total_ms": 4.420042999999964,
+              "mean_ms": 0.007964041441441376,
+              "sd_ms": 0.003933080145491423,
+              "rel": -0.9822909470653602,
+              "z": -2646.0132341642375,
+              "state": "clean",
+              "streak": 0
+            },
+            "txn:stock_decrement": {
+              "calls": 0,
+              "total_ms": 0.0,
+              "mean_ms": null,
+              "sd_ms": null,
+              "state": "insufficient",
+              "streak": 0
+            },
+            "txn:picker_queue_read": {
+              "calls": 56,
+              "total_ms": 876.1890410000033,
+              "mean_ms": 15.646232875000058,
+              "sd_ms": 1.848075253865533,
+              "rel": -0.4316969327011204,
+              "z": -48.126370979976244,
+              "state": "clean",
+              "streak": 0
+            }
+          },
+          "reset": false,
+          "state": "healthy",
+          "revert": false,
+          "streak": 0
+        }
+      }
+    },
+    {
+      "id": 15,
+      "job_id": "20261030-064404-ef7e",
+      "ts": "2026-10-30T06:46:05.287523+00:00",
+      "step": "monitor",
+      "level": "warn",
+      "message": "Applied change reverted",
+      "data": {
+        "applied_id": "ce162c958df94091b0fce122cb64d59f",
+        "actor": "human",
+        "reason": "demo cleanup without confirmed regression",
+        "windows": [
+          {
+            "taken_at": "2026-10-30T06:46:00.242892+00:00",
+            "cumulative": {
+              "groups": {
+                "shape:recent_orders": {
+                  "calls": 0,
+                  "total_ms": 0.0,
+                  "sum_sq_ms": 0.0
+                },
+                "txn:place_order": {
+                  "calls": 46187,
+                  "total_ms": 1320.2989930000053,
+                  "sum_sq_ms": 260.82133380917935
+                },
+                "txn:update_status": {
+                  "calls": 6693,
+                  "total_ms": 308.58382799999976,
+                  "sum_sq_ms": 325.37630602858763
+                },
+                "txn:order_status": {
+                  "calls": 6788,
+                  "total_ms": 247.72150600000046,
+                  "sum_sq_ms": 283.6079869092978
+                },
+                "txn:stock_decrement": {
+                  "calls": 0,
+                  "total_ms": 0.0,
+                  "sum_sq_ms": 0.0
+                },
+                "txn:picker_queue_read": {
+                  "calls": 936,
+                  "total_ms": 16247.527478999998,
+                  "sum_sq_ms": 308211.32006975764
+                }
+              },
+              "taken_at": "2026-10-30T06:46:00.242892+00:00"
+            },
+            "groups": {
+              "shape:recent_orders": {
+                "calls": 0,
+                "total_ms": 0.0,
+                "mean_ms": null,
+                "sd_ms": null,
+                "state": "insufficient",
+                "streak": 0
+              },
+              "txn:place_order": {
+                "calls": 3502,
+                "total_ms": 58.29555499999947,
+                "mean_ms": 0.01664636065105639,
+                "sd_ms": 0.015533271216111191,
+                "rel": -0.7721123010383499,
+                "z": -214.86913402659673,
+                "state": "clean",
+                "streak": 0
+              },
+              "txn:update_status": {
+                "calls": 531,
+                "total_ms": 4.317186999999933,
+                "mean_ms": 0.008130295668549779,
+                "sd_ms": 0.014728742051463054,
+                "rel": -0.968066740461769,
+                "z": -385.61151351600773,
+                "state": "clean",
+                "streak": 0
+              },
+              "txn:order_status": {
+                "calls": 576,
+                "total_ms": 3.8738669999997626,
+                "mean_ms": 0.0067254635416662545,
+                "sd_ms": 0.005751538658751161,
+                "rel": -0.9850450816027142,
+                "z": -1848.5086216209454,
+                "state": "clean",
+                "streak": 0
+              },
+              "txn:stock_decrement": {
+                "calls": 0,
+                "total_ms": 0.0,
+                "mean_ms": null,
+                "sd_ms": null,
+                "state": "insufficient",
+                "streak": 0
+              },
+              "txn:picker_queue_read": {
+                "calls": 87,
+                "total_ms": 1285.3159639999903,
+                "mean_ms": 14.773746712643566,
+                "sd_ms": 1.3831706353880902,
+                "rel": -0.4633874083705247,
+                "z": -86.03157710825577,
+                "state": "clean",
+                "streak": 0
+              }
+            },
+            "reset": false,
+            "state": "healthy",
+            "revert": false,
+            "streak": 0
+          },
+          {
+            "taken_at": "2026-10-30T06:46:05.254880+00:00",
+            "cumulative": {
+              "groups": {
+                "shape:recent_orders": {
+                  "calls": 0,
+                  "total_ms": 0.0,
+                  "sum_sq_ms": 0.0
+                },
+                "txn:place_order": {
+                  "calls": 49584,
+                  "total_ms": 1389.718523000005,
+                  "sum_sq_ms": 265.67672262641725
+                },
+                "txn:update_status": {
+                  "calls": 7169,
+                  "total_ms": 312.92598699999985,
+                  "sum_sq_ms": 325.4305120922388
+                },
+                "txn:order_status": {
+                  "calls": 7343,
+                  "total_ms": 252.14154900000042,
+                  "sum_sq_ms": 283.65177367620686
+                },
+                "txn:stock_decrement": {
+                  "calls": 0,
+                  "total_ms": 0.0,
+                  "sum_sq_ms": 0.0
+                },
+                "txn:picker_queue_read": {
+                  "calls": 992,
+                  "total_ms": 17123.71652,
+                  "sum_sq_ms": 322111.6392478279
+                }
+              },
+              "taken_at": "2026-10-30T06:46:05.254880+00:00"
+            },
+            "groups": {
+              "shape:recent_orders": {
+                "calls": 0,
+                "total_ms": 0.0,
+                "mean_ms": null,
+                "sd_ms": null,
+                "state": "insufficient",
+                "streak": 0
+              },
+              "txn:place_order": {
+                "calls": 3397,
+                "total_ms": 69.41952999999967,
+                "mean_ms": 0.020435540182513885,
+                "sd_ms": 0.031807316669619,
+                "rel": -0.720238655952952,
+                "z": -96.40411759228003,
+                "state": "clean",
+                "streak": 0
+              },
+              "txn:update_status": {
+                "calls": 476,
+                "total_ms": 4.342159000000095,
+                "mean_ms": 0.009122182773109442,
+                "sd_ms": 0.005537514463679008,
+                "rel": -0.9641709180176907,
+                "z": -967.1764638013836,
+                "state": "clean",
+                "streak": 0
+              },
+              "txn:order_status": {
+                "calls": 555,
+                "total_ms": 4.420042999999964,
+                "mean_ms": 0.007964041441441376,
+                "sd_ms": 0.003933080145491423,
+                "rel": -0.9822909470653602,
+                "z": -2646.0132341642375,
+                "state": "clean",
+                "streak": 0
+              },
+              "txn:stock_decrement": {
+                "calls": 0,
+                "total_ms": 0.0,
+                "mean_ms": null,
+                "sd_ms": null,
+                "state": "insufficient",
+                "streak": 0
+              },
+              "txn:picker_queue_read": {
+                "calls": 56,
+                "total_ms": 876.1890410000033,
+                "mean_ms": 15.646232875000058,
+                "sd_ms": 1.848075253865533,
+                "rel": -0.4316969327011204,
+                "z": -48.126370979976244,
+                "state": "clean",
+                "streak": 0
+              }
+            },
+            "reset": false,
+            "state": "healthy",
+            "revert": false,
+            "streak": 0
+          }
+        ]
+      }
+    }
+  ],
+  "baseline": {
+    "groups": {
+      "shape:recent_orders": {
+        "calls": 0,
+        "total_ms": 0.0,
+        "sum_sq_ms": 0.0,
+        "mean_ms": null
+      },
+      "txn:place_order": {
+        "calls": 6708,
+        "total_ms": 489.99479900000006,
+        "sum_sq_ms": 200.7401752060087,
+        "mean_ms": 0.07304633258795469
+      },
+      "txn:update_status": {
+        "calls": 909,
+        "total_ms": 231.43389899999988,
+        "sum_sq_ms": 319.75037846030665,
+        "mean_ms": 0.2546027491749174
+      },
+      "txn:order_status": {
+        "calls": 365,
+        "total_ms": 164.14627800000014,
+        "sum_sq_ms": 276.4229512703622,
+        "mean_ms": 0.4497158301369867
+      },
+      "txn:stock_decrement": {
+        "calls": 0,
+        "total_ms": 0.0,
+        "sum_sq_ms": 0.0,
+        "mean_ms": null
+      },
+      "txn:picker_queue_read": {
+        "calls": 132,
+        "total_ms": 3634.157297999999,
+        "sum_sq_ms": 105254.09601914063,
+        "mean_ms": 27.531494681818174
+      }
+    },
+    "taken_at": "2026-10-30T06:45:05.070759+00:00",
+    "source": "pre_change_normal_live_traffic",
+    "statement_latency": true
+  },
+  "traffic_error": null
+}

@@ -10,6 +10,7 @@ import sqlglot
 from psycopg.pq import TransactionStatus
 from sqlglot import exp
 
+from app.cancel import check_cancelled
 from app.config import get_settings
 from app.errors import BadRequest
 from app.models import PairedResult
@@ -161,6 +162,7 @@ def paired_report(
     if warmup_first:
         for side in ("a", "b"):
             for _ in range(2):
+                check_cancelled()
                 if budget_s is not None and perf_counter() - start >= budget_s:
                     break
                 timed(side)
@@ -169,6 +171,7 @@ def paired_report(
         pending: list[float] = []
         count = min(batch, pair_limit - len(a_vals), max_n - len(test.d))
         for _ in range(count):
+            check_cancelled()
             if budget_s is not None and perf_counter() - start >= budget_s:
                 break
             values = {

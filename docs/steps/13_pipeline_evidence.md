@@ -89,6 +89,6 @@ Step names must be exactly the contract `Step` enum; levels `result` are used fo
 * `test_llm_error_isolated`: provider raising `LLMError` for one shape ⇒ that shape errors, next shape continues.
 
 ## 13.8 Done checklist
-- [ ] A mock-LLM job on three shapes completes; cards saved and schema-valid
-- [ ] Time per stage recorded in `PROGRESS.md`
+- [x] A mock-LLM job on three shapes completes; cards saved and schema-valid
+- [x] Time per stage recorded in `PROGRESS.md`
 - [ ] Commit `step 13: pipeline and evidence`

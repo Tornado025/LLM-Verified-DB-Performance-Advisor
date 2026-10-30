@@ -105,6 +105,11 @@ class Store:
         )
 
     @locked
+    def is_cancelled(self, job_id: str) -> bool:
+        """Report whether an API or caller has cancelled this job."""
+        return self.get_job(job_id)["status"] == "cancelled"
+
+    @locked
     def emit(
         self, job_id: str, step: str, level: str, message: str, data: dict | None = None
     ) -> int:
@@ -243,6 +248,24 @@ class Store:
         ]
 
     @locked
+    def save_approval(self, candidate_id: str, approver: str, confirmed: bool, digest: str) -> None:
+        """Record explicit approval bound to the exact candidate SQL."""
+        self.conn.execute(
+            "INSERT INTO approvals VALUES(?,?,?,?,?) ON CONFLICT(candidate_id) "
+            "DO UPDATE SET approver=excluded.approver,confirmed=excluded.confirmed,"
+            "sql_digest=excluded.sql_digest,approved_at=excluded.approved_at",
+            (candidate_id, approver, int(confirmed), digest, now()),
+        )
+
+    @locked
+    def get_approval(self, candidate_id: str) -> dict | None:
+        """Read the approval audit record, if any."""
+        row = self.conn.execute(
+            "SELECT * FROM approvals WHERE candidate_id=?", (candidate_id,)
+        ).fetchone()
+        return dict(row) if row else None
+
+    @locked
     def update_applied(self, id: str, **changes: object) -> None:
         """Update only mutable monitoring fields using validated column names."""
         self.get_applied(id)
@@ -298,4 +321,7 @@ CREATE TABLE IF NOT EXISTS applied (
   applied_at TEXT NOT NULL, reverted_at TEXT, revert_reason TEXT, windows TEXT);
 CREATE TABLE IF NOT EXISTS experiments (
   name TEXT PRIMARY KEY, updated_at TEXT NOT NULL, payload TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS approvals (
+  candidate_id TEXT PRIMARY KEY REFERENCES candidates(id), approver TEXT NOT NULL,
+  confirmed INTEGER NOT NULL, sql_digest TEXT NOT NULL, approved_at TEXT NOT NULL);
 """

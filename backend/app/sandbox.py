@@ -8,6 +8,8 @@ import re
 import threading
 from collections.abc import Iterator
 from contextlib import contextmanager
+from contextvars import ContextVar
+from dataclasses import dataclass, field
 from time import perf_counter
 from uuid import uuid4
 
@@ -28,6 +30,27 @@ _SEMAPHORE: threading.BoundedSemaphore | None = None
 _LIMIT: int | None = None
 _OWNED: dict[str, Settings] = {}
 metrics: dict[str, dict] = {}
+_TRACKER: ContextVar["CloneTracker | None"] = ContextVar("clone_tracker", default=None)
+
+
+@dataclass
+class CloneTracker:
+    """Clones and clone-creation cost owned by one pipeline job."""
+
+    names: set[str] = field(default_factory=set)
+    created: int = 0
+    seconds: float = 0.0
+
+
+@contextmanager
+def track_clones() -> Iterator[CloneTracker]:
+    """Track only clones created by this job in this execution context."""
+    tracker = CloneTracker()
+    token = _TRACKER.set(tracker)
+    try:
+        yield tracker
+    finally:
+        _TRACKER.reset(token)
 
 
 class InvalidDDL(SandboxError):
@@ -112,6 +135,11 @@ def _create(
                 "template_bytes": size,
                 "copy_strategy": "FILE_COPY",
             }
+        tracker = _TRACKER.get()
+        if tracker is not None:
+            tracker.names.add(name)
+            tracker.created += 1
+            tracker.seconds += metrics[name]["seconds"]
         _LOG.info(
             "Created clone %s in %.3f seconds (%d template bytes)",
             name,
@@ -146,6 +174,9 @@ def _drop(name: str, settings: Settings) -> None:
     with _LOCK:
         if _OWNED.pop(name, None) is not None:
             _semaphore(settings).release()
+    tracker = _TRACKER.get()
+    if tracker is not None:
+        tracker.names.discard(name)
 
 
 def drop_clone(name: str) -> None:

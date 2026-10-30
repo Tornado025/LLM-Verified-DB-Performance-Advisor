@@ -73,6 +73,15 @@ so the UI can plot it. Guard against running traffic and `apply` concurrently wi
 3. Switch the generator to `flash10`. Within `consecutive × interval` the monitor reverts the index; script prints the window table and the final state.
 4. Verify afterwards: index absent; applied row `reverted`; events present.
 
+The natural qty-index demo is observational: it must report failure to demonstrate
+auto-revert if measured windows do not regress. On this fixture the natural run
+did not regress and was manually cleaned up. `--controlled-delay` adds a trusted,
+tagged `pg_sleep` probe (1 ms before apply, 10 ms after) to exercise the monitor
+with an actual measured regression. This mode verifies detection and live index
+removal; it does not establish that the index caused the injected delay. Both runs
+are retained separately under `experiments/results/step14_*demo.json`. Tests use
+this explicitly labelled controlled mode for reproducible lifecycle acceptance.
+
 ## 14.8 Tests (`tests/test_monitor.py`)
 
 * Unit (no DB): window evaluation with synthetic counters — clean windows keep `healthy`; two regressed windows ⇒ revert decision; insufficient calls ⇒ no action; z-test gate.
@@ -82,8 +91,8 @@ so the UI can plot it. Guard against running traffic and `apply` concurrently wi
 * `test_invalid_index_cleanup`: simulate `indisvalid=false` ⇒ index dropped and error raised.
 
 ## 14.9 Done checklist
-- [ ] Approve → apply → monitor → revert demonstrated; window table saved in `PROGRESS.md`
-- [ ] Safety re-check on apply verified by test
+- [x] Approve → apply → monitor → revert demonstrated; window table saved in `PROGRESS.md`
+- [x] Safety re-check on apply verified by test
 - [ ] Commit `step 14: apply, monitor, revert`
 
 ## 14.10 Pitfalls

@@ -21,6 +21,7 @@ from typing import Any
 import numpy as np
 import psycopg
 
+from app.cancel import current_event
 from app.config import get_settings
 from app.errors import BadRequest, Conflict
 from app.models import Arrival, BlockResult, ProfileSpec
@@ -303,7 +304,7 @@ def run_block(
     if any(a.t > b.t for a, b in zip(schedule, schedule[1:], strict=False)):
         raise BadRequest("Scheduled arrivals must be ordered by target time")
     cancelled = threading.Event()
-    external = stop_event or threading.Event()
+    external = stop_event or current_event() or threading.Event()
     jobs: Queue = Queue()
     ready = threading.Barrier(workers + 1)
     lock = threading.Lock()

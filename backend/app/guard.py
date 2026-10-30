@@ -13,6 +13,7 @@ from typing import Any
 
 import numpy as np
 
+from app.cancel import check_cancelled
 from app.config import Settings
 from app.errors import BadRequest
 from app.models import Candidate, GuardResult
@@ -112,6 +113,7 @@ def _guard_custom_profile(
     failed_cell: tuple[str, str] | None = None
 
     for index in range(settings.max_blocks):
+        check_cancelled()
         schedule = build_schedule(
             profile, settings.block_seconds, seed + index, settings.base_rate_tps, pools
         )
@@ -298,6 +300,7 @@ def _guard_ch_profile(
     failed_cell: tuple[str, str] | None = None
     blocked_reason: str | None = None
     for index in range(settings.max_blocks):
+        check_cancelled()
         block_started = time.perf_counter()
         with tempfile.TemporaryDirectory(prefix="dpa_guard_ch_", dir=root) as folder:
             out_a, out_b = Path(folder) / "a", Path(folder) / "b"
@@ -476,6 +479,7 @@ def run_guard(
     started = time.perf_counter()
     clone_count = 0
     for profile_name in selected:
+        check_cancelled()
         if stopped:
             break
         tests = _make_tests(settings, txns, len(selected))
