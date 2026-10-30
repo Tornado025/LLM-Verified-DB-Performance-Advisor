@@ -1,0 +1,767 @@
+{
+  "created_at": "2026-10-27T06:52:13.353858+00:00",
+  "profile": "flash5",
+  "seed": 4321,
+  "pairs_per_arm": 8,
+  "base_rate_tps": 41,
+  "block_seconds": 12,
+  "workers": 16,
+  "min_samples_per_block": 5,
+  "candidate_sql": "CREATE INDEX guard_diagnostic_qty ON store_stock(qty)",
+  "record_timeline": false,
+  "stocked_only": false,
+  "arms": {
+    "reused": {
+      "blocks": [
+        {
+          "index": 0,
+          "seed": 4321,
+          "order": [
+            "a",
+            "b"
+          ],
+          "scheduled": 2380,
+          "valid": true,
+          "actual_seconds_a": 12.03703087499889,
+          "actual_seconds_b": 12.032685707999917,
+          "queue_lag_p95_ms_a": 3.009913580171994,
+          "queue_lag_p95_ms_b": 2.9873371757275886,
+          "workload_lag_ms_a": 5.037573366280412,
+          "workload_lag_ms_b": 5.061258150817594,
+          "dropped_a": 0,
+          "dropped_b": 0,
+          "transactions": {
+            "place_order": {
+              "n_a": 922,
+              "n_b": 922,
+              "mean_a_ms": 3.7126090620027465,
+              "mean_b_ms": 3.577607015625146,
+              "d": -0.0370407351446382,
+              "errors_a": 458,
+              "errors_b": 458
+            },
+            "update_status": {
+              "n_a": 425,
+              "n_b": 425,
+              "mean_a_ms": 2.459279693747008,
+              "mean_b_ms": 2.365107377571643,
+              "d": -0.03904507595596478,
+              "errors_a": 42,
+              "errors_b": 42
+            },
+            "order_status": {
+              "n_a": 620,
+              "n_b": 620,
+              "mean_a_ms": 1.7739556613436904,
+              "mean_b_ms": 1.7687500654104835,
+              "d": -0.002938770578854236,
+              "errors_a": 31,
+              "errors_b": 31
+            },
+            "stock_decrement": {
+              "n_a": 299,
+              "n_b": 299,
+              "mean_a_ms": 2.1107782159259747,
+              "mean_b_ms": 2.0568401951065023,
+              "d": -0.025885782879765704,
+              "errors_a": 71,
+              "errors_b": 71
+            },
+            "picker_queue_read": {
+              "n_a": 114,
+              "n_b": 114,
+              "mean_a_ms": 22.293646307253656,
+              "mean_b_ms": 21.172516227587742,
+              "d": -0.05159778265193387,
+              "errors_a": 0,
+              "errors_b": 0
+            }
+          },
+          "hot_stats": {
+            "a": {
+              "updates": 4278,
+              "hot_updates": 1558
+            },
+            "b": {
+              "updates": 4278,
+              "hot_updates": 0
+            }
+          },
+          "stock_statement": {
+            "a": {
+              "calls": 2806,
+              "total_exec_ms": 51.175756999999884,
+              "updated_rows": 2277
+            },
+            "b": {
+              "calls": 2806,
+              "total_exec_ms": 53.65669400000004,
+              "updated_rows": 2277
+            }
+          }
+        },
+        {
+          "index": 1,
+          "seed": 4322,
+          "order": [
+            "b",
+            "a"
+          ],
+          "scheduled": 2409,
+          "valid": true,
+          "actual_seconds_a": 12.017443166998419,
+          "actual_seconds_b": 12.016680583001289,
+          "queue_lag_p95_ms_a": 2.89400422188919,
+          "queue_lag_p95_ms_b": 2.818688096886035,
+          "workload_lag_ms_a": 5.042923516157316,
+          "workload_lag_ms_b": 5.03652492625406,
+          "dropped_a": 0,
+          "dropped_b": 0,
+          "transactions": {
+            "place_order": {
+              "n_a": 915,
+              "n_b": 915,
+              "mean_a_ms": 3.611157994016482,
+              "mean_b_ms": 3.5726642246252176,
+              "d": -0.010716896003936755,
+              "errors_a": 456,
+              "errors_b": 456
+            },
+            "update_status": {
+              "n_a": 433,
+              "n_b": 433,
+              "mean_a_ms": 2.3228047045867775,
+              "mean_b_ms": 2.2417623327136136,
+              "d": -0.03551306769573665,
+              "errors_a": 53,
+              "errors_b": 53
+            },
+            "order_status": {
+              "n_a": 648,
+              "n_b": 648,
+              "mean_a_ms": 1.7843476500420814,
+              "mean_b_ms": 1.7754799887539034,
+              "d": -0.004982083701841681,
+              "errors_a": 61,
+              "errors_b": 61
+            },
+            "stock_decrement": {
+              "n_a": 311,
+              "n_b": 311,
+              "mean_a_ms": 2.0597519181567505,
+              "mean_b_ms": 2.0330630842705033,
+              "d": -0.01304198316743913,
+              "errors_a": 73,
+              "errors_b": 73
+            },
+            "picker_queue_read": {
+              "n_a": 102,
+              "n_b": 102,
+              "mean_a_ms": 22.418516690723823,
+              "mean_b_ms": 22.65991299678075,
+              "d": 0.010710160723168353,
+              "errors_a": 0,
+              "errors_b": 0
+            }
+          },
+          "hot_stats": {
+            "a": {
+              "updates": 6486,
+              "hot_updates": 3382
+            },
+            "b": {
+              "updates": 6486,
+              "hot_updates": 0
+            }
+          },
+          "stock_statement": {
+            "a": {
+              "calls": 2737,
+              "total_exec_ms": 41.30618499999981,
+              "updated_rows": 2208
+            },
+            "b": {
+              "calls": 2737,
+              "total_exec_ms": 53.71595200000015,
+              "updated_rows": 2208
+            }
+          }
+        },
+        {
+          "index": 2,
+          "seed": 4323,
+          "order": [
+            "a",
+            "b"
+          ],
+          "scheduled": 2419,
+          "valid": true,
+          "actual_seconds_a": 12.01955162500235,
+          "actual_seconds_b": 12.017926583001099,
+          "queue_lag_p95_ms_a": 2.804221550104557,
+          "queue_lag_p95_ms_b": 2.9746455558779403,
+          "workload_lag_ms_a": 5.0573726402944885,
+          "workload_lag_ms_b": 5.0442405154171865,
+          "dropped_a": 0,
+          "dropped_b": 0,
+          "transactions": {
+            "place_order": {
+              "n_a": 957,
+              "n_b": 957,
+              "mean_a_ms": 3.5068399916998025,
+              "mean_b_ms": 3.5451508709442408,
+              "d": 0.010865373167210483,
+              "errors_a": 479,
+              "errors_b": 479
+            },
+            "update_status": {
+              "n_a": 442,
+              "n_b": 442,
+              "mean_a_ms": 2.295011690373907,
+              "mean_b_ms": 2.1573882840051763,
+              "d": -0.06183957500845002,
+              "errors_a": 96,
+              "errors_b": 96
+            },
+            "order_status": {
+              "n_a": 608,
+              "n_b": 608,
+              "mean_a_ms": 1.8644356466187386,
+              "mean_b_ms": 1.8250572321257525,
+              "d": -0.02134705834160413,
+              "errors_a": 66,
+              "errors_b": 66
+            },
+            "stock_decrement": {
+              "n_a": 304,
+              "n_b": 304,
+              "mean_a_ms": 2.0321634552290466,
+              "mean_b_ms": 2.079804480098047,
+              "d": 0.023172922295549805,
+              "errors_a": 72,
+              "errors_b": 72
+            },
+            "picker_queue_read": {
+              "n_a": 108,
+              "n_b": 108,
+              "mean_a_ms": 22.40841314034225,
+              "mean_b_ms": 22.112444370139674,
+              "d": -0.013295931250983195,
+              "errors_a": 0,
+              "errors_b": 0
+            }
+          },
+          "hot_stats": {
+            "a": {
+              "updates": 8811,
+              "hot_updates": 5350
+            },
+            "b": {
+              "updates": 8811,
+              "hot_updates": 0
+            }
+          },
+          "stock_statement": {
+            "a": {
+              "calls": 2876,
+              "total_exec_ms": 44.36251599999986,
+              "updated_rows": 2325
+            },
+            "b": {
+              "calls": 2876,
+              "total_exec_ms": 56.82120900000042,
+              "updated_rows": 2325
+            }
+          }
+        },
+        {
+          "index": 3,
+          "seed": 4324,
+          "order": [
+            "b",
+            "a"
+          ],
+          "scheduled": 2437,
+          "valid": true,
+          "actual_seconds_a": 12.017996082999161,
+          "actual_seconds_b": 12.016839708001498,
+          "queue_lag_p95_ms_a": 2.765734045533463,
+          "queue_lag_p95_ms_b": 2.691425841476302,
+          "workload_lag_ms_a": 5.033433186326874,
+          "workload_lag_ms_b": 5.203825894568581,
+          "dropped_a": 0,
+          "dropped_b": 0,
+          "transactions": {
+            "place_order": {
+              "n_a": 923,
+              "n_b": 923,
+              "mean_a_ms": 3.582385625727713,
+              "mean_b_ms": 3.6319883918283544,
+              "d": 0.013751310267067074,
+              "errors_a": 464,
+              "errors_b": 464
+            },
+            "update_status": {
+              "n_a": 463,
+              "n_b": 463,
+              "mean_a_ms": 2.1678672094293696,
+              "mean_b_ms": 2.1682643997832454,
+              "d": 0.00018320032267596213,
+              "errors_a": 108,
+              "errors_b": 108
+            },
+            "order_status": {
+              "n_a": 622,
+              "n_b": 622,
+              "mean_a_ms": 1.8553505235741763,
+              "mean_b_ms": 1.7501492987517335,
+              "d": -0.05837254183509068,
+              "errors_a": 63,
+              "errors_b": 63
+            },
+            "stock_decrement": {
+              "n_a": 336,
+              "n_b": 336,
+              "mean_a_ms": 2.0767601354994745,
+              "mean_b_ms": 2.1430673977344363,
+              "d": 0.031429113989142964,
+              "errors_a": 71,
+              "errors_b": 71
+            },
+            "picker_queue_read": {
+              "n_a": 93,
+              "n_b": 93,
+              "mean_a_ms": 22.892022712219703,
+              "mean_b_ms": 22.923122067231326,
+              "d": 0.0013576017248395438,
+              "errors_a": 0,
+              "errors_b": 0
+            }
+          },
+          "hot_stats": {
+            "a": {
+              "updates": 11086,
+              "hot_updates": 7443
+            },
+            "b": {
+              "updates": 11086,
+              "hot_updates": 0
+            }
+          },
+          "stock_statement": {
+            "a": {
+              "calls": 2810,
+              "total_exec_ms": 47.2902839999995,
+              "updated_rows": 2275
+            },
+            "b": {
+              "calls": 2810,
+              "total_exec_ms": 59.82188399999973,
+              "updated_rows": 2275
+            }
+          }
+        },
+        {
+          "index": 4,
+          "seed": 4325,
+          "order": [
+            "a",
+            "b"
+          ],
+          "scheduled": 2455,
+          "valid": true,
+          "actual_seconds_a": 12.020439167001314,
+          "actual_seconds_b": 12.016471874998388,
+          "queue_lag_p95_ms_a": 2.880962806375461,
+          "queue_lag_p95_ms_b": 2.8789127125491984,
+          "workload_lag_ms_a": 5.066220241133124,
+          "workload_lag_ms_b": 5.043753761128755,
+          "dropped_a": 0,
+          "dropped_b": 0,
+          "transactions": {
+            "place_order": {
+              "n_a": 964,
+              "n_b": 964,
+              "mean_a_ms": 3.62593063225754,
+              "mean_b_ms": 3.5041792362710895,
+              "d": -0.034154657828351996,
+              "errors_a": 493,
+              "errors_b": 493
+            },
+            "update_status": {
+              "n_a": 406,
+              "n_b": 406,
+              "mean_a_ms": 2.3274307278088284,
+              "mean_b_ms": 2.2131659132651404,
+              "d": -0.05034093687583458,
+              "errors_a": 127,
+              "errors_b": 127
+            },
+            "order_status": {
+              "n_a": 651,
+              "n_b": 651,
+              "mean_a_ms": 1.8750837474930695,
+              "mean_b_ms": 1.7994294799922856,
+              "d": -0.04118366465329724,
+              "errors_a": 65,
+              "errors_b": 65
+            },
+            "stock_decrement": {
+              "n_a": 319,
+              "n_b": 319,
+              "mean_a_ms": 2.2536477299011533,
+              "mean_b_ms": 1.9773847658217623,
+              "d": -0.13077497045285294,
+              "errors_a": 72,
+              "errors_b": 72
+            },
+            "picker_queue_read": {
+              "n_a": 115,
+              "n_b": 115,
+              "mean_a_ms": 22.837000814204497,
+              "mean_b_ms": 21.903261742630526,
+              "d": -0.04174649955037175,
+              "errors_a": 0,
+              "errors_b": 0
+            }
+          },
+          "hot_stats": {
+            "a": {
+              "updates": 13448,
+              "hot_updates": 9666
+            },
+            "b": {
+              "updates": 13448,
+              "hot_updates": 0
+            }
+          },
+          "stock_statement": {
+            "a": {
+              "calls": 2927,
+              "total_exec_ms": 49.441419000000366,
+              "updated_rows": 2362
+            },
+            "b": {
+              "calls": 2927,
+              "total_exec_ms": 54.010698000000446,
+              "updated_rows": 2362
+            }
+          }
+        },
+        {
+          "index": 5,
+          "seed": 4326,
+          "order": [
+            "b",
+            "a"
+          ],
+          "scheduled": 2456,
+          "valid": true,
+          "actual_seconds_a": 12.017097625001043,
+          "actual_seconds_b": 12.020081291997485,
+          "queue_lag_p95_ms_a": 2.6846315167858847,
+          "queue_lag_p95_ms_b": 2.7580541900533717,
+          "workload_lag_ms_a": 5.361802155675832,
+          "workload_lag_ms_b": 5.048710252594901,
+          "dropped_a": 0,
+          "dropped_b": 0,
+          "transactions": {
+            "place_order": {
+              "n_a": 993,
+              "n_b": 993,
+              "mean_a_ms": 3.445904096299799,
+              "mean_b_ms": 3.4229268243899256,
+              "d": -0.006690325582683031,
+              "errors_a": 527,
+              "errors_b": 527
+            },
+            "update_status": {
+              "n_a": 399,
+              "n_b": 399,
+              "mean_a_ms": 2.21126152955503,
+              "mean_b_ms": 2.093644549173054,
+              "d": -0.05465682977353316,
+              "errors_a": 144,
+              "errors_b": 144
+            },
+            "order_status": {
+              "n_a": 604,
+              "n_b": 604,
+              "mean_a_ms": 1.7790351225119967,
+              "mean_b_ms": 1.8190313745640347,
+              "d": 0.022232996307136505,
+              "errors_a": 70,
+              "errors_b": 70
+            },
+            "stock_decrement": {
+              "n_a": 348,
+              "n_b": 348,
+              "mean_a_ms": 2.0084407109628035,
+              "mean_b_ms": 2.0835774580361965,
+              "d": 0.03672769275363002,
+              "errors_a": 93,
+              "errors_b": 93
+            },
+            "picker_queue_read": {
+              "n_a": 112,
+              "n_b": 112,
+              "mean_a_ms": 22.090441457521592,
+              "mean_b_ms": 22.21243519602467,
+              "d": 0.005507274292674857,
+              "errors_a": 0,
+              "errors_b": 0
+            }
+          },
+          "hot_stats": {
+            "a": {
+              "updates": 15808,
+              "hot_updates": 11945
+            },
+            "b": {
+              "updates": 15808,
+              "hot_updates": 0
+            }
+          },
+          "stock_statement": {
+            "a": {
+              "calls": 2980,
+              "total_exec_ms": 39.85198800000089,
+              "updated_rows": 2360
+            },
+            "b": {
+              "calls": 2980,
+              "total_exec_ms": 56.64090199999913,
+              "updated_rows": 2360
+            }
+          }
+        },
+        {
+          "index": 6,
+          "seed": 4327,
+          "order": [
+            "a",
+            "b"
+          ],
+          "scheduled": 2428,
+          "valid": true,
+          "actual_seconds_a": 12.034324874999584,
+          "actual_seconds_b": 12.039083749998099,
+          "queue_lag_p95_ms_a": 2.9551832680226657,
+          "queue_lag_p95_ms_b": 2.8057258523404016,
+          "workload_lag_ms_a": 5.043170880526304,
+          "workload_lag_ms_b": 5.046063837653492,
+          "dropped_a": 0,
+          "dropped_b": 0,
+          "transactions": {
+            "place_order": {
+              "n_a": 937,
+              "n_b": 937,
+              "mean_a_ms": 3.7093893914948652,
+              "mean_b_ms": 3.6456227050331016,
+              "d": -0.017340089558136724,
+              "errors_a": 487,
+              "errors_b": 487
+            },
+            "update_status": {
+              "n_a": 421,
+              "n_b": 421,
+              "mean_a_ms": 2.3137623250686743,
+              "mean_b_ms": 2.1504636171375924,
+              "d": -0.07319145699996742,
+              "errors_a": 161,
+              "errors_b": 161
+            },
+            "order_status": {
+              "n_a": 644,
+              "n_b": 644,
+              "mean_a_ms": 1.835647429768824,
+              "mean_b_ms": 1.7500796049310152,
+              "d": -0.04773596660866155,
+              "errors_a": 68,
+              "errors_b": 68
+            },
+            "stock_decrement": {
+              "n_a": 333,
+              "n_b": 333,
+              "mean_a_ms": 2.078748908257563,
+              "mean_b_ms": 1.9706185717382483,
+              "d": -0.05341873706332253,
+              "errors_a": 89,
+              "errors_b": 89
+            },
+            "picker_queue_read": {
+              "n_a": 93,
+              "n_b": 93,
+              "mean_a_ms": 23.831942859091683,
+              "mean_b_ms": 22.873598428607995,
+              "d": -0.04104347934942039,
+              "errors_a": 0,
+              "errors_b": 0
+            }
+          },
+          "hot_stats": {
+            "a": {
+              "updates": 18034,
+              "hot_updates": 14120
+            },
+            "b": {
+              "updates": 18034,
+              "hot_updates": 0
+            }
+          },
+          "stock_statement": {
+            "a": {
+              "calls": 2802,
+              "total_exec_ms": 49.47738899999996,
+              "updated_rows": 2226
+            },
+            "b": {
+              "calls": 2802,
+              "total_exec_ms": 61.89773100000093,
+              "updated_rows": 2226
+            }
+          }
+        },
+        {
+          "index": 7,
+          "seed": 4328,
+          "order": [
+            "b",
+            "a"
+          ],
+          "scheduled": 2403,
+          "valid": true,
+          "actual_seconds_a": 12.01871920800113,
+          "actual_seconds_b": 12.021326791997126,
+          "queue_lag_p95_ms_a": 2.9191076246206658,
+          "queue_lag_p95_ms_b": 2.9705463912250707,
+          "workload_lag_ms_a": 5.870464054169133,
+          "workload_lag_ms_b": 5.036536043917295,
+          "dropped_a": 0,
+          "dropped_b": 0,
+          "transactions": {
+            "place_order": {
+              "n_a": 956,
+              "n_b": 956,
+              "mean_a_ms": 3.643532283040943,
+              "mean_b_ms": 3.8404728861240827,
+              "d": 0.05264188790918282,
+              "errors_a": 471,
+              "errors_b": 471
+            },
+            "update_status": {
+              "n_a": 395,
+              "n_b": 395,
+              "mean_a_ms": 2.166561128113336,
+              "mean_b_ms": 2.294885826719294,
+              "d": 0.05754191662324163,
+              "errors_a": 173,
+              "errors_b": 173
+            },
+            "order_status": {
+              "n_a": 630,
+              "n_b": 630,
+              "mean_a_ms": 1.8189186740600567,
+              "mean_b_ms": 1.9037038381770437,
+              "d": 0.04555918770588546,
+              "errors_a": 50,
+              "errors_b": 50
+            },
+            "stock_decrement": {
+              "n_a": 317,
+              "n_b": 317,
+              "mean_a_ms": 2.115611601272952,
+              "mean_b_ms": 2.242944753397923,
+              "d": 0.058445680686162925,
+              "errors_a": 75,
+              "errors_b": 75
+            },
+            "picker_queue_read": {
+              "n_a": 105,
+              "n_b": 105,
+              "mean_a_ms": 22.639983075212164,
+              "mean_b_ms": 22.91691515835867,
+              "d": 0.012157785320213289,
+              "errors_a": 0,
+              "errors_b": 0
+            }
+          },
+          "hot_stats": {
+            "a": {
+              "updates": 20377,
+              "hot_updates": 16425
+            },
+            "b": {
+              "updates": 20377,
+              "hot_updates": 0
+            }
+          },
+          "stock_statement": {
+            "a": {
+              "calls": 2889,
+              "total_exec_ms": 52.778300999999544,
+              "updated_rows": 2343
+            },
+            "b": {
+              "calls": 2889,
+              "total_exec_ms": 66.94203499999935,
+              "updated_rows": 2343
+            }
+          }
+        }
+      ],
+      "dbid_a": 55779,
+      "dbid_b": 55788,
+      "prepare": {
+        "a": {
+          "profile": "flash5",
+          "seed": 4321,
+          "new_products": 2000,
+          "hot_qty": 1000000,
+          "hot_set_max": 50,
+          "analyzed": true,
+          "autovacuum": "left enabled; may analyze asynchronously",
+          "seconds": 0.449127125000814
+        },
+        "b": {
+          "profile": "flash5",
+          "seed": 4321,
+          "new_products": 2000,
+          "hot_qty": 1000000,
+          "hot_set_max": 50,
+          "analyzed": true,
+          "autovacuum": "left enabled; may analyze asynchronously",
+          "seconds": 0.4333873750001658
+        }
+      },
+      "summary": {
+        "place_order": {
+          "n": 8,
+          "mean_rel": -0.0035790963077959844,
+          "sd_log": 0.029214290853017667
+        },
+        "update_status": {
+          "n": 8,
+          "mean_rel": -0.0315977477432235,
+          "sd_log": 0.0423459449566456
+        },
+        "order_status": {
+          "n": 8,
+          "mean_rel": -0.01350397972417981,
+          "sd_log": 0.03578200558742308
+        },
+        "stock_decrement": {
+          "n": 8,
+          "mean_rel": -0.009126357651449826,
+          "sd_log": 0.06142703028945666
+        },
+        "picker_queue_read": {
+          "n": 8,
+          "mean_rel": -0.014635700366168188,
+          "sd_log": 0.02624633807065858
+        }
+      }
+    }
+  },
+  "elapsed_seconds": 209.16373216599823
+}

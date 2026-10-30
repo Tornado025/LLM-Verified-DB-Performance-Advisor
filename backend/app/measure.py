@@ -119,6 +119,9 @@ def paired_report(
     mode: str = "noninferiority",
     budget_s: float | None = None,
     rng: np.random.Generator | None = None,
+    sequential_test: SequentialTest | None = None,
+    max_pairs: int | None = None,
+    warmup_first: bool = True,
 ) -> PairedResult:
     """Alternate A/B order; stop at a verdict or budget, retaining raw evidence.
 
@@ -126,11 +129,22 @@ def paired_report(
     is deterministic. A timeout raises QueryTimeout with side metadata, requiring
     callers to reject candidate timeouts and block baseline timeouts.
     """
-    if batch < 1 or (budget_s is not None and (not math.isfinite(budget_s) or budget_s <= 0)):
+    if (
+        batch < 1
+        or (max_pairs is not None and max_pairs < 1)
+        or (budget_s is not None and (not math.isfinite(budget_s) or budget_s <= 0))
+    ):
         raise BadRequest("Invalid measurement budget or batch")
-    test = SequentialTest(
-        get_settings().delta if delta is None else delta, alpha, looks, family, min_n, max_n, mode
+    test = sequential_test or SequentialTest(
+        get_settings().delta if delta is None else delta,
+        alpha,
+        looks,
+        family,
+        min_n,
+        max_n,
+        mode,
     )
+    initial_n = len(test.d)
     start = perf_counter()
     a_vals: list[float] = []
     b_vals: list[float] = []
@@ -144,17 +158,22 @@ def paired_report(
             exc.side = side
             raise
 
-    for side in ("a", "b"):
-        for _ in range(2):
-            timed(side)
-    while len(a_vals) < max_n and test.state == "CONTINUE":
+    if warmup_first:
+        for side in ("a", "b"):
+            for _ in range(2):
+                if budget_s is not None and perf_counter() - start >= budget_s:
+                    break
+                timed(side)
+    pair_limit = max_pairs if max_pairs is not None else max_n - len(test.d)
+    while len(a_vals) < pair_limit and len(test.d) < max_n and test.state == "CONTINUE":
         pending: list[float] = []
-        count = min(batch, max_n - len(a_vals))
+        count = min(batch, pair_limit - len(a_vals), max_n - len(test.d))
         for _ in range(count):
             if budget_s is not None and perf_counter() - start >= budget_s:
                 break
             values = {
-                side: timed(side) for side in (("a", "b") if len(a_vals) % 2 == 0 else ("b", "a"))
+                side: timed(side)
+                for side in (("a", "b") if (initial_n + len(a_vals)) % 2 == 0 else ("b", "a"))
             }
             a_vals.append(values["a"])
             b_vals.append(values["b"])
@@ -163,6 +182,8 @@ def paired_report(
             test.add(pending)
         if len(pending) < count:
             break
+    # With an externally supplied sequential test, d/summary cover all rounds;
+    # a_vals/b_vals retain the raw observations from this call's batch only.
     return PairedResult(
         test.d.tolist(), test.summary(), perf_counter() - start, metric, a_vals, b_vals
     )

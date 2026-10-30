@@ -1,0 +1,1299 @@
+{
+  "created_at": "2026-10-29T05:21:54.394264+00:00",
+  "design": {
+    "candidate": "CREATE INDEX ON customers(city)",
+    "profiles": [
+      "normal",
+      "flash5",
+      "flash10",
+      "flash20"
+    ],
+    "seeds": [
+      3101,
+      5201,
+      7301
+    ],
+    "budgets": [
+      40,
+      80
+    ],
+    "family": 20,
+    "delta": 0.05,
+    "alpha": 0.05,
+    "guard_stat": "mean",
+    "same_blocks_replayed": true,
+    "interpretation": "Small controlled pilot, not the production-wide BLOCK rate"
+  },
+  "runs": [
+    {
+      "profile": "normal",
+      "seed": 3101,
+      "elapsed_seconds": 2036.7859401669994,
+      "valid_blocks": 80,
+      "file": "experiments/results/step12_guard_budget_study/normal_3101.json",
+      "budgets": {
+        "40": {
+          "state": "BLOCK",
+          "failed_cell": null,
+          "cells": {
+            "place_order": {
+              "n": 37,
+              "mean_rel": -0.003010204656951296,
+              "lower": -0.05133374423772429,
+              "upper": 0.04777485862979369,
+              "sd_log": 0.07104693719610657,
+              "state": "PASS"
+            },
+            "update_status": {
+              "n": 40,
+              "mean_rel": 0.009297403811862181,
+              "lower": -0.049090385189959986,
+              "upper": 0.07127032209561125,
+              "sd_log": 0.08939701184321584,
+              "state": "BLOCK"
+            },
+            "order_status": {
+              "n": 40,
+              "mean_rel": -0.0011388689927701564,
+              "lower": -0.059944181890724146,
+              "upper": 0.061345017834954774,
+              "sd_log": 0.09102590270778078,
+              "state": "BLOCK"
+            },
+            "stock_decrement": {
+              "n": 37,
+              "mean_rel": -0.0071064432849619885,
+              "lower": -0.060110397803853736,
+              "upper": 0.048886606110685765,
+              "sd_log": 0.0784508069452232,
+              "state": "PASS"
+            },
+            "picker_queue_read": {
+              "n": 32,
+              "mean_rel": 0.010804101770051658,
+              "lower": -0.025787455228933564,
+              "upper": 0.04877004267611809,
+              "sd_log": 0.04811569388603029,
+              "state": "PASS"
+            }
+          }
+        },
+        "80": {
+          "state": "PASS",
+          "failed_cell": null,
+          "cells": {
+            "place_order": {
+              "n": 39,
+              "mean_rel": -0.001492436069262154,
+              "lower": -0.050023672131988786,
+              "upper": 0.04951810479789255,
+              "sd_log": 0.0694765286547604,
+              "state": "PASS"
+            },
+            "update_status": {
+              "n": 69,
+              "mean_rel": 0.005712285916809122,
+              "lower": -0.03555128908041667,
+              "upper": 0.04874130743521717,
+              "sd_log": 0.0818838999690212,
+              "state": "PASS"
+            },
+            "order_status": {
+              "n": 49,
+              "mean_rel": -0.004938182132894044,
+              "lower": -0.05697028544517069,
+              "upper": 0.04996481669127797,
+              "sd_log": 0.0860673942037096,
+              "state": "PASS"
+            },
+            "stock_decrement": {
+              "n": 38,
+              "mean_rel": -0.008520094219886361,
+              "lower": -0.06323557735653364,
+              "upper": 0.04939126615388797,
+              "sd_log": 0.07788023355530989,
+              "state": "PASS"
+            },
+            "picker_queue_read": {
+              "n": 33,
+              "mean_rel": 0.00896487502420791,
+              "lower": -0.029321544734305444,
+              "upper": 0.04876142404331544,
+              "sd_log": 0.04849978288163342,
+              "state": "PASS"
+            }
+          }
+        }
+      }
+    },
+    {
+      "profile": "normal",
+      "seed": 5201,
+      "elapsed_seconds": 2035.5676377909986,
+      "valid_blocks": 80,
+      "file": "experiments/results/step12_guard_budget_study/normal_5201.json",
+      "budgets": {
+        "40": {
+          "state": "BLOCK",
+          "failed_cell": null,
+          "cells": {
+            "place_order": {
+              "n": 14,
+              "mean_rel": 0.004862966418507502,
+              "lower": -0.036923648926461154,
+              "upper": 0.04846264800691779,
+              "sd_log": 0.02996225736746619,
+              "state": "PASS"
+            },
+            "update_status": {
+              "n": 25,
+              "mean_rel": 0.004009643688324252,
+              "lower": -0.039243325857195366,
+              "upper": 0.0492098486003583,
+              "sd_log": 0.04877479109341562,
+              "state": "PASS"
+            },
+            "order_status": {
+              "n": 40,
+              "mean_rel": 0.021359200788002186,
+              "lower": -0.02507440219949447,
+              "upper": 0.07000433611321231,
+              "sd_log": 0.0698011610205671,
+              "state": "BLOCK"
+            },
+            "stock_decrement": {
+              "n": 29,
+              "mean_rel": 0.006016273803123511,
+              "lower": -0.035597627195776374,
+              "upper": 0.04942581198125479,
+              "sd_log": 0.05171056460079069,
+              "state": "PASS"
+            },
+            "picker_queue_read": {
+              "n": 10,
+              "mean_rel": -0.000456458253189648,
+              "lower": -0.04545263338434478,
+              "upper": 0.04666078058548163,
+              "sd_log": 0.023161317917455095,
+              "state": "PASS"
+            }
+          }
+        },
+        "80": {
+          "state": "PASS",
+          "failed_cell": null,
+          "cells": {
+            "place_order": {
+              "n": 15,
+              "mean_rel": 0.005831031773885689,
+              "lower": -0.035555135265245966,
+              "upper": 0.048993158108173084,
+              "sd_log": 0.0291122127923775,
+              "state": "PASS"
+            },
+            "update_status": {
+              "n": 27,
+              "mean_rel": 0.003332311800082009,
+              "lower": -0.04003314660579077,
+              "upper": 0.048656757619012087,
+              "sd_log": 0.04842978772471707,
+              "state": "PASS"
+            },
+            "order_status": {
+              "n": 55,
+              "mean_rel": 0.010649291341150193,
+              "lower": -0.027009202061281712,
+              "upper": 0.049765313559214666,
+              "sd_log": 0.06514747679567169,
+              "state": "PASS"
+            },
+            "stock_decrement": {
+              "n": 30,
+              "mean_rel": 0.005586626453540764,
+              "lower": -0.0369311629849349,
+              "upper": 0.049981501256275054,
+              "sd_log": 0.05086502141110259,
+              "state": "PASS"
+            },
+            "picker_queue_read": {
+              "n": 11,
+              "mean_rel": 0.00047356879251082883,
+              "lower": -0.04227036742600009,
+              "upper": 0.04512518753572525,
+              "sd_log": 0.02218820125303906,
+              "state": "PASS"
+            }
+          }
+        }
+      }
+    },
+    {
+      "profile": "normal",
+      "seed": 7301,
+      "elapsed_seconds": 2038.5199208330014,
+      "valid_blocks": 80,
+      "file": "experiments/results/step12_guard_budget_study/normal_7301.json",
+      "budgets": {
+        "40": {
+          "state": "BLOCK",
+          "failed_cell": null,
+          "cells": {
+            "place_order": {
+              "n": 40,
+              "mean_rel": 0.01779126369233367,
+              "lower": -0.022833439800935367,
+              "upper": 0.060104897815381746,
+              "sd_log": 0.06110699813511714,
+              "state": "BLOCK"
+            },
+            "update_status": {
+              "n": 36,
+              "mean_rel": 0.0022549712145892293,
+              "lower": -0.04268464250482841,
+              "upper": 0.0493042020684637,
+              "sd_log": 0.06449268897289834,
+              "state": "PASS"
+            },
+            "order_status": {
+              "n": 40,
+              "mean_rel": 0.013133494747828007,
+              "lower": -0.04699833209021335,
+              "upper": 0.07705947716883994,
+              "sd_log": 0.09179117161247365,
+              "state": "BLOCK"
+            },
+            "stock_decrement": {
+              "n": 40,
+              "mean_rel": 0.016410994227183045,
+              "lower": -0.03650115872967682,
+              "upper": 0.07222890670404283,
+              "sd_log": 0.08020249247079367,
+              "state": "BLOCK"
+            },
+            "picker_queue_read": {
+              "n": 13,
+              "mean_rel": 0.0068048781680175715,
+              "lower": -0.033965671366919435,
+              "upper": 0.04929610952565211,
+              "sd_log": 0.02724501702011719,
+              "state": "PASS"
+            }
+          }
+        },
+        "80": {
+          "state": "PASS",
+          "failed_cell": null,
+          "cells": {
+            "place_order": {
+              "n": 50,
+              "mean_rel": 0.013682747177658543,
+              "lower": -0.0204154724314052,
+              "upper": 0.048967886902124495,
+              "sd_log": 0.05549658206478916,
+              "state": "PASS"
+            },
+            "update_status": {
+              "n": 37,
+              "mean_rel": 0.0014015668747732952,
+              "lower": -0.044854755902039314,
+              "upper": 0.04989801743325471,
+              "sd_log": 0.06380140616752579,
+              "state": "PASS"
+            },
+            "order_status": {
+              "n": 69,
+              "mean_rel": 0.003840050915388589,
+              "lower": -0.039481140721223704,
+              "upper": 0.04911510907600153,
+              "sd_log": 0.08622234803816091,
+              "state": "PASS"
+            },
+            "stock_decrement": {
+              "n": 71,
+              "mean_rel": 0.011342156729834761,
+              "lower": -0.025440361442628703,
+              "upper": 0.049512946681242787,
+              "sd_log": 0.07358950493295473,
+              "state": "PASS"
+            },
+            "picker_queue_read": {
+              "n": 35,
+              "mean_rel": 0.008882157030313267,
+              "lower": -0.03007682964351757,
+              "upper": 0.04940601264329305,
+              "sd_log": 0.051283654108579164,
+              "state": "PASS"
+            }
+          }
+        }
+      }
+    },
+    {
+      "profile": "flash5",
+      "seed": 3101,
+      "elapsed_seconds": 2065.839213542,
+      "valid_blocks": 80,
+      "file": "experiments/results/step12_guard_budget_study/flash5_3101.json",
+      "budgets": {
+        "40": {
+          "state": "PASS",
+          "failed_cell": null,
+          "cells": {
+            "place_order": {
+              "n": 9,
+              "mean_rel": -0.0014773819921014228,
+              "lower": -0.04923382858197548,
+              "upper": 0.048677843876477896,
+              "sd_log": 0.021733670399275175,
+              "state": "PASS"
+            },
+            "update_status": {
+              "n": 12,
+              "mean_rel": -0.014700974328367644,
+              "lower": -0.07328832507982137,
+              "upper": 0.047590309114308005,
+              "sd_log": 0.03740321138922655,
+              "state": "PASS"
+            },
+            "order_status": {
+              "n": 9,
+              "mean_rel": -0.0010185103138012875,
+              "lower": -0.04358379950536336,
+              "upper": 0.0434411464585528,
+              "sd_log": 0.01930987421031234,
+              "state": "PASS"
+            },
+            "stock_decrement": {
+              "n": 14,
+              "mean_rel": -0.006839677804616115,
+              "lower": -0.05620065793057745,
+              "upper": 0.04510289594023157,
+              "sd_log": 0.03596176444556072,
+              "state": "PASS"
+            },
+            "picker_queue_read": {
+              "n": 9,
+              "mean_rel": -0.008285597430519957,
+              "lower": -0.05528987191159416,
+              "upper": 0.041057385775909845,
+              "sd_log": 0.02153339170731968,
+              "state": "PASS"
+            }
+          }
+        },
+        "80": {
+          "state": "PASS",
+          "failed_cell": null,
+          "cells": {
+            "place_order": {
+              "n": 10,
+              "mean_rel": -0.005495600581310362,
+              "lower": -0.056888791189104664,
+              "upper": 0.04869817177779115,
+              "sd_log": 0.024134246446950978,
+              "state": "PASS"
+            },
+            "update_status": {
+              "n": 13,
+              "mean_rel": -0.016020511386506408,
+              "lower": -0.07302404202435234,
+              "upper": 0.04448839873526482,
+              "sd_log": 0.036135355811567724,
+              "state": "PASS"
+            },
+            "order_status": {
+              "n": 9,
+              "mean_rel": -0.0010185103138012875,
+              "lower": -0.048347565285769174,
+              "upper": 0.04866438663116824,
+              "sd_log": 0.01930987421031234,
+              "state": "PASS"
+            },
+            "stock_decrement": {
+              "n": 14,
+              "mean_rel": -0.006839677804616115,
+              "lower": -0.060271881745149886,
+              "upper": 0.04963063935449917,
+              "sd_log": 0.03596176444556072,
+              "state": "PASS"
+            },
+            "picker_queue_read": {
+              "n": 9,
+              "mean_rel": -0.008285597430519957,
+              "lower": -0.06053565464898368,
+              "upper": 0.046870443919052734,
+              "sd_log": 0.02153339170731968,
+              "state": "PASS"
+            }
+          }
+        }
+      }
+    },
+    {
+      "profile": "flash5",
+      "seed": 5201,
+      "elapsed_seconds": 2064.0381879589986,
+      "valid_blocks": 80,
+      "file": "experiments/results/step12_guard_budget_study/flash5_5201.json",
+      "budgets": {
+        "40": {
+          "state": "PASS",
+          "failed_cell": null,
+          "cells": {
+            "place_order": {
+              "n": 15,
+              "mean_rel": 0.00909310893392745,
+              "lower": -0.029777184459514647,
+              "upper": 0.04952067317721097,
+              "sd_log": 0.029441537946517868,
+              "state": "PASS"
+            },
+            "update_status": {
+              "n": 22,
+              "mean_rel": 0.014366662349127092,
+              "lower": -0.01983848746832075,
+              "upper": 0.04976548510626429,
+              "sd_log": 0.034720430529958705,
+              "state": "PASS"
+            },
+            "order_status": {
+              "n": 16,
+              "mean_rel": 0.01009960784131491,
+              "lower": -0.025573360175320144,
+              "upper": 0.04707853424938395,
+              "sd_log": 0.028460663554369613,
+              "state": "PASS"
+            },
+            "stock_decrement": {
+              "n": 9,
+              "mean_rel": 0.0005431832053394923,
+              "lower": -0.044242056433724426,
+              "upper": 0.04742698525032423,
+              "sd_log": 0.02030791917674154,
+              "state": "PASS"
+            },
+            "picker_queue_read": {
+              "n": 8,
+              "mean_rel": 0.007584630026685906,
+              "lower": -0.03194805207732732,
+              "upper": 0.048731722346690765,
+              "sd_log": 0.015189784638191563,
+              "state": "PASS"
+            }
+          }
+        },
+        "80": {
+          "state": "PASS",
+          "failed_cell": null,
+          "cells": {
+            "place_order": {
+              "n": 16,
+              "mean_rel": 0.005817113887403412,
+              "lower": -0.03616787801811548,
+              "upper": 0.04963099228166253,
+              "sd_log": 0.03127618676120935,
+              "state": "PASS"
+            },
+            "update_status": {
+              "n": 24,
+              "mean_rel": 0.013740932027359055,
+              "lower": -0.019410645300141218,
+              "upper": 0.04801329153960742,
+              "sd_log": 0.033542339362504815,
+              "state": "PASS"
+            },
+            "order_status": {
+              "n": 17,
+              "mean_rel": 0.007501395778992085,
+              "lower": -0.03029053755937378,
+              "upper": 0.0467661725625037,
+              "sd_log": 0.029532225421463356,
+              "state": "PASS"
+            },
+            "stock_decrement": {
+              "n": 10,
+              "mean_rel": 0.003102012157947723,
+              "lower": -0.04169537460743422,
+              "upper": 0.04999351994480041,
+              "sd_log": 0.020780427743110827,
+              "state": "PASS"
+            },
+            "picker_queue_read": {
+              "n": 9,
+              "mean_rel": 0.00660099757875504,
+              "lower": -0.02944441215564933,
+              "upper": 0.043985095770774536,
+              "sd_log": 0.01450771986016438,
+              "state": "PASS"
+            }
+          }
+        }
+      }
+    },
+    {
+      "profile": "flash5",
+      "seed": 7301,
+      "elapsed_seconds": 2063.130683708994,
+      "valid_blocks": 80,
+      "file": "experiments/results/step12_guard_budget_study/flash5_7301.json",
+      "budgets": {
+        "40": {
+          "state": "PASS",
+          "failed_cell": null,
+          "cells": {
+            "place_order": {
+              "n": 7,
+              "mean_rel": -0.013512284698237946,
+              "lower": -0.058439362108961196,
+              "upper": 0.03355851262115751,
+              "sd_log": 0.014467891773013625,
+              "state": "PASS"
+            },
+            "update_status": {
+              "n": 14,
+              "mean_rel": -0.004898332718885155,
+              "lower": -0.054696247449415966,
+              "upper": 0.04752289997142125,
+              "sd_log": 0.03621577685497391,
+              "state": "PASS"
+            },
+            "order_status": {
+              "n": 9,
+              "mean_rel": -0.016332031014694746,
+              "lower": -0.07722435971126808,
+              "upper": 0.04857847450862204,
+              "sd_log": 0.02833849056961727,
+              "state": "PASS"
+            },
+            "stock_decrement": {
+              "n": 13,
+              "mean_rel": -0.002436130374105308,
+              "lower": -0.04935011826784907,
+              "upper": 0.04679303401351662,
+              "sd_log": 0.03174827137414823,
+              "state": "PASS"
+            },
+            "picker_queue_read": {
+              "n": 9,
+              "mean_rel": 0.004486649846802627,
+              "lower": -0.03324730836962182,
+              "upper": 0.04369342692890576,
+              "sd_log": 0.016979949853731365,
+              "state": "PASS"
+            }
+          }
+        },
+        "80": {
+          "state": "PASS",
+          "failed_cell": null,
+          "cells": {
+            "place_order": {
+              "n": 7,
+              "mean_rel": -0.013512284698237946,
+              "lower": -0.06476181488330304,
+              "upper": 0.0405456363181555,
+              "sd_log": 0.014467891773013625,
+              "state": "PASS"
+            },
+            "update_status": {
+              "n": 15,
+              "mean_rel": -0.005090545153906087,
+              "lower": -0.05397174202899028,
+              "upper": 0.0463163388640393,
+              "sd_log": 0.03490641475636497,
+              "state": "PASS"
+            },
+            "order_status": {
+              "n": 10,
+              "mean_rel": -0.01580447009274527,
+              "lower": -0.07206093142897653,
+              "upper": 0.043862548627332854,
+              "sd_log": 0.02677153139523057,
+              "state": "PASS"
+            },
+            "stock_decrement": {
+              "n": 14,
+              "mean_rel": -0.002220897789357976,
+              "lower": -0.04795835641749887,
+              "upper": 0.045713854555777374,
+              "sd_log": 0.03051343132594166,
+              "state": "PASS"
+            },
+            "picker_queue_read": {
+              "n": 9,
+              "mean_rel": 0.004486649846802627,
+              "lower": -0.03748282656480362,
+              "upper": 0.04828615796992406,
+              "sd_log": 0.016979949853731365,
+              "state": "PASS"
+            }
+          }
+        }
+      }
+    },
+    {
+      "profile": "flash10",
+      "seed": 3101,
+      "elapsed_seconds": 2089.220914417,
+      "valid_blocks": 80,
+      "file": "experiments/results/step12_guard_budget_study/flash10_3101.json",
+      "budgets": {
+        "40": {
+          "state": "PASS",
+          "failed_cell": null,
+          "cells": {
+            "place_order": {
+              "n": 20,
+              "mean_rel": -0.004724687466279862,
+              "lower": -0.05448048135703319,
+              "upper": 0.0476493908457747,
+              "sd_log": 0.048398933969299555,
+              "state": "PASS"
+            },
+            "update_status": {
+              "n": 11,
+              "mean_rel": -0.0030103999408876295,
+              "lower": -0.05122379273969827,
+              "upper": 0.04765302399001132,
+              "sd_log": 0.027669096231746102,
+              "state": "PASS"
+            },
+            "order_status": {
+              "n": 15,
+              "mean_rel": -0.010174881716600519,
+              "lower": -0.06470270859477223,
+              "upper": 0.04753191716478172,
+              "sd_log": 0.04246958080145593,
+              "state": "PASS"
+            },
+            "stock_decrement": {
+              "n": 22,
+              "mean_rel": -0.0016511452211386828,
+              "lower": -0.047199551841187994,
+              "upper": 0.04607469251749838,
+              "sd_log": 0.04726642923865586,
+              "state": "PASS"
+            },
+            "picker_queue_read": {
+              "n": 12,
+              "mean_rel": -0.004053183278652318,
+              "lower": -0.054488080471445356,
+              "upper": 0.049071980215718305,
+              "sd_log": 0.03170735907016991,
+              "state": "PASS"
+            }
+          }
+        },
+        "80": {
+          "state": "PASS",
+          "failed_cell": null,
+          "cells": {
+            "place_order": {
+              "n": 21,
+              "mean_rel": -0.0034766998441190223,
+              "lower": -0.0539602939289432,
+              "upper": 0.04970085439413857,
+              "sd_log": 0.04752168782791292,
+              "state": "PASS"
+            },
+            "update_status": {
+              "n": 13,
+              "mean_rel": -0.0020617292766764166,
+              "lower": -0.04729175611190573,
+              "upper": 0.045315602717965225,
+              "sd_log": 0.028085256653524463,
+              "state": "PASS"
+            },
+            "order_status": {
+              "n": 17,
+              "mean_rel": -0.007390920809299594,
+              "lower": -0.058369639096563605,
+              "upper": 0.04634772305610615,
+              "sd_log": 0.040726437504248494,
+              "state": "PASS"
+            },
+            "stock_decrement": {
+              "n": 22,
+              "mean_rel": -0.0016511452211386828,
+              "lower": -0.05027699490511443,
+              "upper": 0.049464349596001315,
+              "sd_log": 0.04726642923865586,
+              "state": "PASS"
+            },
+            "picker_queue_read": {
+              "n": 13,
+              "mean_rel": -0.005729043366189465,
+              "lower": -0.05528678563797276,
+              "upper": 0.04642839771549672,
+              "sd_log": 0.030958800076819365,
+              "state": "PASS"
+            }
+          }
+        }
+      }
+    },
+    {
+      "profile": "flash10",
+      "seed": 5201,
+      "elapsed_seconds": 2089.1215029160003,
+      "valid_blocks": 80,
+      "file": "experiments/results/step12_guard_budget_study/flash10_5201.json",
+      "budgets": {
+        "40": {
+          "state": "BLOCK",
+          "failed_cell": null,
+          "cells": {
+            "place_order": {
+              "n": 40,
+              "mean_rel": -0.09245645828111987,
+              "lower": -0.28841008483433833,
+              "upper": 0.1574577752748257,
+              "sd_log": 0.36490431155843367,
+              "state": "BLOCK"
+            },
+            "update_status": {
+              "n": 40,
+              "mean_rel": -0.1053741287675704,
+              "lower": -0.31210837489600873,
+              "upper": 0.16349061432081094,
+              "sd_log": 0.3942097162216126,
+              "state": "BLOCK"
+            },
+            "order_status": {
+              "n": 40,
+              "mean_rel": -0.11045115783343129,
+              "lower": -0.32505371067372046,
+              "upper": 0.1723853514177298,
+              "sd_log": 0.41417264935019443,
+              "state": "BLOCK"
+            },
+            "stock_decrement": {
+              "n": 40,
+              "mean_rel": -0.09364857608343256,
+              "lower": -0.2904885621844835,
+              "upper": 0.15780079059019259,
+              "sd_log": 0.3673207133468033,
+              "state": "BLOCK"
+            },
+            "picker_queue_read": {
+              "n": 40,
+              "mean_rel": -0.03392994624093524,
+              "lower": -0.1616295903943994,
+              "upper": 0.11322076504238249,
+              "sd_log": 0.2126905344211693,
+              "state": "BLOCK"
+            }
+          }
+        },
+        "80": {
+          "state": "BLOCK",
+          "failed_cell": null,
+          "cells": {
+            "place_order": {
+              "n": 80,
+              "mean_rel": -0.04336331763910996,
+              "lower": -0.16861622849573696,
+              "upper": 0.10075968933410659,
+              "sd_log": 0.29801988140167546,
+              "state": "BLOCK"
+            },
+            "update_status": {
+              "n": 80,
+              "mean_rel": -0.044845703549523774,
+              "lower": -0.18274774879429315,
+              "upper": 0.11632574726082752,
+              "sd_log": 0.33113418033053804,
+              "state": "BLOCK"
+            },
+            "order_status": {
+              "n": 80,
+              "mean_rel": -0.05010555453239524,
+              "lower": -0.1949097124046041,
+              "upper": 0.1207431904627145,
+              "sd_log": 0.35124823533777394,
+              "state": "BLOCK"
+            },
+            "stock_decrement": {
+              "n": 80,
+              "mean_rel": -0.04331532985104827,
+              "lower": -0.178368549111725,
+              "upper": 0.1139368595354113,
+              "sd_log": 0.32318485549725917,
+              "state": "BLOCK"
+            },
+            "picker_queue_read": {
+              "n": 80,
+              "mean_rel": -0.004053642675376866,
+              "lower": -0.07789341017830916,
+              "upper": 0.07569901095706613,
+              "sd_log": 0.16359212975939658,
+              "state": "BLOCK"
+            }
+          }
+        }
+      }
+    },
+    {
+      "profile": "flash10",
+      "seed": 7301,
+      "elapsed_seconds": 2089.276638457999,
+      "valid_blocks": 80,
+      "file": "experiments/results/step12_guard_budget_study/flash10_7301.json",
+      "budgets": {
+        "40": {
+          "state": "BLOCK",
+          "failed_cell": null,
+          "cells": {
+            "place_order": {
+              "n": 40,
+              "mean_rel": -0.040821156425037565,
+              "lower": -0.1940772222866659,
+              "upper": 0.14157842339710355,
+              "sd_log": 0.26116639845343986,
+              "state": "BLOCK"
+            },
+            "update_status": {
+              "n": 40,
+              "mean_rel": -0.048349288991149424,
+              "lower": -0.23833273935015836,
+              "upper": 0.18902192932774198,
+              "sd_log": 0.3340733047105708,
+              "state": "BLOCK"
+            },
+            "order_status": {
+              "n": 40,
+              "mean_rel": -0.05132111880070304,
+              "lower": -0.23933280432670162,
+              "upper": 0.1831608156007432,
+              "sd_log": 0.3313522047187768,
+              "state": "BLOCK"
+            },
+            "stock_decrement": {
+              "n": 40,
+              "mean_rel": -0.04587518999904205,
+              "lower": -0.21679555306392675,
+              "upper": 0.16234548542300234,
+              "sd_log": 0.29613733445759816,
+              "state": "BLOCK"
+            },
+            "picker_queue_read": {
+              "n": 18,
+              "mean_rel": -0.010886451214118582,
+              "lower": -0.06790530975915975,
+              "upper": 0.0496204115689248,
+              "sd_log": 0.051687327805265776,
+              "state": "PASS"
+            }
+          }
+        },
+        "80": {
+          "state": "BLOCK",
+          "failed_cell": null,
+          "cells": {
+            "place_order": {
+              "n": 80,
+              "mean_rel": -0.018216689061649326,
+              "lower": -0.12690987704451545,
+              "upper": 0.10400798759948356,
+              "sd_log": 0.24917465984199613,
+              "state": "BLOCK"
+            },
+            "update_status": {
+              "n": 80,
+              "mean_rel": -0.022829477910643537,
+              "lower": -0.15047837540608633,
+              "upper": 0.12399990959244443,
+              "sd_log": 0.2972885022977893,
+              "state": "BLOCK"
+            },
+            "order_status": {
+              "n": 80,
+              "mean_rel": -0.026264719715023244,
+              "lower": -0.15335908972030815,
+              "upper": 0.1199085522083181,
+              "sd_log": 0.29702315724381356,
+              "state": "BLOCK"
+            },
+            "stock_decrement": {
+              "n": 80,
+              "mean_rel": -0.015153606939443348,
+              "lower": -0.14357760128606872,
+              "upper": 0.1325280835495398,
+              "sd_log": 0.29672401942062404,
+              "state": "BLOCK"
+            },
+            "picker_queue_read": {
+              "n": 21,
+              "mean_rel": -0.00987713578895855,
+              "lower": -0.06474995323631502,
+              "upper": 0.04821516943605716,
+              "sd_log": 0.052116942833904535,
+              "state": "PASS"
+            }
+          }
+        }
+      }
+    },
+    {
+      "profile": "flash20",
+      "seed": 3101,
+      "elapsed_seconds": 2130.8128295000006,
+      "valid_blocks": 80,
+      "file": "experiments/results/step12_guard_budget_study/flash20_3101.json",
+      "budgets": {
+        "40": {
+          "state": "BLOCK",
+          "failed_cell": null,
+          "cells": {
+            "place_order": {
+              "n": 40,
+              "mean_rel": 0.01301811478054329,
+              "lower": -0.10254252448748968,
+              "upper": 0.14345885891416918,
+              "sd_log": 0.18170771604911834,
+              "state": "BLOCK"
+            },
+            "update_status": {
+              "n": 40,
+              "mean_rel": 0.025152874281607264,
+              "lower": -0.1264557277533469,
+              "upper": 0.20307401586521867,
+              "sd_log": 0.24008671129950324,
+              "state": "BLOCK"
+            },
+            "order_status": {
+              "n": 40,
+              "mean_rel": 0.02784842277504518,
+              "lower": -0.1323004025339464,
+              "upper": 0.2175554573107655,
+              "sd_log": 0.2540972316893296,
+              "state": "BLOCK"
+            },
+            "stock_decrement": {
+              "n": 40,
+              "mean_rel": 0.02939814941572653,
+              "lower": -0.13878524451432797,
+              "upper": 0.23042544646478944,
+              "sd_log": 0.26761129538944245,
+              "state": "BLOCK"
+            },
+            "picker_queue_read": {
+              "n": 40,
+              "mean_rel": 0.02001353316064712,
+              "lower": -0.03112635650734833,
+              "upper": 0.07385273076504902,
+              "sd_log": 0.07716490035709722,
+              "state": "BLOCK"
+            }
+          }
+        },
+        "80": {
+          "state": "BLOCK",
+          "failed_cell": null,
+          "cells": {
+            "place_order": {
+              "n": 80,
+              "mean_rel": -0.0024621237130062713,
+              "lower": -0.07495809468399237,
+              "upper": 0.07571539073922423,
+              "sd_log": 0.16023355042111917,
+              "state": "BLOCK"
+            },
+            "update_status": {
+              "n": 80,
+              "mean_rel": 0.002891484038281878,
+              "lower": -0.09112100887505828,
+              "upper": 0.1066284275221445,
+              "sd_log": 0.20903463712560497,
+              "state": "BLOCK"
+            },
+            "order_status": {
+              "n": 80,
+              "mean_rel": 0.005312944562439603,
+              "lower": -0.09430997918501835,
+              "upper": 0.11589406229227255,
+              "sd_log": 0.22162043403972614,
+              "state": "BLOCK"
+            },
+            "stock_decrement": {
+              "n": 80,
+              "mean_rel": 0.0014670859909690285,
+              "lower": -0.10180091215690558,
+              "upper": 0.11660804146624226,
+              "sd_log": 0.23111855267397294,
+              "state": "BLOCK"
+            },
+            "picker_queue_read": {
+              "n": 72,
+              "mean_rel": 0.012389741062946841,
+              "lower": -0.022750914313184434,
+              "upper": 0.04879401047397502,
+              "sd_log": 0.07072727537159747,
+              "state": "PASS"
+            }
+          }
+        }
+      }
+    },
+    {
+      "profile": "flash20",
+      "seed": 5201,
+      "elapsed_seconds": 2140.204486042,
+      "valid_blocks": 80,
+      "file": "experiments/results/step12_guard_budget_study/flash20_5201.json",
+      "budgets": {
+        "40": {
+          "state": "BLOCK",
+          "failed_cell": null,
+          "cells": {
+            "place_order": {
+              "n": 40,
+              "mean_rel": -0.09446553755995513,
+              "lower": -0.23846987947392145,
+              "upper": 0.07676983557802744,
+              "sd_log": 0.2598252212843449,
+              "state": "BLOCK"
+            },
+            "update_status": {
+              "n": 40,
+              "mean_rel": -0.11547713890163784,
+              "lower": -0.3144227530741523,
+              "upper": 0.14119990900201956,
+              "sd_log": 0.3822275603463333,
+              "state": "BLOCK"
+            },
+            "order_status": {
+              "n": 40,
+              "mean_rel": -0.12404463353884544,
+              "lower": -0.33478233612107416,
+              "upper": 0.15345374258093822,
+              "sd_log": 0.4128517945958996,
+              "state": "BLOCK"
+            },
+            "stock_decrement": {
+              "n": 40,
+              "mean_rel": -0.1224120244873958,
+              "lower": -0.2938531925280341,
+              "upper": 0.09065232132326345,
+              "sd_log": 0.32607098922486394,
+              "state": "BLOCK"
+            },
+            "picker_queue_read": {
+              "n": 17,
+              "mean_rel": -0.04196475314196941,
+              "lower": -0.12030419877806983,
+              "upper": 0.043351045835873604,
+              "sd_log": 0.07096320211849151,
+              "state": "PASS"
+            }
+          }
+        },
+        "80": {
+          "state": "PASS",
+          "failed_cell": null,
+          "cells": {
+            "place_order": {
+              "n": 55,
+              "mean_rel": -0.08946578557723889,
+              "lower": -0.20755640991360008,
+              "upper": 0.046222805012633296,
+              "sd_log": 0.23831388399555917,
+              "state": "PASS"
+            },
+            "update_status": {
+              "n": 72,
+              "mean_rel": -0.11821150936211246,
+              "lower": -0.25569643458801006,
+              "upper": 0.04466910861974807,
+              "sd_log": 0.3393549522118271,
+              "state": "PASS"
+            },
+            "order_status": {
+              "n": 71,
+              "mean_rel": -0.12896462878765652,
+              "lower": -0.2773866590551247,
+              "upper": 0.049942721664894926,
+              "sd_log": 0.37106390056380006,
+              "state": "PASS"
+            },
+            "stock_decrement": {
+              "n": 56,
+              "mean_rel": -0.12539276992507392,
+              "lower": -0.26716113610784786,
+              "upper": 0.04380081978281431,
+              "sd_log": 0.30660992581576185,
+              "state": "PASS"
+            },
+            "picker_queue_read": {
+              "n": 18,
+              "mean_rel": -0.04417672851046028,
+              "lower": -0.12282825220637293,
+              "upper": 0.04152707678851206,
+              "sd_log": 0.06953942409470283,
+              "state": "PASS"
+            }
+          }
+        }
+      }
+    },
+    {
+      "profile": "flash20",
+      "seed": 7301,
+      "elapsed_seconds": 2138.266597917,
+      "valid_blocks": 80,
+      "file": "experiments/results/step12_guard_budget_study/flash20_7301.json",
+      "budgets": {
+        "40": {
+          "state": "BLOCK",
+          "failed_cell": null,
+          "cells": {
+            "place_order": {
+              "n": 40,
+              "mean_rel": 0.3860792389471547,
+              "lower": -0.3450291751155539,
+              "upper": 1.9332843290833235,
+              "sd_log": 1.1246031531392413,
+              "state": "BLOCK"
+            },
+            "update_status": {
+              "n": 40,
+              "mean_rel": 0.511363375325792,
+              "lower": -0.3986043630235239,
+              "upper": 2.798197246258903,
+              "sd_log": 1.382440837831263,
+              "state": "BLOCK"
+            },
+            "order_status": {
+              "n": 40,
+              "mean_rel": 0.5134614933472036,
+              "lower": -0.4205774507700951,
+              "upper": 2.9531870046981736,
+              "sd_log": 1.440360346449292,
+              "state": "BLOCK"
+            },
+            "stock_decrement": {
+              "n": 40,
+              "mean_rel": 0.49464136604634396,
+              "lower": -0.3977865197566574,
+              "upper": 2.709569590162918,
+              "sd_log": 1.3637112896514663,
+              "state": "BLOCK"
+            },
+            "picker_queue_read": {
+              "n": 40,
+              "mean_rel": 0.19790500336462857,
+              "lower": -0.22078851153570175,
+              "upper": 0.8415750002789625,
+              "sd_log": 0.6451494509953917,
+              "state": "BLOCK"
+            }
+          }
+        },
+        "80": {
+          "state": "BLOCK",
+          "failed_cell": null,
+          "cells": {
+            "place_order": {
+              "n": 80,
+              "mean_rel": 0.13567615554773688,
+              "lower": -0.2342768398143663,
+              "upper": 0.6843689695463983,
+              "sd_log": 0.8370735507468495,
+              "state": "BLOCK"
+            },
+            "update_status": {
+              "n": 80,
+              "mean_rel": 0.17564166101984519,
+              "lower": -0.27826670459841246,
+              "upper": 0.9150194731648797,
+              "sd_log": 1.0361699853938775,
+              "state": "BLOCK"
+            },
+            "order_status": {
+              "n": 80,
+              "mean_rel": 0.170449125205341,
+              "lower": -0.2959432626223196,
+              "upper": 0.9457965274168789,
+              "sd_log": 1.0794296168586908,
+              "state": "BLOCK"
+            },
+            "stock_decrement": {
+              "n": 80,
+              "mean_rel": 0.17457047266173203,
+              "lower": -0.2720624899848122,
+              "upper": 0.8952393251723216,
+              "sd_log": 1.0160564490009825,
+              "state": "BLOCK"
+            },
+            "picker_queue_read": {
+              "n": 80,
+              "mean_rel": 0.08286945728442811,
+              "lower": -0.13328910658897716,
+              "upper": 0.3529381832326681,
+              "sd_log": 0.47286641012936853,
+              "state": "BLOCK"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "counts": {
+    "normal": {
+      "40": {
+        "n": 3,
+        "block": 3,
+        "pass": 0,
+        "fail": 0
+      },
+      "80": {
+        "n": 3,
+        "block": 0,
+        "pass": 3,
+        "fail": 0
+      }
+    },
+    "flash5": {
+      "40": {
+        "n": 3,
+        "block": 0,
+        "pass": 3,
+        "fail": 0
+      },
+      "80": {
+        "n": 3,
+        "block": 0,
+        "pass": 3,
+        "fail": 0
+      }
+    },
+    "flash10": {
+      "40": {
+        "n": 3,
+        "block": 2,
+        "pass": 1,
+        "fail": 0
+      },
+      "80": {
+        "n": 3,
+        "block": 2,
+        "pass": 1,
+        "fail": 0
+      }
+    },
+    "flash20": {
+      "40": {
+        "n": 3,
+        "block": 3,
+        "pass": 0,
+        "fail": 0
+      },
+      "80": {
+        "n": 3,
+        "block": 2,
+        "pass": 1,
+        "fail": 0
+      }
+    }
+  }
+}

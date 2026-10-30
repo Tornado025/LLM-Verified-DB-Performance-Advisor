@@ -11,6 +11,7 @@ from app.measure import QueryTimeout, paired_report, run_once, screen_with_buffe
 from app.noise import NoiseInjector
 from app.pg import connect
 from app.sandbox import single_clone
+from app.stats import SequentialTest
 
 POLICY = dict(
     metric="buffers", delta=0.05, alpha=0.05, looks=19, family=1, min_n=6, max_n=60, batch=3
@@ -124,6 +125,58 @@ def test_counterbalance_and_warmup_excluded(monkeypatch):
     assert calls[:4] == ["a", "a", "b", "b"]
     assert calls[4:] == ["a", "b", "b", "a"] * 3
     assert result.a_vals == result.b_vals == [10.0] * 6
+
+
+def test_paired_report_supports_resumable_single_batches(monkeypatch):
+    calls = []
+    a, b = object(), object()
+
+    def fake(conn, _query, _metric="time"):
+        calls.append("a" if conn is a else "b")
+        return 10.0
+
+    monkeypatch.setattr("app.measure.run_once", fake)
+    test = SequentialTest(0.05, 0.05, 2, 1, 3, 6, mode="improvement")
+    first = paired_report(
+        a,
+        "SELECT 1",
+        b,
+        "SELECT 1",
+        metric="time",
+        delta=0.05,
+        alpha=0.05,
+        looks=2,
+        family=1,
+        min_n=3,
+        max_n=6,
+        batch=3,
+        mode="improvement",
+        sequential_test=test,
+        max_pairs=3,
+        warmup_first=True,
+    )
+    second = paired_report(
+        a,
+        "SELECT 1",
+        b,
+        "SELECT 1",
+        metric="time",
+        delta=0.05,
+        alpha=0.05,
+        looks=2,
+        family=1,
+        min_n=3,
+        max_n=6,
+        batch=3,
+        mode="improvement",
+        sequential_test=test,
+        max_pairs=3,
+        warmup_first=False,
+    )
+    assert len(first.d) == 3 and len(first.a_vals) == 3
+    assert len(second.d) == 6 and len(second.a_vals) == 3
+    assert calls[:4] == ["a", "a", "b", "b"]
+    assert calls[4:] == ["a", "b", "b", "a", "a", "b", "b", "a", "a", "b", "b", "a"]
 
 
 def test_timeout_side_propagates(monkeypatch):

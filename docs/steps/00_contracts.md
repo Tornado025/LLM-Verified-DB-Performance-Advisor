@@ -172,6 +172,15 @@ class Decision:
     action: str                  # DecisionAction
     candidate_id: str | None
     reason: str
+    requires_confirmation: bool = False # weak rewrite requires an explicit human check
+
+@dataclass
+class RaceResult:
+    states: dict[str, Summary]
+    dropped: dict[str, str]
+    seconds: float
+    runs: int
+    clones_created: int = 0
 
 @dataclass
 class ProfileSpec:
@@ -229,14 +238,14 @@ API error body: `{"error": {"code": "...", "message": "...", "detail": {...}}}`.
 | `propose` | `propose(shape, provider, ctx, signature_fn, k_max, patience, safety_fn) -> ProposeResult(kept: list[Candidate], samples: int, saturated: bool, usage: dict, rejected: list[dict])` |
 | `plans` | `explain(conn, sql, *, analyze=False, buffers=False, generic=False) -> dict`; `fingerprint(plan: dict) -> str`; `hypo_plan(conn, create_index_sql, query_sql) -> dict`; `signature_for(candidate, original_sql, conn) -> str` |
 | `equivalence` | `check_rewrite(conn, original_sql, rewrite_sql, cfg: EquivConfig) -> EquivResult`; `EquivConfig(cx_dbs=50, rows_per_table=30, timezones=("UTC","Asia/Kolkata","America/Los_Angeles"), stmt_timeout_ms=60000, min_nonvacuous=0.30, seed=1234, use_llm_veto=False, veto_fn=None)`; `make_llm_veto(provider.complete)` supplies an explicit optional veto callback, never implicit network calls |
-| `sandbox` | `create_clone(name=None, template=None) -> str` (default commerce golden; also permits `qc_ch_golden`); `drop_clone(name)`; `clone_pair(candidate, settings) -> ContextManager[ClonePair(a: str, b: str)]`; `apply_ddl(db, sql)`; `analyze(db)` |
-| `measure` | `run_once(conn, sql, metric) -> float`; `paired_report(conn_a, sql_a, conn_b, sql_b, *, metric, delta=None, alpha, looks, family, min_n, max_n, batch, mode="noninferiority", budget_s=None, rng=None) -> PairedResult(d: list[float], summary: Summary, seconds: float)` |
+| `sandbox` | `create_clone(name=None, template=None, settings=None) -> str` (default commerce golden; also permits `qc_ch_golden`); `drop_clone(name)`; `clone_pair(candidate, settings, template=None) -> ContextManager[ClonePair(a: str, b: str)]`; `apply_ddl(db, sql)`; `analyze(db)` |
+| `measure` | `run_once(conn, sql, metric) -> float`; `paired_report(conn_a, sql_a, conn_b, sql_b, *, metric, delta=None, alpha, looks, family, min_n, max_n, batch, mode="noninferiority", budget_s=None, rng=None, sequential_test=None, max_pairs=None, warmup_first=True) -> PairedResult(d: list[float], summary: Summary, seconds: float)` |
 | `stats` | `verdict(d, delta, alpha, looks, family, min_n, max_n) -> tuple[State, Bounds | None]`; `summarize(d, delta, alpha, looks, family, min_n, max_n) -> Summary`; `SequentialTest` class |
+| `guard` | `run_guard(candidate, profiles, settings, *, seed, progress=None, workload="custom") -> GuardResult`; `estimate_guard_seconds(settings, profiles=None) -> float` (minimum workload time, excludes clone/setup overhead) |
+| `race` | `race(candidates, shape, rendered_sql, settings, *, budget_s, progress=None, rng=None) -> RaceResult` |
+| `decide` | `decide(survivors, race, shape, settings, *, progress=None) -> Decision` |
 | `workload` | `load_profiles() -> dict[str, ProfileSpec]`; `load_pools(dbname, profile) -> dict`; `build_schedule(profile, seconds, seed, base_rate, pools) -> list[Arrival]` (list-compatible `Schedule` preserves duration/profile/seed/pools); `run_block(dbname, schedule, workers, *, stop_event=None, record_timeline=False) -> BlockResult`; `prepare_clone(dbname, profile, seed) -> dict` (sandbox only) |
 | `benchbase` | `load_ch(db, scale) -> None`; `run_profile(db, profile, out_dir, seconds, active_warehouses=None) -> dict`; `parse_results(out_dir) -> dict[str, dict]` (per transaction, latencies in ms); `parse_summary(out_dir) -> dict` (elapsed time, requests, throughput and goodput; missing values remain null) |
-| `guard` | `run_guard(candidate, profiles, settings, progress) -> GuardResult` |
-| `race` | `race(candidates, shape, settings, progress) -> RaceResult` |
-| `decide` | `decide(survivors, shape, settings, progress) -> Decision` |
 | `pipeline` | `run_job(job_id, params, store)` (blocking; call from a thread) |
 | `monitor` | `apply(store, candidate_id)`, `revert(store, applied_id, reason)`, `MonitorThread(store).start()` |
 | `simulate` | `run_rq2(trials, seed, noise_levels, ...) -> dict` and `python -m app.simulate` |

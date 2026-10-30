@@ -3,7 +3,7 @@
 import os
 from dataclasses import asdict, dataclass, field
 from functools import lru_cache
-from math import ceil
+from math import ceil, isfinite
 
 from dotenv import find_dotenv, load_dotenv
 
@@ -113,8 +113,14 @@ class Settings:
             raise ValueError("Invalid delta or alpha")
         if self.min_runs < 3 or self.max_runs < self.min_runs:
             raise ValueError("Invalid run limits")
+        if self.max_blocks < self.min_runs or self.min_samples_per_block < 1:
+            raise ValueError("Invalid guard block limits")
         if min(self.k_max, self.patience, self.race_batch) < 1:
             raise ValueError("Sampling and batch limits must be positive")
+        if self.max_clones < 2 or self.max_guard_candidates < 1:
+            raise ValueError("Guard and race need positive clone/candidate limits")
+        if not isfinite(self.prefer_ratio) or not 0 < self.prefer_ratio <= 1:
+            raise ValueError("PREFER_RATIO must be in (0, 1]")
         if self.llm_provider not in {"mock", "openrouter", "ollama"}:
             raise ValueError("Unknown LLM provider")
         if self.llm_provider == "openrouter" and not (
@@ -125,12 +131,17 @@ class Settings:
             raise ValueError("Ollama model required")
         if self.metric not in {"time", "buffers"}:
             raise ValueError("Unknown metric")
-        if not self.guard_profiles or not set(self.guard_profiles) <= {
-            "normal",
-            "flash5",
-            "flash10",
-            "flash20",
-        }:
+        if (
+            not self.guard_profiles
+            or len(self.guard_profiles) != len(set(self.guard_profiles))
+            or not set(self.guard_profiles)
+            <= {
+                "normal",
+                "flash5",
+                "flash10",
+                "flash20",
+            }
+        ):
             raise ValueError("Unknown or empty guard profiles")
         if self.guard_stat not in {"mean", "p95"}:
             raise ValueError("Unknown guard statistic")

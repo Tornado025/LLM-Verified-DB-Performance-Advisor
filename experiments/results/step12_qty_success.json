@@ -1,0 +1,988 @@
+{
+  "created_at": "2026-10-27T05:36:15.120877+00:00",
+  "profile": "flash5",
+  "seed": 1234,
+  "pairs_per_arm": 8,
+  "base_rate_tps": 41,
+  "block_seconds": 12,
+  "workers": 16,
+  "min_samples_per_block": 5,
+  "candidate_sql": "CREATE INDEX guard_diagnostic_qty ON store_stock(qty)",
+  "record_timeline": true,
+  "arms": {
+    "reused": {
+      "blocks": [
+        {
+          "index": 0,
+          "seed": 1234,
+          "order": [
+            "a",
+            "b"
+          ],
+          "scheduled": 2516,
+          "valid": true,
+          "actual_seconds_a": 12.027168041997356,
+          "actual_seconds_b": 12.021360624999943,
+          "queue_lag_p95_ms_a": 2.6899330514424946,
+          "queue_lag_p95_ms_b": 2.5291711172030773,
+          "workload_lag_ms_a": 5.0394886602589395,
+          "workload_lag_ms_b": 7.489199917472433,
+          "dropped_a": 0,
+          "dropped_b": 0,
+          "transactions": {
+            "place_order": {
+              "n_a": 958,
+              "n_b": 958,
+              "mean_a_ms": 3.3376247110006294,
+              "mean_b_ms": 3.654250636398668,
+              "d": 0.09063165832006531,
+              "errors_a": 486,
+              "errors_b": 486,
+              "n_success_a": 472,
+              "success_latency_ms_a": 3.560371811002735,
+              "success_service_ms_a": 2.5889435762449358,
+              "n_success_b": 472,
+              "success_latency_ms_b": 3.924998951446234,
+              "success_service_ms_b": 2.921066021117748,
+              "d_success_latency": 0.09750110338364969,
+              "d_success_service": 0.1206987184977547
+            },
+            "update_status": {
+              "n_a": 408,
+              "n_b": 408,
+              "mean_a_ms": 2.1301671494274714,
+              "mean_b_ms": 2.21894876035638,
+              "d": 0.04083310180977359,
+              "errors_a": 41,
+              "errors_b": 41,
+              "n_success_a": 367,
+              "success_latency_ms_a": 2.254960888485185,
+              "success_service_ms_a": 1.3712991226149047,
+              "n_success_b": 367,
+              "success_latency_ms_b": 2.360058022627512,
+              "success_service_ms_b": 1.5111478338484672,
+              "d_success_latency": 0.04555357614264785,
+              "d_success_service": 0.0971109617184701
+            },
+            "order_status": {
+              "n_a": 692,
+              "n_b": 692,
+              "mean_a_ms": 1.7148003836349628,
+              "mean_b_ms": 1.6937681701617393,
+              "d": -0.012340946102505157,
+              "errors_a": 61,
+              "errors_b": 61,
+              "n_success_a": 631,
+              "success_latency_ms_a": 1.7726809502263234,
+              "success_service_ms_a": 0.8529338336391681,
+              "n_success_b": 631,
+              "success_latency_ms_b": 1.7534160995711838,
+              "success_service_ms_b": 0.9026296353810754,
+              "d_success_latency": -0.010927119742352148,
+              "d_success_service": 0.05663034472463919
+            },
+            "stock_decrement": {
+              "n_a": 328,
+              "n_b": 328,
+              "mean_a_ms": 1.891971405645408,
+              "mean_b_ms": 2.034978787245253,
+              "d": 0.07286603766188131,
+              "errors_a": 74,
+              "errors_b": 74,
+              "n_success_a": 254,
+              "success_latency_ms_a": 1.9255325261814416,
+              "success_service_ms_a": 1.051992830736966,
+              "n_success_b": 254,
+              "success_latency_ms_b": 2.0786411093265134,
+              "success_service_ms_b": 1.2013023346169818,
+              "d_success_latency": 0.0765118009274515,
+              "d_success_service": 0.1327199477486149
+            },
+            "picker_queue_read": {
+              "n_a": 130,
+              "n_b": 130,
+              "mean_a_ms": 21.441098943838508,
+              "mean_b_ms": 21.683251229030876,
+              "d": 0.011230538168689939,
+              "errors_a": 0,
+              "errors_b": 0,
+              "n_success_a": 130,
+              "success_latency_ms_a": 21.441098943681038,
+              "success_service_ms_a": 20.519430707813278,
+              "n_success_b": 130,
+              "success_latency_ms_b": 21.683251228873402,
+              "success_service_ms_b": 20.78075736930119,
+              "d_success_latency": 0.011230538168771837,
+              "d_success_service": 0.012655155403997245
+            }
+          },
+          "hot_stats": {
+            "a": {
+              "updates": 4319,
+              "hot_updates": 1615
+            },
+            "b": {
+              "updates": 4319,
+              "hot_updates": 0
+            }
+          }
+        },
+        {
+          "index": 1,
+          "seed": 1235,
+          "order": [
+            "b",
+            "a"
+          ],
+          "scheduled": 2479,
+          "valid": true,
+          "actual_seconds_a": 12.019952792001277,
+          "actual_seconds_b": 12.02000883400251,
+          "queue_lag_p95_ms_a": 2.719036605049041,
+          "queue_lag_p95_ms_b": 2.765986423401045,
+          "workload_lag_ms_a": 5.0482712758821435,
+          "workload_lag_ms_b": 5.0631521007744595,
+          "dropped_a": 0,
+          "dropped_b": 0,
+          "transactions": {
+            "place_order": {
+              "n_a": 975,
+              "n_b": 975,
+              "mean_a_ms": 3.5366673022284747,
+              "mean_b_ms": 3.5864273003244307,
+              "d": 0.0139716823464848,
+              "errors_a": 489,
+              "errors_b": 489,
+              "n_success_a": 486,
+              "success_latency_ms_a": 3.6870336909614982,
+              "success_service_ms_a": 2.7837418107053127,
+              "n_success_b": 486,
+              "success_latency_ms_b": 3.724756173613566,
+              "success_service_ms_b": 2.8107445863789495,
+              "d_success_latency": 0.010179135959890668,
+              "d_success_service": 0.009653427840469792
+            },
+            "update_status": {
+              "n_a": 417,
+              "n_b": 417,
+              "mean_a_ms": 2.229850302613396,
+              "mean_b_ms": 2.2330371623384075,
+              "d": 0.0014281607106205868,
+              "errors_a": 55,
+              "errors_b": 55,
+              "n_success_a": 362,
+              "success_latency_ms_a": 2.382581294539312,
+              "success_service_ms_a": 1.459810428149874,
+              "n_success_b": 362,
+              "success_latency_ms_b": 2.383853585813351,
+              "success_service_ms_b": 1.4552844972340055,
+              "d_success_latency": 0.0005338544787427203,
+              "d_success_service": -0.003105171302022581
+            },
+            "order_status": {
+              "n_a": 638,
+              "n_b": 638,
+              "mean_a_ms": 1.7380731429985077,
+              "mean_b_ms": 1.761550564306077,
+              "d": 0.013417313105035909,
+              "errors_a": 63,
+              "errors_b": 63,
+              "n_success_a": 575,
+              "success_latency_ms_a": 1.8359435930577817,
+              "success_service_ms_a": 0.9176381703392785,
+              "n_success_b": 575,
+              "success_latency_ms_b": 1.8725593716827833,
+              "success_service_ms_b": 0.901729507832383,
+              "d_success_latency": 0.019747574089358993,
+              "d_success_service": -0.017488568328180007
+            },
+            "stock_decrement": {
+              "n_a": 336,
+              "n_b": 336,
+              "mean_a_ms": 2.121902439111658,
+              "mean_b_ms": 2.041505124680043,
+              "d": -0.038625721194786924,
+              "errors_a": 91,
+              "errors_b": 91,
+              "n_success_a": 245,
+              "success_latency_ms_a": 2.248094332983012,
+              "success_service_ms_a": 1.1757776978495769,
+              "n_success_b": 245,
+              "success_latency_ms_b": 2.138222938119641,
+              "success_service_ms_b": 1.1216472978679919,
+              "d_success_latency": -0.05010781291117972,
+              "d_success_service": -0.04713139276122973
+            },
+            "picker_queue_read": {
+              "n_a": 113,
+              "n_b": 113,
+              "mean_a_ms": 21.19282706408474,
+              "mean_b_ms": 20.797134136279634,
+              "d": -0.018847583087454357,
+              "errors_a": 0,
+              "errors_b": 0,
+              "n_success_a": 113,
+              "success_latency_ms_a": 21.19282706413332,
+              "success_service_ms_a": 20.118535052976195,
+              "n_success_b": 113,
+              "success_latency_ms_b": 20.79713413632821,
+              "success_service_ms_b": 19.745970840719878,
+              "d_success_latency": -0.018847583087410913,
+              "d_success_service": -0.018692069622626865
+            }
+          },
+          "hot_stats": {
+            "a": {
+              "updates": 6715,
+              "hot_updates": 3569
+            },
+            "b": {
+              "updates": 6715,
+              "hot_updates": 0
+            }
+          }
+        },
+        {
+          "index": 2,
+          "seed": 1236,
+          "order": [
+            "a",
+            "b"
+          ],
+          "scheduled": 2437,
+          "valid": true,
+          "actual_seconds_a": 12.015876749999734,
+          "actual_seconds_b": 12.013861583000107,
+          "queue_lag_p95_ms_a": 2.873509452911094,
+          "queue_lag_p95_ms_b": 2.978193307353645,
+          "workload_lag_ms_a": 8.86022125268937,
+          "workload_lag_ms_b": 5.045927628088975,
+          "dropped_a": 0,
+          "dropped_b": 0,
+          "transactions": {
+            "place_order": {
+              "n_a": 955,
+              "n_b": 955,
+              "mean_a_ms": 3.5155507364453253,
+              "mean_b_ms": 3.557293385830135,
+              "d": 0.011803776055556702,
+              "errors_a": 475,
+              "errors_b": 475,
+              "n_success_a": 480,
+              "success_latency_ms_a": 3.7221898884249405,
+              "success_service_ms_a": 2.7473419229712213,
+              "n_success_b": 480,
+              "success_latency_ms_b": 3.7297923823387524,
+              "success_service_ms_b": 2.7260495500589363,
+              "d_success_latency": 0.002040395769916672,
+              "d_success_service": -0.007780360833496113
+            },
+            "update_status": {
+              "n_a": 430,
+              "n_b": 430,
+              "mean_a_ms": 2.3471825515856795,
+              "mean_b_ms": 2.308567474603986,
+              "d": -0.01658850336185349,
+              "errors_a": 72,
+              "errors_b": 72,
+              "n_success_a": 358,
+              "success_latency_ms_a": 2.511388916213902,
+              "success_service_ms_a": 1.5488851229889793,
+              "n_success_b": 358,
+              "success_latency_ms_b": 2.477125876407227,
+              "success_service_ms_b": 1.5057346368015532,
+              "d_success_latency": -0.013736985868264148,
+              "d_success_service": -0.02825448676852665
+            },
+            "order_status": {
+              "n_a": 650,
+              "n_b": 650,
+              "mean_a_ms": 1.8204493736154221,
+              "mean_b_ms": 1.7861027866680301,
+              "d": -0.01904734706752137,
+              "errors_a": 58,
+              "errors_b": 58,
+              "n_success_a": 592,
+              "success_latency_ms_a": 1.9237607613108563,
+              "success_service_ms_a": 0.9516555979902281,
+              "n_success_b": 592,
+              "success_latency_ms_b": 1.873107525415567,
+              "success_service_ms_b": 0.9112156369426245,
+              "d_success_latency": -0.026683170141275518,
+              "d_success_service": -0.04342362971147382
+            },
+            "stock_decrement": {
+              "n_a": 291,
+              "n_b": 291,
+              "mean_a_ms": 2.0618323053979823,
+              "mean_b_ms": 2.051946445122898,
+              "d": -0.004806227998510676,
+              "errors_a": 63,
+              "errors_b": 63,
+              "n_success_a": 228,
+              "success_latency_ms_a": 2.100870394404099,
+              "success_service_ms_a": 1.131049377235876,
+              "n_success_b": 228,
+              "success_latency_ms_b": 2.1001159405620715,
+              "success_service_ms_b": 1.143719517689565,
+              "d_success_latency": -0.00035917938787805096,
+              "d_success_service": 0.011139831837575852
+            },
+            "picker_queue_read": {
+              "n_a": 111,
+              "n_b": 111,
+              "mean_a_ms": 22.220270249031397,
+              "mean_b_ms": 21.985301791737747,
+              "d": -0.010630816855928288,
+              "errors_a": 0,
+              "errors_b": 0,
+              "n_success_a": 111,
+              "success_latency_ms_a": 22.220270248852362,
+              "success_service_ms_a": 21.277013855905277,
+              "n_success_b": 111,
+              "success_latency_ms_b": 21.98530179155871,
+              "success_service_ms_b": 21.074864495260357,
+              "d_success_latency": -0.010630816856014353,
+              "d_success_service": -0.009546254082931454
+            }
+          },
+          "hot_stats": {
+            "a": {
+              "updates": 8994,
+              "hot_updates": 5548
+            },
+            "b": {
+              "updates": 8994,
+              "hot_updates": 0
+            }
+          }
+        },
+        {
+          "index": 3,
+          "seed": 1237,
+          "order": [
+            "b",
+            "a"
+          ],
+          "scheduled": 2462,
+          "valid": true,
+          "actual_seconds_a": 12.014846792000753,
+          "actual_seconds_b": 12.015446500001417,
+          "queue_lag_p95_ms_a": 2.7167433980139317,
+          "queue_lag_p95_ms_b": 2.696330533399302,
+          "workload_lag_ms_a": 8.786764399701497,
+          "workload_lag_ms_b": 5.04529325189651,
+          "dropped_a": 0,
+          "dropped_b": 0,
+          "transactions": {
+            "place_order": {
+              "n_a": 954,
+              "n_b": 954,
+              "mean_a_ms": 3.526614863584802,
+              "mean_b_ms": 3.4793101491094656,
+              "d": -0.013504407568447232,
+              "errors_a": 483,
+              "errors_b": 483,
+              "n_success_a": 471,
+              "success_latency_ms_a": 3.726964958331474,
+              "success_service_ms_a": 2.761432424658141,
+              "n_success_b": 471,
+              "success_latency_ms_b": 3.6990059406553493,
+              "success_service_ms_b": 2.6663490828598015,
+              "d_success_latency": -0.007530099476086093,
+              "d_success_service": -0.035039387547471997
+            },
+            "update_status": {
+              "n_a": 430,
+              "n_b": 430,
+              "mean_a_ms": 2.2343792951412684,
+              "mean_b_ms": 2.0909439434627677,
+              "d": -0.06634785759488764,
+              "errors_a": 93,
+              "errors_b": 93,
+              "n_success_a": 337,
+              "success_latency_ms_a": 2.4585647244673052,
+              "success_service_ms_a": 1.5069336259977868,
+              "n_success_b": 337,
+              "success_latency_ms_b": 2.2236285073083955,
+              "success_service_ms_b": 1.3542493649903313,
+              "d_success_latency": -0.10043740998014934,
+              "d_success_service": -0.10682954822291295
+            },
+            "order_status": {
+              "n_a": 666,
+              "n_b": 666,
+              "mean_a_ms": 1.7394949999861118,
+              "mean_b_ms": 1.7211097622205127,
+              "d": -0.010625547848734353,
+              "errors_a": 63,
+              "errors_b": 63,
+              "n_success_a": 603,
+              "success_latency_ms_a": 1.7945380505715824,
+              "success_service_ms_a": 0.876219535633722,
+              "n_success_b": 603,
+              "success_latency_ms_b": 1.7951777598298193,
+              "success_service_ms_b": 0.8639721327591522,
+              "d_success_latency": 0.00035641220575465763,
+              "d_success_service": -0.014076156459696273
+            },
+            "stock_decrement": {
+              "n_a": 299,
+              "n_b": 299,
+              "mean_a_ms": 1.904086061163177,
+              "mean_b_ms": 1.9715051844788685,
+              "d": 0.03479516850650944,
+              "errors_a": 70,
+              "errors_b": 70,
+              "n_success_a": 229,
+              "success_latency_ms_a": 1.9647556369944323,
+              "success_service_ms_a": 1.0192705590052196,
+              "n_success_b": 229,
+              "success_latency_ms_b": 2.0273140688416436,
+              "success_service_ms_b": 1.0560402271996647,
+              "d_success_latency": 0.03134391833742114,
+              "d_success_service": 0.03543904526490986
+            },
+            "picker_queue_read": {
+              "n_a": 113,
+              "n_b": 113,
+              "mean_a_ms": 21.59207389111511,
+              "mean_b_ms": 21.221385518699602,
+              "d": -0.01731687374951579,
+              "errors_a": 0,
+              "errors_b": 0,
+              "n_success_a": 113,
+              "success_latency_ms_a": 21.59207389099701,
+              "success_service_ms_a": 20.670264734456726,
+              "n_success_b": 113,
+              "success_latency_ms_b": 21.2213855185815,
+              "success_service_ms_b": 20.35609438929236,
+              "d_success_latency": -0.01731687374961158,
+              "d_success_service": -0.015315835634536423
+            }
+          },
+          "hot_stats": {
+            "a": {
+              "updates": 11301,
+              "hot_updates": 7638
+            },
+            "b": {
+              "updates": 11301,
+              "hot_updates": 0
+            }
+          }
+        },
+        {
+          "index": 4,
+          "seed": 1238,
+          "order": [
+            "a",
+            "b"
+          ],
+          "scheduled": 2521,
+          "valid": true,
+          "actual_seconds_a": 12.020141583001532,
+          "actual_seconds_b": 12.01988962500036,
+          "queue_lag_p95_ms_a": 2.769953462120611,
+          "queue_lag_p95_ms_b": 2.7079305982624646,
+          "workload_lag_ms_a": 5.0379847816657275,
+          "workload_lag_ms_b": 5.063400974904653,
+          "dropped_a": 0,
+          "dropped_b": 0,
+          "transactions": {
+            "place_order": {
+              "n_a": 977,
+              "n_b": 977,
+              "mean_a_ms": 3.5846491695954303,
+              "mean_b_ms": 3.576272214183054,
+              "d": -0.002339631671576209,
+              "errors_a": 475,
+              "errors_b": 475,
+              "n_success_a": 502,
+              "success_latency_ms_a": 3.7844956670643035,
+              "success_service_ms_a": 2.8406273187532953,
+              "n_success_b": 502,
+              "success_latency_ms_b": 3.7005618190492147,
+              "success_service_ms_b": 2.862942637426364,
+              "d_success_latency": -0.02242798174066686,
+              "d_success_service": 0.007825075421769957
+            },
+            "update_status": {
+              "n_a": 462,
+              "n_b": 462,
+              "mean_a_ms": 2.1878606126548217,
+              "mean_b_ms": 2.090079691059783,
+              "d": -0.045721982218986795,
+              "errors_a": 124,
+              "errors_b": 124,
+              "n_success_a": 338,
+              "success_latency_ms_a": 2.4119113546547974,
+              "success_service_ms_a": 1.4487469290661628,
+              "n_success_b": 338,
+              "success_latency_ms_b": 2.30868108000714,
+              "success_service_ms_b": 1.4045659436036788,
+              "d_success_latency": -0.04374312595057193,
+              "d_success_service": -0.030970677838854852
+            },
+            "order_status": {
+              "n_a": 637,
+              "n_b": 637,
+              "mean_a_ms": 1.7606410026591688,
+              "mean_b_ms": 1.7607409890628807,
+              "d": 5.678816099698103e-05,
+              "errors_a": 60,
+              "errors_b": 60,
+              "n_success_a": 577,
+              "success_latency_ms_a": 1.8336436030707466,
+              "success_service_ms_a": 0.9175644106960689,
+              "n_success_b": 577,
+              "success_latency_ms_b": 1.8288898964902316,
+              "success_service_ms_b": 0.9023704556931872,
+              "d_success_latency": -0.002595858440875097,
+              "d_success_service": -0.01669763935204807
+            },
+            "stock_decrement": {
+              "n_a": 351,
+              "n_b": 351,
+              "mean_a_ms": 2.0107708657874315,
+              "mean_b_ms": 2.0540550516271883,
+              "d": 0.0212977494376808,
+              "errors_a": 79,
+              "errors_b": 79,
+              "n_success_a": 272,
+              "success_latency_ms_a": 2.0819807177581042,
+              "success_service_ms_a": 1.1348924558928155,
+              "n_success_b": 272,
+              "success_latency_ms_b": 2.1100948580687406,
+              "success_service_ms_b": 1.1385017241590343,
+              "d_success_latency": 0.013413194161666002,
+              "d_success_service": 0.0031752270066451186
+            },
+            "picker_queue_read": {
+              "n_a": 94,
+              "n_b": 94,
+              "mean_a_ms": 23.06783500391751,
+              "mean_b_ms": 22.46003536624522,
+              "d": -0.026701699190149683,
+              "errors_a": 0,
+              "errors_b": 0,
+              "n_success_a": 94,
+              "success_latency_ms_a": 23.06783500399918,
+              "success_service_ms_a": 22.177056340567898,
+              "n_success_b": 94,
+              "success_latency_ms_b": 22.46003536632689,
+              "success_service_ms_b": 21.61282051089616,
+              "d_success_latency": -0.026701699190053902,
+              "d_success_service": -0.02577157549337599
+            }
+          },
+          "hot_stats": {
+            "a": {
+              "updates": 13757,
+              "hot_updates": 9942
+            },
+            "b": {
+              "updates": 13757,
+              "hot_updates": 0
+            }
+          }
+        },
+        {
+          "index": 5,
+          "seed": 1239,
+          "order": [
+            "b",
+            "a"
+          ],
+          "scheduled": 2414,
+          "valid": true,
+          "actual_seconds_a": 12.016846041999088,
+          "actual_seconds_b": 12.014247332997911,
+          "queue_lag_p95_ms_a": 7.633238497692217,
+          "queue_lag_p95_ms_b": 2.8092096708860472,
+          "workload_lag_ms_a": 94.8063026771706,
+          "workload_lag_ms_b": 5.046451540692942,
+          "dropped_a": 0,
+          "dropped_b": 0,
+          "transactions": {
+            "place_order": {
+              "n_a": 965,
+              "n_b": 965,
+              "mean_a_ms": 8.781280071130643,
+              "mean_b_ms": 3.4762112110911403,
+              "d": -0.9266792227569332,
+              "errors_a": 481,
+              "errors_b": 481,
+              "n_success_a": 484,
+              "success_latency_ms_a": 10.722901710872312,
+              "success_service_ms_a": 7.186291427673541,
+              "n_success_b": 484,
+              "success_latency_ms_b": 3.6952637140356797,
+              "success_service_ms_b": 2.7908513181673773,
+              "d_success_latency": -1.0653298786355105,
+              "d_success_service": -0.9458285615419427
+            },
+            "update_status": {
+              "n_a": 397,
+              "n_b": 397,
+              "mean_a_ms": 7.219965461415318,
+              "mean_b_ms": 2.12440739508357,
+              "d": -1.22335727857355,
+              "errors_a": 123,
+              "errors_b": 123,
+              "n_success_a": 274,
+              "success_latency_ms_a": 8.770036824164203,
+              "success_service_ms_a": 5.23468825552293,
+              "n_success_b": 274,
+              "success_latency_ms_b": 2.336736907247365,
+              "success_service_ms_b": 1.340385328374555,
+              "d_success_latency": -1.3225855331642338,
+              "d_success_service": -1.3623501613916744
+            },
+            "order_status": {
+              "n_a": 631,
+              "n_b": 631,
+              "mean_a_ms": 5.083302830500395,
+              "mean_b_ms": 1.7279120403216124,
+              "d": -1.0790474473153848,
+              "errors_a": 58,
+              "errors_b": 58,
+              "n_success_a": 573,
+              "success_latency_ms_a": 5.2720577090972895,
+              "success_service_ms_a": 2.16322069627971,
+              "n_success_b": 573,
+              "success_latency_ms_b": 1.8048400990635765,
+              "success_service_ms_b": 0.8582521290958203,
+              "d_success_latency": -1.071948743394628,
+              "d_success_service": -0.9244555401643156
+            },
+            "stock_decrement": {
+              "n_a": 312,
+              "n_b": 312,
+              "mean_a_ms": 6.032346097561878,
+              "mean_b_ms": 2.011112580429397,
+              "d": -1.0984479144408734,
+              "errors_a": 81,
+              "errors_b": 81,
+              "n_success_a": 231,
+              "success_latency_ms_a": 6.757150137612402,
+              "success_service_ms_a": 4.2604082165261,
+              "n_success_b": 231,
+              "success_latency_ms_b": 1.983553106247202,
+              "success_service_ms_b": 1.0768230519412707,
+              "d_success_latency": -1.2257114892669105,
+              "d_success_service": -1.3753498936660944
+            },
+            "picker_queue_read": {
+              "n_a": 109,
+              "n_b": 109,
+              "mean_a_ms": 29.250494853490345,
+              "mean_b_ms": 22.544734999419983,
+              "d": -0.26039493409380365,
+              "errors_a": 0,
+              "errors_b": 0,
+              "n_success_a": 109,
+              "success_latency_ms_a": 29.25049485328048,
+              "success_service_ms_a": 25.917150614586383,
+              "n_success_b": 109,
+              "success_latency_ms_b": 22.54473499921012,
+              "success_service_ms_b": 21.389513403713146,
+              "d_success_latency": -0.2603949340959377,
+              "d_success_service": -0.19200416138747717
+            }
+          },
+          "hot_stats": {
+            "a": {
+              "updates": 16064,
+              "hot_updates": 12187
+            },
+            "b": {
+              "updates": 16064,
+              "hot_updates": 0
+            }
+          }
+        },
+        {
+          "index": 6,
+          "seed": 1240,
+          "order": [
+            "a",
+            "b"
+          ],
+          "scheduled": 2465,
+          "valid": true,
+          "actual_seconds_a": 12.35007058300107,
+          "actual_seconds_b": 12.035514957999112,
+          "queue_lag_p95_ms_a": 5.409535844228223,
+          "queue_lag_p95_ms_b": 3.459388086048413,
+          "workload_lag_ms_a": 117.76867492153542,
+          "workload_lag_ms_b": 8.122605784592452,
+          "dropped_a": 0,
+          "dropped_b": 0,
+          "transactions": {
+            "place_order": {
+              "n_a": 964,
+              "n_b": 964,
+              "mean_a_ms": 4.38553006711212,
+              "mean_b_ms": 7.943577176955996,
+              "d": 0.594053199453536,
+              "errors_a": 504,
+              "errors_b": 504,
+              "n_success_a": 460,
+              "success_latency_ms_a": 4.805710351827559,
+              "success_service_ms_a": 2.901292467425304,
+              "n_success_b": 460,
+              "success_latency_ms_b": 8.48073282893859,
+              "success_service_ms_b": 5.564673202064549,
+              "d_success_latency": 0.5679919971129865,
+              "d_success_service": 0.6512819430754565
+            },
+            "update_status": {
+              "n_a": 414,
+              "n_b": 414,
+              "mean_a_ms": 2.758198546089349,
+              "mean_b_ms": 4.1352150376991155,
+              "d": 0.404961565468833,
+              "errors_a": 146,
+              "errors_b": 146,
+              "n_success_a": 268,
+              "success_latency_ms_a": 3.0947947117462062,
+              "success_service_ms_a": 1.3400107650001578,
+              "n_success_b": 268,
+              "success_latency_ms_b": 4.765237326168226,
+              "success_service_ms_b": 3.27645787308314,
+              "d_success_latency": 0.4316257670501465,
+              "d_success_service": 0.894085274610116
+            },
+            "order_status": {
+              "n_a": 656,
+              "n_b": 656,
+              "mean_a_ms": 2.4169200207779795,
+              "mean_b_ms": 3.8972256065235564,
+              "d": 0.47777090615247464,
+              "errors_a": 70,
+              "errors_b": 70,
+              "n_success_a": 586,
+              "success_latency_ms_a": 2.4981616622419285,
+              "success_service_ms_a": 0.8195974044117372,
+              "n_success_b": 586,
+              "success_latency_ms_b": 4.132327200318431,
+              "success_service_ms_b": 1.8911750068315527,
+              "d_success_latency": 0.5032856087543415,
+              "d_success_service": 0.8361403621532401
+            },
+            "stock_decrement": {
+              "n_a": 326,
+              "n_b": 326,
+              "mean_a_ms": 2.5602495749970253,
+              "mean_b_ms": 3.9490726413962323,
+              "d": 0.43337603304633526,
+              "errors_a": 75,
+              "errors_b": 75,
+              "n_success_a": 251,
+              "success_latency_ms_a": 2.6044993795527733,
+              "success_service_ms_a": 0.982589486050554,
+              "n_success_b": 251,
+              "success_latency_ms_b": 4.6308042749243485,
+              "success_service_ms_b": 2.873557370657656,
+              "d_success_latency": 0.575490082517459,
+              "d_success_service": 1.0731146236310307
+            },
+            "picker_queue_read": {
+              "n_a": 105,
+              "n_b": 105,
+              "mean_a_ms": 23.586271274723998,
+              "mean_b_ms": 31.113570806857233,
+              "d": 0.2769792672405416,
+              "errors_a": 0,
+              "errors_b": 0,
+              "n_success_a": 105,
+              "success_latency_ms_a": 23.586271274553244,
+              "success_service_ms_a": 22.176285009447298,
+              "n_success_b": 105,
+              "success_latency_ms_b": 31.113570806686475,
+              "success_service_ms_b": 29.115851152302987,
+              "d_success_latency": 0.27697926724229305,
+              "d_success_service": 0.272259263930137
+            }
+          },
+          "hot_stats": {
+            "a": {
+              "updates": 18357,
+              "hot_updates": 14446
+            },
+            "b": {
+              "updates": 18357,
+              "hot_updates": 0
+            }
+          }
+        },
+        {
+          "index": 7,
+          "seed": 1241,
+          "order": [
+            "b",
+            "a"
+          ],
+          "scheduled": 2515,
+          "valid": true,
+          "actual_seconds_a": 12.016778124998382,
+          "actual_seconds_b": 12.021350416001951,
+          "queue_lag_p95_ms_a": 2.8225512942299242,
+          "queue_lag_p95_ms_b": 2.880567100874029,
+          "workload_lag_ms_a": 20.344913311419077,
+          "workload_lag_ms_b": 5.0351755307929125,
+          "dropped_a": 0,
+          "dropped_b": 0,
+          "transactions": {
+            "place_order": {
+              "n_a": 996,
+              "n_b": 996,
+              "mean_a_ms": 4.17918686284738,
+              "mean_b_ms": 3.7024752313826244,
+              "d": -0.12111511975728516,
+              "errors_a": 507,
+              "errors_b": 507,
+              "n_success_a": 489,
+              "success_latency_ms_a": 4.3915755362508975,
+              "success_service_ms_a": 3.314035196325507,
+              "n_success_b": 489,
+              "success_latency_ms_b": 3.9958354350657994,
+              "success_service_ms_b": 3.0431458037243635,
+              "d_success_latency": -0.09443537726288548,
+              "d_success_service": -0.08527475521011199
+            },
+            "update_status": {
+              "n_a": 419,
+              "n_b": 419,
+              "mean_a_ms": 2.6595467087404434,
+              "mean_b_ms": 2.2117565021331163,
+              "d": -0.1843687008333663,
+              "errors_a": 181,
+              "errors_b": 181,
+              "n_success_a": 238,
+              "success_latency_ms_a": 3.1038186092972695,
+              "success_service_ms_a": 2.0497830755935986,
+              "n_success_b": 238,
+              "success_latency_ms_b": 2.5597788918295468,
+              "success_service_ms_b": 1.5461899453205226,
+              "d_success_latency": -0.19271227850477493,
+              "d_success_service": -0.28194016571703506
+            },
+            "order_status": {
+              "n_a": 635,
+              "n_b": 635,
+              "mean_a_ms": 2.0880189769583715,
+              "mean_b_ms": 1.7639534141617188,
+              "d": -0.16865821053019142,
+              "errors_a": 56,
+              "errors_b": 56,
+              "n_success_a": 579,
+              "success_latency_ms_a": 2.218901385224445,
+              "success_service_ms_a": 1.1979249655281652,
+              "n_success_b": 579,
+              "success_latency_ms_b": 1.8529894829347515,
+              "success_service_ms_b": 0.9442027790108691,
+              "d_success_latency": -0.18021193028353083,
+              "d_success_service": -0.2380051922470726
+            },
+            "stock_decrement": {
+              "n_a": 358,
+              "n_b": 358,
+              "mean_a_ms": 2.2009370273715514,
+              "mean_b_ms": 2.116847757373477,
+              "d": -0.03895511597643088,
+              "errors_a": 80,
+              "errors_b": 80,
+              "n_success_a": 278,
+              "success_latency_ms_a": 2.238847907661111,
+              "success_service_ms_a": 1.2920500466861995,
+              "n_success_b": 278,
+              "success_latency_ms_b": 2.169345311506064,
+              "success_service_ms_b": 1.1825439063574625,
+              "d_success_latency": -0.031535984353429025,
+              "d_success_service": -0.08856216962876466
+            },
+            "picker_queue_read": {
+              "n_a": 107,
+              "n_b": 107,
+              "mean_a_ms": 23.28533544597487,
+              "mean_b_ms": 22.891580830091527,
+              "d": -0.017054588808216527,
+              "errors_a": 0,
+              "errors_b": 0,
+              "n_success_a": 107,
+              "success_latency_ms_a": 23.28533544608536,
+              "success_service_ms_a": 22.316791298988257,
+              "n_success_b": 107,
+              "success_latency_ms_b": 22.89158083020202,
+              "success_service_ms_b": 21.735501981175247,
+              "d_success_latency": -0.017054588808134763,
+              "d_success_service": -0.026392408476622872
+            }
+          },
+          "hot_stats": {
+            "a": {
+              "updates": 20820,
+              "hot_updates": 16883
+            },
+            "b": {
+              "updates": 20820,
+              "hot_updates": 0
+            }
+          }
+        }
+      ],
+      "prepare": {
+        "a": {
+          "profile": "flash5",
+          "seed": 1234,
+          "new_products": 2000,
+          "hot_qty": 1000000,
+          "hot_set_max": 50,
+          "analyzed": true,
+          "autovacuum": "left enabled; may analyze asynchronously",
+          "seconds": 0.4291019580014108
+        },
+        "b": {
+          "profile": "flash5",
+          "seed": 1234,
+          "new_products": 2000,
+          "hot_qty": 1000000,
+          "hot_set_max": 50,
+          "analyzed": true,
+          "autovacuum": "left enabled; may analyze asynchronously",
+          "seconds": 0.4219759170009638
+        }
+      },
+      "summary": {
+        "place_order": {
+          "n": 8,
+          "mean_rel": -0.04318695146640087,
+          "sd_log": 0.4173807942874583
+        },
+        "update_status": {
+          "n": 8,
+          "mean_rel": -0.12728408356212503,
+          "sd_log": 0.47128119015924275
+        },
+        "order_status": {
+          "n": 8,
+          "mean_rel": -0.0949900233594182,
+          "sd_log": 0.43787911986245
+        },
+        "stock_decrement": {
+          "n": 8,
+          "mean_rel": -0.07439944072186264,
+          "sd_log": 0.4402257751037284
+        },
+        "picker_queue_read": {
+          "n": 8,
+          "mean_rel": -0.007811417360082145,
+          "sd_log": 0.14438496861874206
+        }
+      }
+    }
+  },
+  "elapsed_seconds": 208.78606095800205
+}

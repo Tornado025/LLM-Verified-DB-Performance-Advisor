@@ -88,6 +88,7 @@ class Decision(Model):
     action: str  # DecisionAction
     candidate_id: str | None
     reason: str
+    requires_confirmation: bool = False
 
 
 @dataclass
@@ -164,6 +165,7 @@ class RaceResult(Model):
     dropped: dict[str, str]
     seconds: float
     runs: int
+    clones_created: int = 0
 
 
 @dataclass

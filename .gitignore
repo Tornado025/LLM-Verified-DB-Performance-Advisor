@@ -18,7 +18,7 @@ coverage/
 htmlcov/
 *.tsbuildinfo
 backend/data/meta.sqlite*
-backend/data/external/
+backend/data/external
 benchbase/results/
 experiments/results/*.tmp
 *.log
@@ -36,3 +36,5 @@ benchbase/.runtime/
 
 # Interrupted/failed A/A diagnostic checkpoints (keep the final report only)
 experiments/results/workload_aa_*.json
+experiments/results/step12_guard_budget_study/*_interrupted.json
+experiments/results/step12_guard_budget_study/status.json

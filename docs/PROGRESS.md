@@ -1116,3 +1116,262 @@ relative change above 5%; CPU is measured whole-host utilization, not worker dut
 - Created `docs/POST_21_FOLLOWUPS.md` to track the BenchBase high-load predicate-
   lock errors and Step 07 host-noise variance test. Both are explicitly deferred
   until after Step 21 and do not gate or alter numbered-step acceptance.
+
+## 2026-10-26 step 12 — guard, race, decide in progress
+
+- Implemented round-based report-query racing, paired write-cost guarding across
+  normal/flash5/flash10/flash20, and rewrite/index/block decisions. Added unit
+  checks for fail-closed verdicts, preference boundaries, invalid index DDL,
+  guard measurement errors, and preserving statistical failure bounds. No Step
+  12 commit has been made.
+- `make test`: 197 passed, 82 deselected. `make lint`: Ruff check/format clean;
+  mypy clean across 31 app modules. Real database tests used disposable clones;
+  the final clone count was zero.
+- Planted redundant-index case (8 added write indexes): FAIL on normal-profile
+  `place_order` with n=16 paired blocks (seed 9876). Measured geometric mean
+  slowdown 11.53%, one-sided lower/upper bounds 5.06%/18.40%, elapsed 409.06 s.
+  A prior run failed after 8 blocks in 206.25 s, showing run-to-run variation.
+- Planted candidate-side order-insert trigger (seed 2468): the guard reported
+  `errors_increased` for `place_order` in the first normal-profile block,
+  elapsed 27.18 s. The error-rate verdict had n=0 statistical pairs and null
+  confidence bounds because it fired before latency testing. The trigger was
+  created only in the disposable candidate clone; the baseline and live
+  database were untouched.
+- Planted HOT-killer `CREATE INDEX ON store_stock(qty)` (seed 4321): BLOCK after
+  40 paired blocks in **each** of the four profiles, elapsed 4162.31 s. The
+  `stock_decrement` results were:
+
+  | Profile | n | Mean change | Lower bound | Upper bound | Verdict |
+  |---|---:|---:|---:|---:|---|
+  | normal | 40 | 2.94% | -1.10% | 7.16% | BLOCK |
+  | flash5 | 40 | 0.70% | -5.59% | 7.41% | BLOCK |
+  | flash10 | 40 | 1.70% | -7.37% | 11.65% | BLOCK |
+  | flash20 | 40 | 0.20% | -19.84% | 25.25% | BLOCK |
+
+- Planted harmless `CREATE INDEX ON customers(city)` (seed 1234): BLOCK, not
+  PASS, with block counts normal=40, flash5=15, flash10=10, flash20=40;
+  elapsed 2736.54 s. This run preceded per-cell console reporting, so its
+  detailed bounds are unavailable and are not inferred.
+- The harmless case was repeated with per-cell reporting (same candidate,
+  seed and settings): BLOCK again, 40 blocks in every profile, elapsed
+  4165.40 s. The `stock_decrement` results were:
+
+  | Profile | n | Mean change | Lower bound | Upper bound | Verdict |
+  |---|---:|---:|---:|---:|---|
+  | normal | 40 | 0.94% | -3.50% | 5.59% | BLOCK |
+  | flash5 | 40 | -8.65% | -29.66% | 18.63% | BLOCK |
+  | flash10 | 40 | -1.91% | -11.64% | 8.89% | BLOCK |
+  | flash20 | 40 | -1.71% | -15.77% | 14.68% | BLOCK |
+
+  This is not evidence that the index harmed stock updates; every reported
+  upper bound exceeded 5%. The difference between runs shows
+  unstable measurement power, especially at flash load.
+- `estimate_guard_seconds` is a **minimum scheduled workload** estimate:
+  576 s for four profiles under the current 12 s block/6-run settings. The
+  measured HOT-killer run took 4162.31 s because multiple profiles exhausted
+  the 40-block cap and workload drain/clone overhead added time. The estimate
+  must not be presented as an expected or maximum runtime.
+- Acceptance remains **open**: the specified harmless-index PASS and HOT-killer
+  FAIL were not reproduced under the calibrated 41 TPS base rate and the
+  required 5% bound. Both candidates were rejected safely; relabeling either
+  measured BLOCK as PASS or FAIL would violate the evidence and the contract.
+  No Step 13 work has started.
+
+### Step 12 measurement investigation — 2026-10-27
+
+- User asked to keep the original Step 12 PASS/FAIL expectations and investigate
+  the measurement setup. No threshold or acceptance check was changed.
+- Recalculated the saved Step 11 A/A samples with Step 12's stricter family of
+  20 cells and 40 planned looks. Normal `update_status` had n=32, upper=5.23%
+  (unproven); flash5 `stock_decrement` had n=15, upper=5.08% (unproven).
+  Multiplicity accounts for some, but not all, of the Step 12 BLOCKs.
+- A controlled flash5 diagnostic compared eight reused-pair blocks with eight
+  fresh-pair blocks using identical seeds/schedules and the harmless city index.
+  All 16 blocks were valid. `stock_decrement` log-ratio SD was 0.0633 reused
+  versus 0.0627 fresh; clone reuse alone did not create large noise in these
+  first eight blocks. Evidence: `experiments/results/step12_clone_lifecycle.json`.
+- A separate 40-block reused-pair flash5 run kept all blocks valid and queue
+  lag stable. At n=40, the unchanged Step 12 bounds from the raw block ratios
+  were: `place_order` upper 5.83%, `update_status` 6.69%, `order_status`
+  5.12% (all BLOCK); `stock_decrement` 4.96% and `picker_queue_read` 3.01%
+  (PASS). At the observed means and SDs, the first three would need roughly
+  53, 71 and 42 samples respectively to pass; those projections are not
+  guarantees and do not alter the 40-block cap. Evidence:
+  `experiments/results/step12_reused_40.json`.
+- On disposable clones with the single `store_stock(qty)` index, baseline
+  stock updates were 92.42% HOT over the measured interval versus 0% in the
+  candidate clone. The short flash5 diagnostic nevertheless measured only
+  +0.84% mean change for all stock-decrement attempts, with n=8 and log-ratio
+  SD 0.0511. About 23.6% of those stock attempts and 50.4% of place-order
+  attempts ended in expected errors on both sides, so their latency averages
+  include attempts without the indexed write. Evidence:
+  `experiments/results/step12_qty_hot_stats.json`.
+- Restricting a separate diagnostic to preloaded in-stock hot products removed
+  those errors and yielded 99.8% baseline HOT updates versus 0% with the qty
+  index. Eight valid paired blocks still did not show a reliable >5% latency
+  regression; one large timing outlier dominated the mean. A timeline-enabled
+  run also showed two large second-side timing spikes, so its instrumented
+  numbers are diagnostic only. Evidence: `experiments/results/step12_qty_stocked_only.json`
+  and `experiments/results/step12_qty_success.json`.
+- From the prior full harmless flash20 `stock_decrement` mean/SD, a fixed-effect
+  calculation projects about 185 blocks to put its upper bound below 5%, far
+  beyond the configured 40. The full HOT-index stock means were below 5% in
+  every profile; more samples alone cannot establish a >5% failure if those
+  effects remain the same. The physical HOT loss is real, but the specified
+  latency FAIL is not supported by these workloads. This remains an open Step
+  12 acceptance issue, not a deferred post-Step-21 item. No Step 13 work or
+  commit was started. Every diagnostic clone was removed.
+- A further eight-block flash5 diagnostic measured both the guard's end-to-end
+  latency and PostgreSQL's `pg_stat_statements` execution time on the **same**
+  disposable clone pair. All eight pairs were valid and had identical A/B SQL
+  call counts and affected-row counts. PostgreSQL groups the identical stock
+  update used by `place_order` and `stock_decrement` into one query-statistics
+  entry, regardless of their different SQL comments. Across 22,827 calls per
+  side, combined stock-update SQL time rose from 375.68 ms (baseline) to
+  463.51 ms (qty-index candidate), a 23.38% increase: about 0.01646 to
+  0.02030 ms per call. Baseline HOT updates were 16,425/20,377 versus
+  0/20,377 on the candidate. Yet mean full `stock_decrement` latency was
+  2.092 versus 2.073 ms and the eight-block paired geometric change was
+  -0.91% (SD of log ratios 0.0614), far from a demonstrated >5% regression.
+  The SQL update itself accounts for under 1% of the measured transaction
+  time, so its approximately 0.00385 ms added cost is too small to establish
+  the planted FAIL on this workload. This is a diagnostic explanation, not a
+  guard verdict, and it does not alter the required 5% threshold. Evidence:
+  `experiments/results/step12_qty_statement_cost.json`. The diagnostic took
+  209.2 s; Ruff passed; all clones were removed. The Step 12 acceptance issue
+  remains open.
+- Reviewed Step 12 statistical look accounting. With `MIN_RUNS=6` and
+  `MAX_BLOCKS=40`, the guard can first decide at block 6 and can therefore
+  spend at most 35 sequential looks, not 40. Updated the guard to allocate
+  alpha over those 35 possible looks while retaining the same family of 20
+  protected profile/transaction cells and the same 5% non-inferiority rule.
+  Recomputing saved Step 11 A/A samples with the corrected look count changed
+  flash5 `stock_decrement` at n=15 from upper=5.080% to 4.967% (PASS); normal
+  `update_status` at n=32 remained unproven (upper 5.233% to 5.186%). This
+  modest correction cannot account for the earlier harmless-index BLOCKs or
+  turn the measured below-5% HOT-index point estimates into a FAIL. `make test`
+  (using the project `.venv`) passed 197 tests with 82 deselected; Ruff and
+  mypy passed. The real planted-case acceptance is still open.
+- Started a controlled harmless-index BLOCK-rate pilot after the user requested
+  a measured answer. `backend/scripts/run_guard_budget_study.py` runs three
+  independent seeds for each of `normal` and `flash5`, each with 80 sequential
+  paired blocks on a fresh clone pair. It replays the same observed blocks at
+  40 and 80 block budgets using the unchanged 5% delta, 5% alpha, family of
+  20 cells, and budget-specific sequential-look correction. Runs are serial to
+  avoid host CPU competition; raw checkpoints and verdict counts are under
+  `experiments/results/step12_guard_budget_study/`. This is a six-run pilot,
+  not an estimate of the finished advisor's overall BLOCK rate. The study is
+  running; no result is claimed yet. A quiet thread monitor will report its
+  completion or any failure needing attention.
+- The user paused the pilot on 2026-10-27. The first normal-profile seed
+  finished all 80 valid blocks; the second had saved 70 valid blocks when its
+  worker was interrupted. No worker or disposable clone remains, and the
+  monitor was removed. `status.json` records `paused_by_user`. No six-run
+  BLOCK-rate conclusion is available yet; resume only when the user asks.
+- The user resumed the pilot later on 2026-10-27. Preserved the interrupted
+  70-block checkpoint as `normal_5201_interrupted.json`, verified no worker or
+  sandbox clone was left running, and restarted the orchestrator. It skips the
+  completed 80-block `normal_3101.json` run and repeats seed 5201 from fresh
+  clones for a fair 80-block comparison. The quiet completion monitor was
+  restored. No result is claimed until the six planned runs finish.
+- The controlled pilot completed six valid 80-block runs on 2026-10-27. The
+  harmless `customers(city)` index had these profile-level guard verdicts when
+  the **same** paired observations were replayed with each budget's correct
+  sequential-look allocation (5% delta, 5% alpha, family 20, min runs 6):
+
+  | Profile | Independent seeds | 40 blocks | 80 blocks |
+  |---|---:|---:|---:|
+  | normal | 3 | 3 BLOCK, 0 PASS | 0 BLOCK, 3 PASS |
+  | flash5 | 3 | 0 BLOCK, 3 PASS | 0 BLOCK, 3 PASS |
+
+  All six runs had 80/80 valid paired blocks and no FAIL. In normal load, the
+  last protected transaction reached PASS between 55 and 71 valid pairs,
+  depending on seed; the remaining cells at block 40 were `update_status`,
+  `order_status`, `place_order`, or `stock_decrement`. The flash5 runs passed
+  within 14–24 pairs. This is a deliberately small pilot of one harmless
+  candidate and two profiles. Its observed BLOCK fractions (normal 3/3 at
+  40, 0/3 at 80; flash5 0/3 at either budget) are not an estimate of the
+  product-wide BLOCK rate, and flash10/flash20 remain untested at 80 blocks.
+  Evidence: `experiments/results/step12_guard_budget_study/summary.json`
+  and six per-run JSON files. Each run used a fresh clone pair and took about
+  34 minutes. Ruff, mypy, and 197 non-DB/non-LLM tests passed. No worker or
+  `qc_sbx_*` clone remains. The original Step 12 planted-case acceptance is
+  still open, particularly the required HOT-killer FAIL; no commit or Step 13
+  work has started.
+- On 2026-10-28, the user requested the same harmless-index pilot under 10×
+  and 20× flash-sale load. Extended the serial study runner to include
+  `flash10` and `flash20`, retained all six completed normal/flash5 runs, and
+  started three fresh-clone seeds per new profile. Each run records 80 paired
+  blocks, then evaluates the original 5% guard at 40 and 80 block budgets with
+  family 20. The study is in progress; no flash10/flash20 result is claimed
+  until its checkpoints complete and are verified. A quiet monitor is active.
+- The first flash10 attempt found Docker Desktop stopped and exited before
+  creating a measurement. Started Docker Desktop and the project's PostgreSQL
+  service, verified `qc_golden` and `qc_live` still exist and no sandbox clone
+  was left behind, then restarted the serial study. The first flash10 paired
+  blocks are valid. No earlier study result was changed.
+- During the third flash10 seed, Docker Desktop stopped again after 29 valid
+  blocks and the worker exited. The PostgreSQL container showed a clean
+  shutdown, with no evidence from its new startup log of a database crash.
+  Restarted Docker/PostgreSQL, removed the two disposable clones left by the
+  interrupted run, preserved its 29-block checkpoint as
+  `flash10_7301_interrupted.json`, and restarted the serial study. The two
+  completed flash10 seeds and all earlier profiles were skipped and retained.
+  This interruption is not counted as a completed replicate.
+- On 2026-10-29, the four-profile harmless-index budget pilot finished. All
+  12 planned runs had 80/80 valid paired blocks, three independent seeds per
+  profile. Replaying the same observations with the original 5% delta and
+  alpha, family 20, and budget-specific sequential looks gave:
+
+  | Profile | 40 blocks: PASS/BLOCK/FAIL | 80 blocks: PASS/BLOCK/FAIL |
+  |---|---:|---:|
+  | normal | 0/3/0 | 3/0/0 |
+  | flash5 | 3/0/0 | 3/0/0 |
+  | flash10 | 1/2/0 | 1/2/0 |
+  | flash20 | 0/3/0 | 1/2/0 |
+
+  Thus extra blocks resolved all three normal runs and one flash20 run, but
+  not the two BLOCK runs at 10x or the other two at 20x. A BLOCK means the
+  upper confidence bound did not establish less than 5% slowdown; it is not
+  proof of harm. No planted harmless-index run failed. The pilot covers one
+  candidate and three seeds per load, so these fractions are not a general
+  BLOCK rate. Docker Desktop stopped during the second and third flash20
+  seeds; the interrupted partial files were preserved and each seed was
+  restarted on fresh clones. Completed runs were retained. Evidence:
+  `experiments/results/step12_guard_budget_study/summary.json` and the 12
+  complete per-run files. Step 12 remains open because the harmless index
+  did not PASS in all flash profiles and the single HOT-killer index has not
+  produced the required FAIL. After resuming on 2026-10-30, confirmed all
+  12 runs contain 80 valid blocks, no guard worker or disposable clone remains,
+  `git diff --check` is clean, `make lint` passes Ruff and mypy, and `make test`
+  passes 197 tests (82 DB/LLM tests deselected). No Step 13 work or commit
+  was made.
+- Follow-up review on 2026-10-30 found that the four 80-block harmless-index
+  BLOCK runs had wide upper bounds, especially at 20x. For flash10 seeds
+  5201/7301, the `stock_decrement` mean changes were -4.33%/-1.52% but upper
+  bounds 11.39%/13.25%; for flash20 seeds 3101/7301 they were +0.15%/+17.46%
+  with upper bounds 11.66%/89.52%. The last flash20 seed was unstable:
+  its first 40 blocks averaged +49.46% stock latency and the second 40
+  averaged -7.70%, so a single run cannot identify a causal index effect.
+  The single qty-index statement diagnostic remains the stronger causal
+  explanation for the HOT case: SQL stock updates rose 23.38% but by only
+  ~0.00385 ms per call, versus ~2.09 ms full `stock_decrement` latency. This
+  does not support the planted >5% transaction FAIL. The original acceptance
+  expectations were not altered, and no speculative verdict was recorded.
+- The user authorized revising Step 12's planted-case expectations on
+  2026-10-30 to match measured transaction evidence. Updated
+  `docs/steps/12_guard_race_decide.md`: the eight-index write-cost case is the
+  proven latency FAIL; the single qty index is a HOT-loss diagnostic whose
+  observed full-transaction verdict is BLOCK; the harmless city index may
+  PASS only when every profile/cell bound clears 5%, otherwise it BLOCKs.
+  The 5% delta and alpha, family correction, and fail-closed guard code were
+  not relaxed. Revised the two long database tests to check that the verdict
+  agrees with per-cell evidence on short disposable-clone smoke runs, while
+  the 12-run study remains the full-profile measured record. `make lint`
+  passed and `make test` passed 197 tests with 82 deselected. The two real
+  planted harm cases (eight indexes and candidate-side order errors) passed
+  together on PostgreSQL. The short harmless/qty smoke checks also passed on
+  disposable clones. Final `make lint`, `make test` (197 passed, 82 deselected),
+  and `git diff --check` passed; no `qc_sbx_*` clone remains. The revised Step
+  12 acceptance is satisfied by these checks and the recorded full-profile
+  measurements. The requested Step 12 commit has not yet been made.

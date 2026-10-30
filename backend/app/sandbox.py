@@ -129,9 +129,11 @@ def _create(
         raise SandboxError("Clone creation failed", {"error_type": type(exc).__name__}) from exc
 
 
-def create_clone(name: str | None = None, template: str | None = None) -> str:
+def create_clone(
+    name: str | None = None, template: str | None = None, settings: Settings | None = None
+) -> str:
     """Acquire a slot, clone and analyze a private database."""
-    return _create(name, template, get_settings())
+    return _create(name, template, settings or get_settings())
 
 
 def _drop(name: str, settings: Settings) -> None:
@@ -220,7 +222,9 @@ def single_clone(settings: Settings) -> Iterator[str]:
 
 
 @contextmanager
-def clone_pair(candidate: Candidate, settings: Settings) -> Iterator[ClonePair]:
+def clone_pair(
+    candidate: Candidate, settings: Settings, template: str | None = None
+) -> Iterator[ClonePair]:
     """Reserve both slots atomically, apply only to B, and clean both on errors."""
     _validate(settings.sandbox_prefix + "00000000", settings)
     if settings.max_clones < 2:
@@ -235,7 +239,7 @@ def clone_pair(candidate: Candidate, settings: Settings) -> Iterator[ClonePair]:
     try:
         for _ in range(2):
             unconsumed -= 1  # _create assumes ownership of this slot even on failure
-            names.append(_create(None, None, settings, reserved=True))
+            names.append(_create(None, template, settings, reserved=True))
         if candidate.kind in {"index", "stats"}:
             try:
                 apply_ddl(names[1], candidate.sql)
