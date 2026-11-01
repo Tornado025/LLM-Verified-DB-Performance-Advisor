@@ -87,7 +87,7 @@ The backend container needs the **Docker socket?** No — it connects to Postgre
 * OpenAPI: `GET /openapi.json` validates; generate TypeScript types in step 16 from it.
 
 ## 15.8 Done checklist
-- [ ] All endpoints implemented; OpenAPI documented with examples
-- [ ] SSE verified with `curl -N http://localhost:8000/api/jobs/<id>/events`
-- [ ] `docker compose up backend` serves `/api/health`
+- [x] All endpoints implemented; OpenAPI documented with examples
+- [x] SSE verified with `curl -N http://localhost:8000/api/jobs/<id>/events`
+- [x] `docker compose up backend` serves `/api/health`
 - [ ] Commit `step 15: api`

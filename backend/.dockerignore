@@ -1,0 +1,7 @@
+data/external
+.env*
+__pycache__
+*.sqlite*
+.pytest_cache
+.mypy_cache
+.ruff_cache

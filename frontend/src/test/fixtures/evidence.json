@@ -1,0 +1,3073 @@
+[
+  {
+    "job_id": "20261030-052119-248f",
+    "shape_id": "delivered_yesterday",
+    "created_at": "2026-10-30T05:22:31.461038+00:00",
+    "settings": {
+      "delta": 0.05,
+      "alpha": 0.05,
+      "metric": "time",
+      "profiles": [
+        "normal"
+      ],
+      "guard_stat": "mean",
+      "seed": 1234,
+      "workload": "custom",
+      "llm": {
+        "provider": "mock",
+        "model": "mock",
+        "temperature": 0.7,
+        "usage": {
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "cost": 0.0,
+          "calls": [
+            {
+              "prompt_tokens": 0,
+              "completion_tokens": 0,
+              "cost": 0.0,
+              "model": "mock"
+            },
+            {
+              "prompt_tokens": 0,
+              "completion_tokens": 0,
+              "cost": 0.0,
+              "model": "mock"
+            }
+          ],
+          "model": "mock"
+        }
+      }
+    },
+    "baseline": {
+      "sql": "/* dpa:shape=delivered_yesterday */\nSELECT store_id, count(*) AS delivered, sum(total) AS revenue FROM orders\nWHERE DATE(delivered_at) = ('2026-10-25T12:00:00+00:00'::timestamptz)::date - 1\nGROUP BY store_id ORDER BY store_id\n",
+      "signature": "5990b66b1d77",
+      "plan": {
+        "Plan": {
+          "Node Type": "Aggregate",
+          "Strategy": "Sorted",
+          "Partial Mode": "Finalize",
+          "Parallel Aware": false,
+          "Async Capable": false,
+          "Startup Cost": 18829.96,
+          "Total Cost": 18862.5,
+          "Plan Rows": 50,
+          "Plan Width": 44,
+          "Group Key": [
+            "store_id"
+          ],
+          "Plans": [
+            {
+              "Node Type": "Gather Merge",
+              "Parent Relationship": "Outer",
+              "Parallel Aware": false,
+              "Async Capable": false,
+              "Startup Cost": 18829.96,
+              "Total Cost": 18860.87,
+              "Plan Rows": 100,
+              "Plan Width": 44,
+              "Workers Planned": 2,
+              "Plans": [
+                {
+                  "Node Type": "Aggregate",
+                  "Strategy": "Sorted",
+                  "Partial Mode": "Partial",
+                  "Parent Relationship": "Outer",
+                  "Parallel Aware": false,
+                  "Async Capable": false,
+                  "Startup Cost": 17829.93,
+                  "Total Cost": 17849.31,
+                  "Plan Rows": 50,
+                  "Plan Width": 44,
+                  "Group Key": [
+                    "store_id"
+                  ],
+                  "Plans": [
+                    {
+                      "Node Type": "Sort",
+                      "Parent Relationship": "Outer",
+                      "Parallel Aware": false,
+                      "Async Capable": false,
+                      "Startup Cost": 17829.93,
+                      "Total Cost": 17834.62,
+                      "Plan Rows": 1875,
+                      "Plan Width": 10,
+                      "Sort Key": [
+                        "store_id"
+                      ],
+                      "Plans": [
+                        {
+                          "Node Type": "Seq Scan",
+                          "Parent Relationship": "Outer",
+                          "Parallel Aware": true,
+                          "Async Capable": false,
+                          "Relation Name": "orders",
+                          "Alias": "orders",
+                          "Startup Cost": 0.0,
+                          "Total Cost": 17728.0,
+                          "Plan Rows": 1875,
+                          "Plan Width": 10,
+                          "Filter": "(date(delivered_at) = (('2026-10-25 12:00:00+00'::timestamp with time zone)::date - 1))"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "time_ms": {
+        "mean": 25.6886,
+        "sd": 0.2941212335075443,
+        "n": 5
+      }
+    },
+    "propose": {
+      "samples": 2,
+      "saturated": false,
+      "usage": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "cost": 0.0,
+        "calls": [
+          {
+            "prompt_tokens": 0,
+            "completion_tokens": 0,
+            "cost": 0.0,
+            "model": "mock"
+          },
+          {
+            "prompt_tokens": 0,
+            "completion_tokens": 0,
+            "cost": 0.0,
+            "model": "mock"
+          }
+        ],
+        "model": "mock"
+      },
+      "rejected": [
+        {
+          "id": "20261030-052119-248f:delivered_yesterday:03",
+          "job_id": "20261030-052119-248f",
+          "shape_id": "delivered_yesterday",
+          "kind": "rewrite",
+          "sql": "SELECT store_id, count(*) AS delivered, sum(total) AS revenue FROM orders\nWHERE delivered_at >= (('2026-10-25T12:00:00+00:00'::timestamptz)::date - 1) AND delivered_at < ('2026-10-25T12:00:00+00:00'::timestamptz)::date\nGROUP BY store_id ORDER BY store_id\n",
+          "rationale": "Use session-local calendar day bounds.",
+          "sample_idx": 1,
+          "status": "skipped_duplicate",
+          "reason": "duplicate_of:20261030-052119-248f:delivered_yesterday:01",
+          "signature": null,
+          "plan_before": null,
+          "plan_after": null,
+          "equiv": null,
+          "speedup": null,
+          "guard": null
+        }
+      ],
+      "distinct_plan_curve": [
+        1,
+        2
+      ]
+    },
+    "candidates": [
+      {
+        "id": "20261030-052119-248f:delivered_yesterday:01",
+        "job_id": "20261030-052119-248f",
+        "shape_id": "delivered_yesterday",
+        "kind": "rewrite",
+        "sql": "SELECT store_id, count(*) AS delivered, sum(total) AS revenue FROM orders\nWHERE delivered_at >= (('2026-10-25T12:00:00+00:00'::timestamptz)::date - 1) AND delivered_at < ('2026-10-25T12:00:00+00:00'::timestamptz)::date\nGROUP BY store_id ORDER BY store_id\n",
+        "rationale": "Use session-local calendar day bounds.",
+        "sample_idx": 0,
+        "status": "dropped_race",
+        "reason": "slower_than_baseline",
+        "signature": "635da985055b",
+        "plan_before": {
+          "Plan": {
+            "Node Type": "Aggregate",
+            "Strategy": "Sorted",
+            "Partial Mode": "Finalize",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Startup Cost": 18829.96,
+            "Total Cost": 18862.5,
+            "Plan Rows": 50,
+            "Plan Width": 44,
+            "Group Key": [
+              "store_id"
+            ],
+            "Plans": [
+              {
+                "Node Type": "Gather Merge",
+                "Parent Relationship": "Outer",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 18829.96,
+                "Total Cost": 18860.87,
+                "Plan Rows": 100,
+                "Plan Width": 44,
+                "Workers Planned": 2,
+                "Plans": [
+                  {
+                    "Node Type": "Aggregate",
+                    "Strategy": "Sorted",
+                    "Partial Mode": "Partial",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Startup Cost": 17829.93,
+                    "Total Cost": 17849.31,
+                    "Plan Rows": 50,
+                    "Plan Width": 44,
+                    "Group Key": [
+                      "store_id"
+                    ],
+                    "Plans": [
+                      {
+                        "Node Type": "Sort",
+                        "Parent Relationship": "Outer",
+                        "Parallel Aware": false,
+                        "Async Capable": false,
+                        "Startup Cost": 17829.93,
+                        "Total Cost": 17834.62,
+                        "Plan Rows": 1875,
+                        "Plan Width": 10,
+                        "Sort Key": [
+                          "store_id"
+                        ],
+                        "Plans": [
+                          {
+                            "Node Type": "Seq Scan",
+                            "Parent Relationship": "Outer",
+                            "Parallel Aware": true,
+                            "Async Capable": false,
+                            "Relation Name": "orders",
+                            "Alias": "orders",
+                            "Startup Cost": 0.0,
+                            "Total Cost": 17728.0,
+                            "Plan Rows": 1875,
+                            "Plan Width": 10,
+                            "Filter": "(date(delivered_at) = (('2026-10-25 12:00:00+00'::timestamp with time zone)::date - 1))"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "plan_after": {
+          "Plan": {
+            "Node Type": "Aggregate",
+            "Strategy": "Sorted",
+            "Partial Mode": "Finalize",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Startup Cost": 19753.83,
+            "Total Cost": 19767.12,
+            "Plan Rows": 50,
+            "Plan Width": 44,
+            "Group Key": [
+              "store_id"
+            ],
+            "Plans": [
+              {
+                "Node Type": "Gather Merge",
+                "Parent Relationship": "Outer",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 19753.83,
+                "Total Cost": 19765.5,
+                "Plan Rows": 100,
+                "Plan Width": 44,
+                "Workers Planned": 2,
+                "Plans": [
+                  {
+                    "Node Type": "Sort",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Startup Cost": 18753.81,
+                    "Total Cost": 18753.93,
+                    "Plan Rows": 50,
+                    "Plan Width": 44,
+                    "Sort Key": [
+                      "store_id"
+                    ],
+                    "Plans": [
+                      {
+                        "Node Type": "Aggregate",
+                        "Strategy": "Hashed",
+                        "Partial Mode": "Partial",
+                        "Parent Relationship": "Outer",
+                        "Parallel Aware": false,
+                        "Async Capable": false,
+                        "Startup Cost": 18751.77,
+                        "Total Cost": 18752.4,
+                        "Plan Rows": 50,
+                        "Plan Width": 44,
+                        "Group Key": [
+                          "store_id"
+                        ],
+                        "Planned Partitions": 0,
+                        "Plans": [
+                          {
+                            "Node Type": "Seq Scan",
+                            "Parent Relationship": "Outer",
+                            "Parallel Aware": true,
+                            "Async Capable": false,
+                            "Relation Name": "orders",
+                            "Alias": "orders",
+                            "Startup Cost": 0.0,
+                            "Total Cost": 18665.5,
+                            "Plan Rows": 11503,
+                            "Plan Width": 10,
+                            "Filter": "((delivered_at < ('2026-10-25 12:00:00+00'::timestamp with time zone)::date) AND (delivered_at >= (('2026-10-25 12:00:00+00'::timestamp with time zone)::date - 1)))"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "equiv": {
+          "label": "tested",
+          "rewrite_class": 1,
+          "tier_reached": 3,
+          "reason": "tiers 0-3 completed; human approval required",
+          "counterexample": null,
+          "cx_dbs": 50,
+          "nonvacuous_fraction": 1.0,
+          "weak": false
+        },
+        "speedup": {
+          "n": 3,
+          "mean_rel": 0.172601006545749,
+          "lower": 0.1508203973274108,
+          "upper": 0.19479383902587827,
+          "sd_log": 0.007547603674365691,
+          "state": "FAIL",
+          "metric": "time",
+          "n_runs": 3
+        },
+        "guard": null
+      },
+      {
+        "id": "20261030-052119-248f:delivered_yesterday:02",
+        "job_id": "20261030-052119-248f",
+        "shape_id": "delivered_yesterday",
+        "kind": "index",
+        "sql": "CREATE INDEX ON orders(delivered_at)",
+        "rationale": "Test report benefit against protected write cost.",
+        "sample_idx": 1,
+        "status": "skipped_noplan",
+        "reason": "plan unchanged",
+        "signature": "5990b66b1d77",
+        "plan_before": null,
+        "plan_after": null,
+        "equiv": null,
+        "speedup": null,
+        "guard": null
+      },
+      {
+        "id": "20261030-052119-248f:delivered_yesterday:03",
+        "job_id": "20261030-052119-248f",
+        "shape_id": "delivered_yesterday",
+        "kind": "rewrite",
+        "sql": "SELECT store_id, count(*) AS delivered, sum(total) AS revenue FROM orders\nWHERE delivered_at >= (('2026-10-25T12:00:00+00:00'::timestamptz)::date - 1) AND delivered_at < ('2026-10-25T12:00:00+00:00'::timestamptz)::date\nGROUP BY store_id ORDER BY store_id\n",
+        "rationale": "Use session-local calendar day bounds.",
+        "sample_idx": 1,
+        "status": "skipped_duplicate",
+        "reason": "duplicate_of:20261030-052119-248f:delivered_yesterday:01",
+        "signature": null,
+        "plan_before": null,
+        "plan_after": null,
+        "equiv": null,
+        "speedup": null,
+        "guard": null
+      }
+    ],
+    "decision": {
+      "action": "block",
+      "candidate_id": null,
+      "reason": "no candidate improves the report",
+      "requires_confirmation": false
+    },
+    "budget": {
+      "seconds": 2.5877879170002416,
+      "stage_seconds": {
+        "observe": 0.5260999169986462,
+        "propose": 0.020344042000942864,
+        "filter": 0.012665624999499414,
+        "equivalence": 1.2996766669966746,
+        "race": 0.7039979590044823,
+        "guard_decide": 7.665999874006957e-06
+      },
+      "paired_runs": 3,
+      "llm_calls": 2,
+      "clones_created": 2,
+      "clone_seconds": 0.7382012079979177,
+      "guard_blocks": 0
+    }
+  },
+  {
+    "job_id": "20261030-052119-248f",
+    "shape_id": "payout_report",
+    "created_at": "2026-10-30T05:22:34.167929+00:00",
+    "settings": {
+      "delta": 0.05,
+      "alpha": 0.05,
+      "metric": "time",
+      "profiles": [
+        "normal"
+      ],
+      "guard_stat": "mean",
+      "seed": 1234,
+      "workload": "custom",
+      "llm": {
+        "provider": "mock",
+        "model": "mock",
+        "temperature": 0.7,
+        "usage": {
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "cost": 0.0,
+          "calls": [
+            {
+              "prompt_tokens": 0,
+              "completion_tokens": 0,
+              "cost": 0.0,
+              "model": "mock"
+            },
+            {
+              "prompt_tokens": 0,
+              "completion_tokens": 0,
+              "cost": 0.0,
+              "model": "mock"
+            }
+          ],
+          "model": "mock"
+        }
+      }
+    },
+    "baseline": {
+      "sql": "/* dpa:shape=payout_report */\nSELECT store_id, sum(total) AS payout FROM (\n  SELECT DISTINCT order_id, store_id, total FROM orders\n  WHERE status = 'delivered' AND delivered_at >= '2026-10-18T12:00:00+00:00'::timestamptz\n    AND delivered_at < '2026-10-25T12:00:00+00:00'::timestamptz\n  ORDER BY order_id) t\nGROUP BY store_id ORDER BY store_id\n",
+      "signature": "6e5f440d00ce",
+      "plan": {
+        "Plan": {
+          "Node Type": "Sort",
+          "Parallel Aware": false,
+          "Async Capable": false,
+          "Startup Cost": 47369.11,
+          "Total Cost": 47369.61,
+          "Plan Rows": 200,
+          "Plan Width": 36,
+          "Sort Key": [
+            "orders.store_id"
+          ],
+          "Plans": [
+            {
+              "Node Type": "Aggregate",
+              "Strategy": "Hashed",
+              "Partial Mode": "Simple",
+              "Parent Relationship": "Outer",
+              "Parallel Aware": false,
+              "Async Capable": false,
+              "Startup Cost": 47358.97,
+              "Total Cost": 47361.47,
+              "Plan Rows": 200,
+              "Plan Width": 36,
+              "Group Key": [
+                "orders.store_id"
+              ],
+              "Planned Partitions": 0,
+              "Plans": [
+                {
+                  "Node Type": "Unique",
+                  "Parent Relationship": "Outer",
+                  "Parallel Aware": false,
+                  "Async Capable": false,
+                  "Startup Cost": 24349.5,
+                  "Total Cost": 44944.12,
+                  "Plan Rows": 160990,
+                  "Plan Width": 18,
+                  "Plans": [
+                    {
+                      "Node Type": "Gather Merge",
+                      "Parent Relationship": "Outer",
+                      "Parallel Aware": false,
+                      "Async Capable": false,
+                      "Startup Cost": 24349.5,
+                      "Total Cost": 43736.69,
+                      "Plan Rows": 160990,
+                      "Plan Width": 18,
+                      "Workers Planned": 2,
+                      "Plans": [
+                        {
+                          "Node Type": "Unique",
+                          "Parent Relationship": "Outer",
+                          "Parallel Aware": false,
+                          "Async Capable": false,
+                          "Startup Cost": 23349.48,
+                          "Total Cost": 24154.43,
+                          "Plan Rows": 80495,
+                          "Plan Width": 18,
+                          "Plans": [
+                            {
+                              "Node Type": "Sort",
+                              "Parent Relationship": "Outer",
+                              "Parallel Aware": false,
+                              "Async Capable": false,
+                              "Startup Cost": 23349.48,
+                              "Total Cost": 23550.72,
+                              "Plan Rows": 80495,
+                              "Plan Width": 18,
+                              "Sort Key": [
+                                "orders.order_id",
+                                "orders.store_id",
+                                "orders.total"
+                              ],
+                              "Plans": [
+                                {
+                                  "Node Type": "Seq Scan",
+                                  "Parent Relationship": "Outer",
+                                  "Parallel Aware": true,
+                                  "Async Capable": false,
+                                  "Relation Name": "orders",
+                                  "Alias": "orders",
+                                  "Startup Cost": 0.0,
+                                  "Total Cost": 16790.5,
+                                  "Plan Rows": 80495,
+                                  "Plan Width": 18,
+                                  "Filter": "((delivered_at >= '2026-10-18 12:00:00+00'::timestamp with time zone) AND (delivered_at < '2026-10-25 12:00:00+00'::timestamp with time zone) AND (status = 'delivered'::text))"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "time_ms": {
+        "mean": 50.1916,
+        "sd": 3.320042062986554,
+        "n": 5
+      }
+    },
+    "propose": {
+      "samples": 2,
+      "saturated": false,
+      "usage": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "cost": 0.0,
+        "calls": [
+          {
+            "prompt_tokens": 0,
+            "completion_tokens": 0,
+            "cost": 0.0,
+            "model": "mock"
+          },
+          {
+            "prompt_tokens": 0,
+            "completion_tokens": 0,
+            "cost": 0.0,
+            "model": "mock"
+          }
+        ],
+        "model": "mock"
+      },
+      "rejected": [
+        {
+          "id": "20261030-052119-248f:payout_report:03",
+          "job_id": "20261030-052119-248f",
+          "shape_id": "payout_report",
+          "kind": "rewrite",
+          "sql": "SELECT store_id, sum(total) AS payout FROM orders WHERE status = 'delivered' AND delivered_at >= '2026-10-18T12:00:00+00:00'::timestamptz AND delivered_at < '2026-10-25T12:00:00+00:00'::timestamptz GROUP BY store_id ORDER BY store_id",
+          "rationale": "Primary key makes DISTINCT redundant.",
+          "sample_idx": 1,
+          "status": "skipped_duplicate",
+          "reason": "duplicate_of:20261030-052119-248f:payout_report:01",
+          "signature": null,
+          "plan_before": null,
+          "plan_after": null,
+          "equiv": null,
+          "speedup": null,
+          "guard": null
+        }
+      ],
+      "distinct_plan_curve": [
+        1,
+        2
+      ]
+    },
+    "candidates": [
+      {
+        "id": "20261030-052119-248f:payout_report:01",
+        "job_id": "20261030-052119-248f",
+        "shape_id": "payout_report",
+        "kind": "rewrite",
+        "sql": "SELECT store_id, sum(total) AS payout FROM orders WHERE status = 'delivered' AND delivered_at >= '2026-10-18T12:00:00+00:00'::timestamptz AND delivered_at < '2026-10-25T12:00:00+00:00'::timestamptz GROUP BY store_id ORDER BY store_id",
+        "rationale": "Primary key makes DISTINCT redundant.",
+        "sample_idx": 0,
+        "status": "selected",
+        "reason": null,
+        "signature": "fef296e7b0b9",
+        "plan_before": {
+          "Plan": {
+            "Node Type": "Sort",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Startup Cost": 47369.11,
+            "Total Cost": 47369.61,
+            "Plan Rows": 200,
+            "Plan Width": 36,
+            "Sort Key": [
+              "orders.store_id"
+            ],
+            "Plans": [
+              {
+                "Node Type": "Aggregate",
+                "Strategy": "Hashed",
+                "Partial Mode": "Simple",
+                "Parent Relationship": "Outer",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 47358.97,
+                "Total Cost": 47361.47,
+                "Plan Rows": 200,
+                "Plan Width": 36,
+                "Group Key": [
+                  "orders.store_id"
+                ],
+                "Planned Partitions": 0,
+                "Plans": [
+                  {
+                    "Node Type": "Unique",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Startup Cost": 24349.5,
+                    "Total Cost": 44944.12,
+                    "Plan Rows": 160990,
+                    "Plan Width": 18,
+                    "Plans": [
+                      {
+                        "Node Type": "Gather Merge",
+                        "Parent Relationship": "Outer",
+                        "Parallel Aware": false,
+                        "Async Capable": false,
+                        "Startup Cost": 24349.5,
+                        "Total Cost": 43736.69,
+                        "Plan Rows": 160990,
+                        "Plan Width": 18,
+                        "Workers Planned": 2,
+                        "Plans": [
+                          {
+                            "Node Type": "Unique",
+                            "Parent Relationship": "Outer",
+                            "Parallel Aware": false,
+                            "Async Capable": false,
+                            "Startup Cost": 23349.48,
+                            "Total Cost": 24154.43,
+                            "Plan Rows": 80495,
+                            "Plan Width": 18,
+                            "Plans": [
+                              {
+                                "Node Type": "Sort",
+                                "Parent Relationship": "Outer",
+                                "Parallel Aware": false,
+                                "Async Capable": false,
+                                "Startup Cost": 23349.48,
+                                "Total Cost": 23550.72,
+                                "Plan Rows": 80495,
+                                "Plan Width": 18,
+                                "Sort Key": [
+                                  "orders.order_id",
+                                  "orders.store_id",
+                                  "orders.total"
+                                ],
+                                "Plans": [
+                                  {
+                                    "Node Type": "Seq Scan",
+                                    "Parent Relationship": "Outer",
+                                    "Parallel Aware": true,
+                                    "Async Capable": false,
+                                    "Relation Name": "orders",
+                                    "Alias": "orders",
+                                    "Startup Cost": 0.0,
+                                    "Total Cost": 16790.5,
+                                    "Plan Rows": 80495,
+                                    "Plan Width": 18,
+                                    "Filter": "((delivered_at >= '2026-10-18 12:00:00+00'::timestamp with time zone) AND (delivered_at < '2026-10-25 12:00:00+00'::timestamp with time zone) AND (status = 'delivered'::text))"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "plan_after": {
+          "Plan": {
+            "Node Type": "Aggregate",
+            "Strategy": "Sorted",
+            "Partial Mode": "Finalize",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Startup Cost": 18195.03,
+            "Total Cost": 18208.08,
+            "Plan Rows": 50,
+            "Plan Width": 36,
+            "Group Key": [
+              "store_id"
+            ],
+            "Plans": [
+              {
+                "Node Type": "Gather Merge",
+                "Parent Relationship": "Outer",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 18195.03,
+                "Total Cost": 18206.7,
+                "Plan Rows": 100,
+                "Plan Width": 36,
+                "Workers Planned": 2,
+                "Plans": [
+                  {
+                    "Node Type": "Sort",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Startup Cost": 17195.01,
+                    "Total Cost": 17195.14,
+                    "Plan Rows": 50,
+                    "Plan Width": 36,
+                    "Sort Key": [
+                      "store_id"
+                    ],
+                    "Plans": [
+                      {
+                        "Node Type": "Aggregate",
+                        "Strategy": "Hashed",
+                        "Partial Mode": "Partial",
+                        "Parent Relationship": "Outer",
+                        "Parallel Aware": false,
+                        "Async Capable": false,
+                        "Startup Cost": 17192.97,
+                        "Total Cost": 17193.6,
+                        "Plan Rows": 50,
+                        "Plan Width": 36,
+                        "Group Key": [
+                          "store_id"
+                        ],
+                        "Planned Partitions": 0,
+                        "Plans": [
+                          {
+                            "Node Type": "Seq Scan",
+                            "Parent Relationship": "Outer",
+                            "Parallel Aware": true,
+                            "Async Capable": false,
+                            "Relation Name": "orders",
+                            "Alias": "orders",
+                            "Startup Cost": 0.0,
+                            "Total Cost": 16790.5,
+                            "Plan Rows": 80495,
+                            "Plan Width": 10,
+                            "Filter": "((delivered_at >= '2026-10-18 12:00:00+00'::timestamp with time zone) AND (delivered_at < '2026-10-25 12:00:00+00'::timestamp with time zone) AND (status = 'delivered'::text))"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "equiv": {
+          "label": "tested",
+          "rewrite_class": 3,
+          "tier_reached": 3,
+          "reason": "tiers 0-3 completed; human approval required",
+          "counterexample": null,
+          "cx_dbs": 50,
+          "nonvacuous_fraction": 1.0,
+          "weak": false
+        },
+        "speedup": {
+          "n": 3,
+          "mean_rel": -0.6229124389627606,
+          "lower": -0.6755143643354772,
+          "upper": -0.5617832869618136,
+          "sd_log": 0.060478188489290055,
+          "state": "PASS",
+          "metric": "time",
+          "n_runs": 3
+        },
+        "guard": null
+      },
+      {
+        "id": "20261030-052119-248f:payout_report:02",
+        "job_id": "20261030-052119-248f",
+        "shape_id": "payout_report",
+        "kind": "rewrite",
+        "sql": "SELECT store_id, sum(total) AS payout FROM orders WHERE delivered_at >= '2026-10-18T12:00:00+00:00'::timestamptz AND delivered_at < '2026-10-25T12:00:00+00:00'::timestamptz GROUP BY store_id ORDER BY store_id",
+        "rationale": "Deliberately drop a required status predicate.",
+        "sample_idx": 1,
+        "status": "rejected_equiv",
+        "reason": "outside allowed classes",
+        "signature": "49a06466451f",
+        "plan_before": {
+          "Plan": {
+            "Node Type": "Sort",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Startup Cost": 47369.11,
+            "Total Cost": 47369.61,
+            "Plan Rows": 200,
+            "Plan Width": 36,
+            "Sort Key": [
+              "orders.store_id"
+            ],
+            "Plans": [
+              {
+                "Node Type": "Aggregate",
+                "Strategy": "Hashed",
+                "Partial Mode": "Simple",
+                "Parent Relationship": "Outer",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 47358.97,
+                "Total Cost": 47361.47,
+                "Plan Rows": 200,
+                "Plan Width": 36,
+                "Group Key": [
+                  "orders.store_id"
+                ],
+                "Planned Partitions": 0,
+                "Plans": [
+                  {
+                    "Node Type": "Unique",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Startup Cost": 24349.5,
+                    "Total Cost": 44944.12,
+                    "Plan Rows": 160990,
+                    "Plan Width": 18,
+                    "Plans": [
+                      {
+                        "Node Type": "Gather Merge",
+                        "Parent Relationship": "Outer",
+                        "Parallel Aware": false,
+                        "Async Capable": false,
+                        "Startup Cost": 24349.5,
+                        "Total Cost": 43736.69,
+                        "Plan Rows": 160990,
+                        "Plan Width": 18,
+                        "Workers Planned": 2,
+                        "Plans": [
+                          {
+                            "Node Type": "Unique",
+                            "Parent Relationship": "Outer",
+                            "Parallel Aware": false,
+                            "Async Capable": false,
+                            "Startup Cost": 23349.48,
+                            "Total Cost": 24154.43,
+                            "Plan Rows": 80495,
+                            "Plan Width": 18,
+                            "Plans": [
+                              {
+                                "Node Type": "Sort",
+                                "Parent Relationship": "Outer",
+                                "Parallel Aware": false,
+                                "Async Capable": false,
+                                "Startup Cost": 23349.48,
+                                "Total Cost": 23550.72,
+                                "Plan Rows": 80495,
+                                "Plan Width": 18,
+                                "Sort Key": [
+                                  "orders.order_id",
+                                  "orders.store_id",
+                                  "orders.total"
+                                ],
+                                "Plans": [
+                                  {
+                                    "Node Type": "Seq Scan",
+                                    "Parent Relationship": "Outer",
+                                    "Parallel Aware": true,
+                                    "Async Capable": false,
+                                    "Relation Name": "orders",
+                                    "Alias": "orders",
+                                    "Startup Cost": 0.0,
+                                    "Total Cost": 16790.5,
+                                    "Plan Rows": 80495,
+                                    "Plan Width": 18,
+                                    "Filter": "((delivered_at >= '2026-10-18 12:00:00+00'::timestamp with time zone) AND (delivered_at < '2026-10-25 12:00:00+00'::timestamp with time zone) AND (status = 'delivered'::text))"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "plan_after": {
+          "Plan": {
+            "Node Type": "Aggregate",
+            "Strategy": "Sorted",
+            "Partial Mode": "Finalize",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Startup Cost": 17271.7,
+            "Total Cost": 17284.75,
+            "Plan Rows": 50,
+            "Plan Width": 36,
+            "Group Key": [
+              "store_id"
+            ],
+            "Plans": [
+              {
+                "Node Type": "Gather Merge",
+                "Parent Relationship": "Outer",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 17271.7,
+                "Total Cost": 17283.37,
+                "Plan Rows": 100,
+                "Plan Width": 36,
+                "Workers Planned": 2,
+                "Plans": [
+                  {
+                    "Node Type": "Sort",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Startup Cost": 16271.68,
+                    "Total Cost": 16271.81,
+                    "Plan Rows": 50,
+                    "Plan Width": 36,
+                    "Sort Key": [
+                      "store_id"
+                    ],
+                    "Plans": [
+                      {
+                        "Node Type": "Aggregate",
+                        "Strategy": "Hashed",
+                        "Partial Mode": "Partial",
+                        "Parent Relationship": "Outer",
+                        "Parallel Aware": false,
+                        "Async Capable": false,
+                        "Startup Cost": 16269.65,
+                        "Total Cost": 16270.27,
+                        "Plan Rows": 50,
+                        "Plan Width": 36,
+                        "Group Key": [
+                          "store_id"
+                        ],
+                        "Planned Partitions": 0,
+                        "Plans": [
+                          {
+                            "Node Type": "Seq Scan",
+                            "Parent Relationship": "Outer",
+                            "Parallel Aware": true,
+                            "Async Capable": false,
+                            "Relation Name": "orders",
+                            "Alias": "orders",
+                            "Startup Cost": 0.0,
+                            "Total Cost": 15853.0,
+                            "Plan Rows": 83329,
+                            "Plan Width": 10,
+                            "Filter": "((delivered_at >= '2026-10-18 12:00:00+00'::timestamp with time zone) AND (delivered_at < '2026-10-25 12:00:00+00'::timestamp with time zone))"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "equiv": {
+          "label": "rejected",
+          "rewrite_class": null,
+          "tier_reached": 1,
+          "reason": "outside allowed classes",
+          "counterexample": null,
+          "cx_dbs": 0,
+          "nonvacuous_fraction": null,
+          "weak": true
+        },
+        "speedup": null,
+        "guard": null
+      },
+      {
+        "id": "20261030-052119-248f:payout_report:03",
+        "job_id": "20261030-052119-248f",
+        "shape_id": "payout_report",
+        "kind": "rewrite",
+        "sql": "SELECT store_id, sum(total) AS payout FROM orders WHERE status = 'delivered' AND delivered_at >= '2026-10-18T12:00:00+00:00'::timestamptz AND delivered_at < '2026-10-25T12:00:00+00:00'::timestamptz GROUP BY store_id ORDER BY store_id",
+        "rationale": "Primary key makes DISTINCT redundant.",
+        "sample_idx": 1,
+        "status": "skipped_duplicate",
+        "reason": "duplicate_of:20261030-052119-248f:payout_report:01",
+        "signature": null,
+        "plan_before": null,
+        "plan_after": null,
+        "equiv": null,
+        "speedup": null,
+        "guard": null
+      }
+    ],
+    "decision": {
+      "action": "apply_rewrite",
+      "candidate_id": "20261030-052119-248f:payout_report:01",
+      "reason": "verified rewrite within 0.80 of the best option; zero write cost",
+      "requires_confirmation": false
+    },
+    "budget": {
+      "seconds": 2.7050929999968503,
+      "stage_seconds": {
+        "observe": 0.6364901669949177,
+        "propose": 0.016313207997882273,
+        "filter": 0.008054541001911275,
+        "equivalence": 1.2686747920015478,
+        "race": 0.7520572919966071,
+        "guard_decide": 4.570799501379952e-05
+      },
+      "paired_runs": 3,
+      "llm_calls": 2,
+      "clones_created": 2,
+      "clone_seconds": 0.7103206670071813,
+      "guard_blocks": 0
+    }
+  },
+  {
+    "job_id": "20261030-052119-248f",
+    "shape_id": "recent_orders",
+    "created_at": "2026-10-30T05:22:28.869960+00:00",
+    "settings": {
+      "delta": 0.05,
+      "alpha": 0.05,
+      "metric": "time",
+      "profiles": [
+        "normal"
+      ],
+      "guard_stat": "mean",
+      "seed": 1234,
+      "workload": "custom",
+      "llm": {
+        "provider": "mock",
+        "model": "mock",
+        "temperature": 0.7,
+        "usage": {
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "cost": 0.0,
+          "calls": [
+            {
+              "prompt_tokens": 0,
+              "completion_tokens": 0,
+              "cost": 0.0,
+              "model": "mock"
+            },
+            {
+              "prompt_tokens": 0,
+              "completion_tokens": 0,
+              "cost": 0.0,
+              "model": "mock"
+            }
+          ],
+          "model": "mock"
+        }
+      }
+    },
+    "baseline": {
+      "sql": "/* dpa:shape=recent_orders */\nSELECT order_id, store_id, total, created_at FROM orders\nWHERE customer_id = 1 AND created_at >= '2026-10-25T12:00:00+00:00'::timestamptz - interval '30 days'\n  AND created_at <= '2026-10-25T12:00:00+00:00'::timestamptz\nORDER BY created_at DESC LIMIT 20\n",
+      "signature": "a6c916546141",
+      "plan": {
+        "Plan": {
+          "Node Type": "Limit",
+          "Parallel Aware": false,
+          "Async Capable": false,
+          "Startup Cost": 18796.54,
+          "Total Cost": 18798.88,
+          "Plan Rows": 20,
+          "Plan Width": 26,
+          "Plans": [
+            {
+              "Node Type": "Gather Merge",
+              "Parent Relationship": "Outer",
+              "Parallel Aware": false,
+              "Async Capable": false,
+              "Startup Cost": 18796.54,
+              "Total Cost": 19397.42,
+              "Plan Rows": 5150,
+              "Plan Width": 26,
+              "Workers Planned": 2,
+              "Plans": [
+                {
+                  "Node Type": "Sort",
+                  "Parent Relationship": "Outer",
+                  "Parallel Aware": false,
+                  "Async Capable": false,
+                  "Startup Cost": 17796.52,
+                  "Total Cost": 17802.96,
+                  "Plan Rows": 2575,
+                  "Plan Width": 26,
+                  "Sort Key": [
+                    "created_at DESC"
+                  ],
+                  "Plans": [
+                    {
+                      "Node Type": "Seq Scan",
+                      "Parent Relationship": "Outer",
+                      "Parallel Aware": true,
+                      "Async Capable": false,
+                      "Relation Name": "orders",
+                      "Alias": "orders",
+                      "Startup Cost": 0.0,
+                      "Total Cost": 17728.0,
+                      "Plan Rows": 2575,
+                      "Plan Width": 26,
+                      "Filter": "((created_at <= '2026-10-25 12:00:00+00'::timestamp with time zone) AND (customer_id = 1) AND (created_at >= ('2026-10-25 12:00:00+00'::timestamp with time zone - '30 days'::interval)))"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "time_ms": {
+        "mean": 12.6212,
+        "sd": 0.5272700446640222,
+        "n": 5
+      }
+    },
+    "propose": {
+      "samples": 2,
+      "saturated": false,
+      "usage": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "cost": 0.0,
+        "calls": [
+          {
+            "prompt_tokens": 0,
+            "completion_tokens": 0,
+            "cost": 0.0,
+            "model": "mock"
+          },
+          {
+            "prompt_tokens": 0,
+            "completion_tokens": 0,
+            "cost": 0.0,
+            "model": "mock"
+          }
+        ],
+        "model": "mock"
+      },
+      "rejected": [
+        {
+          "id": "20261030-052119-248f:recent_orders:05",
+          "job_id": "20261030-052119-248f",
+          "shape_id": "recent_orders",
+          "kind": "index",
+          "sql": "CREATE INDEX ON orders(customer_id, created_at DESC)",
+          "rationale": "Test report benefit against protected write cost.",
+          "sample_idx": 1,
+          "status": "skipped_duplicate",
+          "reason": "duplicate_of:20261030-052119-248f:recent_orders:01",
+          "signature": null,
+          "plan_before": null,
+          "plan_after": null,
+          "equiv": null,
+          "speedup": null,
+          "guard": null
+        }
+      ],
+      "distinct_plan_curve": [
+        3,
+        4
+      ]
+    },
+    "candidates": [
+      {
+        "id": "20261030-052119-248f:recent_orders:01",
+        "job_id": "20261030-052119-248f",
+        "shape_id": "recent_orders",
+        "kind": "index",
+        "sql": "CREATE INDEX ON orders(customer_id, created_at DESC)",
+        "rationale": "Test report benefit against protected write cost.",
+        "sample_idx": 0,
+        "status": "blocked_unproven",
+        "reason": "guard evidence was inconclusive",
+        "signature": "3836c2bb2966",
+        "plan_before": {
+          "Plan": {
+            "Node Type": "Limit",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Startup Cost": 18796.54,
+            "Total Cost": 18798.88,
+            "Plan Rows": 20,
+            "Plan Width": 26,
+            "Plans": [
+              {
+                "Node Type": "Gather Merge",
+                "Parent Relationship": "Outer",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 18796.54,
+                "Total Cost": 19397.42,
+                "Plan Rows": 5150,
+                "Plan Width": 26,
+                "Workers Planned": 2,
+                "Plans": [
+                  {
+                    "Node Type": "Sort",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Startup Cost": 17796.52,
+                    "Total Cost": 17802.96,
+                    "Plan Rows": 2575,
+                    "Plan Width": 26,
+                    "Sort Key": [
+                      "created_at DESC"
+                    ],
+                    "Plans": [
+                      {
+                        "Node Type": "Seq Scan",
+                        "Parent Relationship": "Outer",
+                        "Parallel Aware": true,
+                        "Async Capable": false,
+                        "Relation Name": "orders",
+                        "Alias": "orders",
+                        "Startup Cost": 0.0,
+                        "Total Cost": 17728.0,
+                        "Plan Rows": 2575,
+                        "Plan Width": 26,
+                        "Filter": "((created_at <= '2026-10-25 12:00:00+00'::timestamp with time zone) AND (customer_id = 1) AND (created_at >= ('2026-10-25 12:00:00+00'::timestamp with time zone - '30 days'::interval)))"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "plan_after": {
+          "Plan": {
+            "Node Type": "Limit",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Startup Cost": 0.05,
+            "Total Cost": 62.3,
+            "Plan Rows": 20,
+            "Plan Width": 26,
+            "Plans": [
+              {
+                "Node Type": "Index Scan",
+                "Parent Relationship": "Outer",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Scan Direction": "Forward",
+                "Index Name": "<13625>btree_orders_customer_id_created_at",
+                "Relation Name": "orders",
+                "Alias": "orders",
+                "Startup Cost": 0.05,
+                "Total Cost": 19230.9,
+                "Plan Rows": 6179,
+                "Plan Width": 26,
+                "Index Cond": "((customer_id = 1) AND (created_at >= ('2026-10-25 12:00:00+00'::timestamp with time zone - '30 days'::interval)) AND (created_at <= '2026-10-25 12:00:00+00'::timestamp with time zone))"
+              }
+            ]
+          }
+        },
+        "equiv": null,
+        "speedup": {
+          "n": 3,
+          "mean_rel": -0.9985842983942281,
+          "lower": -0.9998915869210757,
+          "upper": -0.981513198808931,
+          "sd_log": 0.5818408257319686,
+          "state": "PASS",
+          "metric": "time",
+          "n_runs": 3
+        },
+        "guard": {
+          "passed": false,
+          "profiles": {
+            "normal": {
+              "cells": {
+                "place_order": {
+                  "n": 12,
+                  "state": "BLOCK",
+                  "mean_rel": -0.008386789077810498,
+                  "lower": -0.10080617133602199,
+                  "upper": 0.0935314820125009,
+                  "sd_log": 0.08420716726098097
+                },
+                "update_status": {
+                  "n": 12,
+                  "state": "BLOCK",
+                  "mean_rel": -0.023367978852635515,
+                  "lower": -0.18128353208101977,
+                  "upper": 0.16500661963571836,
+                  "sd_log": 0.1518052895034454
+                },
+                "order_status": {
+                  "n": 12,
+                  "state": "BLOCK",
+                  "mean_rel": -0.0017908456749947158,
+                  "lower": -0.11838064596261913,
+                  "upper": 0.130217379206938,
+                  "sd_log": 0.10690231556119136
+                },
+                "stock_decrement": {
+                  "n": 12,
+                  "state": "BLOCK",
+                  "mean_rel": 0.047862479634883895,
+                  "lower": -0.16545617069336613,
+                  "upper": 0.315707740765197,
+                  "sd_log": 0.1959169181123077
+                },
+                "picker_queue_read": {
+                  "n": 12,
+                  "state": "BLOCK",
+                  "mean_rel": 0.03122506684827167,
+                  "lower": -0.07674652439610595,
+                  "upper": 0.15182359622382463,
+                  "sd_log": 0.09519364749441352
+                }
+              },
+              "blocks": [
+                {
+                  "index": 0,
+                  "seed": 3368118913,
+                  "scheduled": 91,
+                  "valid": true,
+                  "a_metadata": {
+                    "valid": true,
+                    "profile": "normal",
+                    "seed": 3368118913,
+                    "scheduled": 91,
+                    "completed": 91,
+                    "created_orders": 25,
+                    "oos": {
+                      "place_order": 12,
+                      "update_status": 0,
+                      "order_status": 0,
+                      "stock_decrement": 3,
+                      "picker_queue_read": 0
+                    },
+                    "workload_lag_ms": 5.103531839267816,
+                    "queue_lag_p95_ms": 5.057439248048468,
+                    "actual_seconds": 2.0130292090034345,
+                    "timeline": null
+                  },
+                  "b_metadata": {
+                    "valid": true,
+                    "profile": "normal",
+                    "seed": 3368118913,
+                    "scheduled": 91,
+                    "completed": 91,
+                    "created_orders": 25,
+                    "oos": {
+                      "place_order": 12,
+                      "update_status": 0,
+                      "order_status": 0,
+                      "stock_decrement": 3,
+                      "picker_queue_read": 0
+                    },
+                    "workload_lag_ms": 5.060241375758778,
+                    "queue_lag_p95_ms": 5.083096053567715,
+                    "actual_seconds": 2.015011291994597,
+                    "timeline": null
+                  },
+                  "transactions": {
+                    "place_order": {
+                      "n_a": 37,
+                      "n_b": 37,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 7.261160328100133,
+                      "stat_b": 6.7604358923130645,
+                      "p95_a": 11.795972209074533,
+                      "p95_b": 11.524301783356346,
+                      "p95_ratio": 0.9769692212813801,
+                      "d": -0.07145227178580645,
+                      "state": "CONTINUE"
+                    },
+                    "update_status": {
+                      "n_a": 18,
+                      "n_b": 18,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 4.471333593957954,
+                      "stat_b": 4.5402708666289175,
+                      "p95_a": 6.912287934028426,
+                      "p95_b": 7.159524393500759,
+                      "p95_ratio": 1.0357676737184538,
+                      "d": 0.015299965229268719,
+                      "state": "CONTINUE"
+                    },
+                    "order_status": {
+                      "n_a": 16,
+                      "n_b": 16,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 4.5702041438744345,
+                      "stat_b": 4.400003454065882,
+                      "p95_a": 7.846779661122127,
+                      "p95_b": 7.48031342845934,
+                      "p95_ratio": 0.9532972444124446,
+                      "d": -0.03795254840158137,
+                      "state": "CONTINUE"
+                    },
+                    "stock_decrement": {
+                      "n_a": 14,
+                      "n_b": 14,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 4.198532506831855,
+                      "stat_b": 3.257017291096937,
+                      "p95_a": 7.11863975993765,
+                      "p95_b": 5.310730277051334,
+                      "p95_ratio": 0.746031609428969,
+                      "d": -0.25392322591558897,
+                      "state": "CONTINUE"
+                    },
+                    "picker_queue_read": {
+                      "n_a": 6,
+                      "n_b": 6,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 35.70233228674624,
+                      "stat_b": 30.97806811638293,
+                      "p95_a": 40.436425884763594,
+                      "p95_b": 39.65923723808373,
+                      "p95_ratio": 0.9807799866166533,
+                      "d": -0.1419365428263223,
+                      "state": "CONTINUE"
+                    }
+                  }
+                },
+                {
+                  "index": 1,
+                  "seed": 3368118914,
+                  "scheduled": 98,
+                  "valid": true,
+                  "a_metadata": {
+                    "valid": true,
+                    "profile": "normal",
+                    "seed": 3368118914,
+                    "scheduled": 98,
+                    "completed": 98,
+                    "created_orders": 23,
+                    "oos": {
+                      "place_order": 25,
+                      "update_status": 0,
+                      "order_status": 0,
+                      "stock_decrement": 3,
+                      "picker_queue_read": 0
+                    },
+                    "workload_lag_ms": 5.05226318637142,
+                    "queue_lag_p95_ms": 5.05557824508287,
+                    "actual_seconds": 2.0227325829982874,
+                    "timeline": null
+                  },
+                  "b_metadata": {
+                    "valid": true,
+                    "profile": "normal",
+                    "seed": 3368118914,
+                    "scheduled": 98,
+                    "completed": 98,
+                    "created_orders": 23,
+                    "oos": {
+                      "place_order": 25,
+                      "update_status": 0,
+                      "order_status": 0,
+                      "stock_decrement": 3,
+                      "picker_queue_read": 0
+                    },
+                    "workload_lag_ms": 5.061776886577718,
+                    "queue_lag_p95_ms": 5.0932542315422324,
+                    "actual_seconds": 2.0240511250012787,
+                    "timeline": null
+                  },
+                  "transactions": {
+                    "place_order": {
+                      "n_a": 48,
+                      "n_b": 48,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 6.983252040754451,
+                      "stat_b": 8.143346523562892,
+                      "p95_a": 10.111730053904466,
+                      "p95_b": 11.995374724574502,
+                      "p95_ratio": 1.1862831247104644,
+                      "d": 0.15368649966806036,
+                      "state": "CONTINUE"
+                    },
+                    "update_status": {
+                      "n_a": 20,
+                      "n_b": 20,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 5.540689625922823,
+                      "stat_b": 5.110612730641151,
+                      "p95_a": 9.749096259838554,
+                      "p95_b": 9.735896338315797,
+                      "p95_ratio": 0.998646036394457,
+                      "d": -0.0807996690493963,
+                      "state": "CONTINUE"
+                    },
+                    "order_status": {
+                      "n_a": 10,
+                      "n_b": 10,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 4.341770085011376,
+                      "stat_b": 4.396603390341625,
+                      "p95_a": 7.171531765925463,
+                      "p95_b": 6.805145197722595,
+                      "p95_ratio": 0.9489109746478844,
+                      "d": 0.012550167419778716,
+                      "state": "CONTINUE"
+                    },
+                    "stock_decrement": {
+                      "n_a": 16,
+                      "n_b": 16,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 3.55712331702307,
+                      "stat_b": 3.5422846972323896,
+                      "p95_a": 6.8043566243432,
+                      "p95_b": 7.119746263924753,
+                      "p95_ratio": 1.0463511331039321,
+                      "d": -0.004180247527388869,
+                      "state": "CONTINUE"
+                    },
+                    "picker_queue_read": {
+                      "n_a": 4,
+                      "n_b": 4,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 36.955880184905254,
+                      "stat_b": 39.25657819127082,
+                      "p95_a": 40.43844330772117,
+                      "p95_b": 54.3135463798535,
+                      "p95_ratio": 1.3431166468636804,
+                      "d": 0.06039425371343308,
+                      "state": "CONTINUE"
+                    }
+                  }
+                },
+                {
+                  "index": 2,
+                  "seed": 3368118915,
+                  "scheduled": 79,
+                  "valid": true,
+                  "a_metadata": {
+                    "valid": true,
+                    "profile": "normal",
+                    "seed": 3368118915,
+                    "scheduled": 79,
+                    "completed": 79,
+                    "created_orders": 19,
+                    "oos": {
+                      "place_order": 16,
+                      "update_status": 0,
+                      "order_status": 0,
+                      "stock_decrement": 1,
+                      "picker_queue_read": 0
+                    },
+                    "workload_lag_ms": 5.059173017798457,
+                    "queue_lag_p95_ms": 5.072120942350011,
+                    "actual_seconds": 2.020900542003801,
+                    "timeline": null
+                  },
+                  "b_metadata": {
+                    "valid": true,
+                    "profile": "normal",
+                    "seed": 3368118915,
+                    "scheduled": 79,
+                    "completed": 79,
+                    "created_orders": 19,
+                    "oos": {
+                      "place_order": 16,
+                      "update_status": 0,
+                      "order_status": 0,
+                      "stock_decrement": 1,
+                      "picker_queue_read": 0
+                    },
+                    "workload_lag_ms": 5.129454460984562,
+                    "queue_lag_p95_ms": 5.066927823645528,
+                    "actual_seconds": 2.016948290998698,
+                    "timeline": null
+                  },
+                  "transactions": {
+                    "place_order": {
+                      "n_a": 35,
+                      "n_b": 35,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 8.193168023509704,
+                      "stat_b": 7.801761734923015,
+                      "p95_a": 13.660484534921125,
+                      "p95_b": 12.535226042382416,
+                      "p95_ratio": 0.9176267511110501,
+                      "d": -0.048951067484379704,
+                      "state": "CONTINUE"
+                    },
+                    "update_status": {
+                      "n_a": 19,
+                      "n_b": 19,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 6.331494881841967,
+                      "stat_b": 6.567501088858607,
+                      "p95_a": 8.830345636670241,
+                      "p95_b": 10.119447100441901,
+                      "p95_ratio": 1.1459853913779252,
+                      "d": 0.03659704182855216,
+                      "state": "CONTINUE"
+                    },
+                    "order_status": {
+                      "n_a": 16,
+                      "n_b": 16,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 4.216426093535119,
+                      "stat_b": 4.783524715548992,
+                      "p95_a": 9.13053828298871,
+                      "p95_b": 7.977915063747787,
+                      "p95_ratio": 0.8737617450891808,
+                      "d": 0.12618979099516692,
+                      "state": "CONTINUE"
+                    },
+                    "stock_decrement": {
+                      "n_a": 6,
+                      "n_b": 6,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 4.1596602616967475,
+                      "stat_b": 5.439965259332287,
+                      "p95_a": 5.240258065896342,
+                      "p95_b": 7.051814134683809,
+                      "p95_ratio": 1.345699781576998,
+                      "d": 0.2683392716184949,
+                      "state": "CONTINUE"
+                    },
+                    "picker_queue_read": {
+                      "n_a": 3,
+                      "n_b": 3,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 33.1610948536157,
+                      "stat_b": 33.47638618288329,
+                      "p95_a": 36.56425051667611,
+                      "p95_b": 35.541095153894275,
+                      "p95_ratio": 0.9720176033058521,
+                      "d": 0.009462953195568724,
+                      "state": "CONTINUE"
+                    }
+                  }
+                },
+                {
+                  "index": 3,
+                  "seed": 3368118916,
+                  "scheduled": 84,
+                  "valid": true,
+                  "a_metadata": {
+                    "valid": true,
+                    "profile": "normal",
+                    "seed": 3368118916,
+                    "scheduled": 84,
+                    "completed": 84,
+                    "created_orders": 22,
+                    "oos": {
+                      "place_order": 17,
+                      "update_status": 0,
+                      "order_status": 0,
+                      "stock_decrement": 2,
+                      "picker_queue_read": 0
+                    },
+                    "workload_lag_ms": 5.151939418283291,
+                    "queue_lag_p95_ms": 5.0878584836027585,
+                    "actual_seconds": 2.0211459169950103,
+                    "timeline": null
+                  },
+                  "b_metadata": {
+                    "valid": true,
+                    "profile": "normal",
+                    "seed": 3368118916,
+                    "scheduled": 84,
+                    "completed": 84,
+                    "created_orders": 22,
+                    "oos": {
+                      "place_order": 17,
+                      "update_status": 0,
+                      "order_status": 0,
+                      "stock_decrement": 2,
+                      "picker_queue_read": 0
+                    },
+                    "workload_lag_ms": 5.145730065123644,
+                    "queue_lag_p95_ms": 5.078620287167723,
+                    "actual_seconds": 2.02305575000355,
+                    "timeline": null
+                  },
+                  "transactions": {
+                    "place_order": {
+                      "n_a": 39,
+                      "n_b": 39,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 7.0703727098402736,
+                      "stat_b": 6.853988532384392,
+                      "p95_a": 12.651674883090891,
+                      "p95_b": 12.776548746478511,
+                      "p95_ratio": 1.0098701448260037,
+                      "d": -0.031082445287402942,
+                      "state": "CONTINUE"
+                    },
+                    "update_status": {
+                      "n_a": 19,
+                      "n_b": 19,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 5.6485801530805855,
+                      "stat_b": 4.749690154552043,
+                      "p95_a": 9.294772207795177,
+                      "p95_b": 7.377105177874909,
+                      "p95_ratio": 0.7936832676424289,
+                      "d": -0.17332482793909088,
+                      "state": "CONTINUE"
+                    },
+                    "order_status": {
+                      "n_a": 11,
+                      "n_b": 11,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 5.560709721810946,
+                      "stat_b": 4.73888427156701,
+                      "p95_a": 7.990136902662925,
+                      "p95_b": 6.727023090206785,
+                      "p95_ratio": 0.8419158735521572,
+                      "d": -0.1599240256698709,
+                      "state": "CONTINUE"
+                    },
+                    "stock_decrement": {
+                      "n_a": 11,
+                      "n_b": 11,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 4.510519899750679,
+                      "stat_b": 4.825182991970161,
+                      "p95_a": 7.516467605455546,
+                      "p95_b": 7.936322108434979,
+                      "p95_ratio": 1.055857954163828,
+                      "d": 0.06743623589143635,
+                      "state": "CONTINUE"
+                    },
+                    "picker_queue_read": {
+                      "n_a": 4,
+                      "n_b": 4,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 36.26415723374521,
+                      "stat_b": 35.79583448845369,
+                      "p95_a": 43.73139526578598,
+                      "p95_b": 41.50362032196426,
+                      "p95_ratio": 0.9490577666163638,
+                      "d": -0.012998317871503701,
+                      "state": "CONTINUE"
+                    }
+                  }
+                },
+                {
+                  "index": 4,
+                  "seed": 3368118917,
+                  "scheduled": 75,
+                  "valid": true,
+                  "a_metadata": {
+                    "valid": true,
+                    "profile": "normal",
+                    "seed": 3368118917,
+                    "scheduled": 75,
+                    "completed": 75,
+                    "created_orders": 16,
+                    "oos": {
+                      "place_order": 14,
+                      "update_status": 0,
+                      "order_status": 0,
+                      "stock_decrement": 2,
+                      "picker_queue_read": 0
+                    },
+                    "workload_lag_ms": 5.041817443270702,
+                    "queue_lag_p95_ms": 5.077234580676304,
+                    "actual_seconds": 2.018778249999741,
+                    "timeline": null
+                  },
+                  "b_metadata": {
+                    "valid": true,
+                    "profile": "normal",
+                    "seed": 3368118917,
+                    "scheduled": 75,
+                    "completed": 75,
+                    "created_orders": 16,
+                    "oos": {
+                      "place_order": 14,
+                      "update_status": 0,
+                      "order_status": 0,
+                      "stock_decrement": 2,
+                      "picker_queue_read": 0
+                    },
+                    "workload_lag_ms": 5.113775434438139,
+                    "queue_lag_p95_ms": 5.090476843906799,
+                    "actual_seconds": 2.016201374994125,
+                    "timeline": null
+                  },
+                  "transactions": {
+                    "place_order": {
+                      "n_a": 30,
+                      "n_b": 30,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 8.231454419728834,
+                      "stat_b": 8.896421049090955,
+                      "p95_a": 12.364412834358516,
+                      "p95_b": 13.460150951141257,
+                      "p95_ratio": 1.0886203114908843,
+                      "d": 0.07768634575451255,
+                      "state": "CONTINUE"
+                    },
+                    "update_status": {
+                      "n_a": 18,
+                      "n_b": 18,
+                      "unexpected_errors_a": 2,
+                      "unexpected_errors_b": 2,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 5.747944125889465,
+                      "stat_b": 5.172048232957928,
+                      "p95_a": 7.984049665901691,
+                      "p95_b": 8.088197205142931,
+                      "p95_ratio": 1.013044450322752,
+                      "d": -0.10557346090111203,
+                      "state": "CONTINUE"
+                    },
+                    "order_status": {
+                      "n_a": 13,
+                      "n_b": 13,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 3.6214851391447995,
+                      "stat_b": 4.1367222880720735,
+                      "p95_a": 7.034829306940079,
+                      "p95_b": 6.8639183504274115,
+                      "p95_ratio": 0.9757050314861146,
+                      "d": 0.1330195552695802,
+                      "state": "CONTINUE"
+                    },
+                    "stock_decrement": {
+                      "n_a": 10,
+                      "n_b": 10,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 4.574409300403204,
+                      "stat_b": 4.449355396354804,
+                      "p95_a": 8.72334854211658,
+                      "p95_b": 9.484797173718105,
+                      "p95_ratio": 1.0872885713467975,
+                      "d": -0.0277183447915457,
+                      "state": "CONTINUE"
+                    },
+                    "picker_queue_read": {
+                      "n_a": 4,
+                      "n_b": 4,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 26.204318073723698,
+                      "stat_b": 29.056495068289223,
+                      "p95_a": 33.84012574024382,
+                      "p95_b": 37.04122573653876,
+                      "p95_ratio": 1.0945948020662373,
+                      "d": 0.10331783153103809,
+                      "state": "CONTINUE"
+                    }
+                  }
+                },
+                {
+                  "index": 5,
+                  "seed": 3368118918,
+                  "scheduled": 68,
+                  "valid": true,
+                  "a_metadata": {
+                    "valid": true,
+                    "profile": "normal",
+                    "seed": 3368118918,
+                    "scheduled": 68,
+                    "completed": 68,
+                    "created_orders": 18,
+                    "oos": {
+                      "place_order": 20,
+                      "update_status": 0,
+                      "order_status": 0,
+                      "stock_decrement": 1,
+                      "picker_queue_read": 0
+                    },
+                    "workload_lag_ms": 5.054199231381062,
+                    "queue_lag_p95_ms": 5.073152000841219,
+                    "actual_seconds": 2.02413649999653,
+                    "timeline": null
+                  },
+                  "b_metadata": {
+                    "valid": true,
+                    "profile": "normal",
+                    "seed": 3368118918,
+                    "scheduled": 68,
+                    "completed": 68,
+                    "created_orders": 18,
+                    "oos": {
+                      "place_order": 20,
+                      "update_status": 0,
+                      "order_status": 0,
+                      "stock_decrement": 1,
+                      "picker_queue_read": 0
+                    },
+                    "workload_lag_ms": 5.037385853938758,
+                    "queue_lag_p95_ms": 5.0595090484421235,
+                    "actual_seconds": 2.016062458002125,
+                    "timeline": null
+                  },
+                  "transactions": {
+                    "place_order": {
+                      "n_a": 38,
+                      "n_b": 38,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 8.194248506793214,
+                      "stat_b": 8.15713872227781,
+                      "p95_a": 11.44613518627011,
+                      "p95_b": 12.308927784033584,
+                      "p95_ratio": 1.0753785084417324,
+                      "d": -0.004539045857053315,
+                      "state": "CONTINUE"
+                    },
+                    "update_status": {
+                      "n_a": 11,
+                      "n_b": 11,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 5.637890960232736,
+                      "stat_b": 5.382292601015334,
+                      "p95_a": 8.367239111976232,
+                      "p95_b": 9.842304571066052,
+                      "p95_ratio": 1.1762905827536974,
+                      "d": -0.046395634932521884,
+                      "state": "CONTINUE"
+                    },
+                    "order_status": {
+                      "n_a": 9,
+                      "n_b": 9,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 6.112798834187237,
+                      "stat_b": 5.194256949632997,
+                      "p95_a": 7.599303002643865,
+                      "p95_b": 7.6584530077525415,
+                      "p95_ratio": 1.0077836092452293,
+                      "d": -0.16283116014533922,
+                      "state": "CONTINUE"
+                    },
+                    "stock_decrement": {
+                      "n_a": 6,
+                      "n_b": 6,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 3.4034905414349246,
+                      "stat_b": 4.915580546366982,
+                      "p95_a": 5.905756235733861,
+                      "p95_b": 8.32324574184895,
+                      "p95_ratio": 1.4093446139018786,
+                      "d": 0.3676083290588587,
+                      "state": "CONTINUE"
+                    },
+                    "picker_queue_read": {
+                      "n_a": 4,
+                      "n_b": 4,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 24.294814253153163,
+                      "stat_b": 25.08986651082523,
+                      "p95_a": 28.908144676097436,
+                      "p95_b": 30.21507778321393,
+                      "p95_ratio": 1.0452098576978939,
+                      "d": 0.03220111759834121,
+                      "state": "CONTINUE"
+                    }
+                  }
+                },
+                {
+                  "index": 6,
+                  "seed": 3368118919,
+                  "scheduled": 70,
+                  "valid": true,
+                  "a_metadata": {
+                    "valid": true,
+                    "profile": "normal",
+                    "seed": 3368118919,
+                    "scheduled": 70,
+                    "completed": 70,
+                    "created_orders": 14,
+                    "oos": {
+                      "place_order": 22,
+                      "update_status": 0,
+                      "order_status": 0,
+                      "stock_decrement": 1,
+                      "picker_queue_read": 0
+                    },
+                    "workload_lag_ms": 5.049881809100043,
+                    "queue_lag_p95_ms": 5.067639774279087,
+                    "actual_seconds": 2.0144057090001297,
+                    "timeline": null
+                  },
+                  "b_metadata": {
+                    "valid": true,
+                    "profile": "normal",
+                    "seed": 3368118919,
+                    "scheduled": 70,
+                    "completed": 70,
+                    "created_orders": 14,
+                    "oos": {
+                      "place_order": 22,
+                      "update_status": 0,
+                      "order_status": 0,
+                      "stock_decrement": 1,
+                      "picker_queue_read": 0
+                    },
+                    "workload_lag_ms": 5.077418863947969,
+                    "queue_lag_p95_ms": 5.105593970438349,
+                    "actual_seconds": 2.016887416000827,
+                    "timeline": null
+                  },
+                  "transactions": {
+                    "place_order": {
+                      "n_a": 36,
+                      "n_b": 36,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 8.288860707681225,
+                      "stat_b": 8.36532184762796,
+                      "p95_a": 14.368268002726836,
+                      "p95_b": 13.482843372912612,
+                      "p95_ratio": 0.9383763840118944,
+                      "d": 0.00918227921693109,
+                      "state": "CONTINUE"
+                    },
+                    "update_status": {
+                      "n_a": 18,
+                      "n_b": 18,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 5.403465165727539,
+                      "stat_b": 5.356332555594337,
+                      "p95_a": 8.15643213172734,
+                      "p95_b": 9.97520729943062,
+                      "p95_ratio": 1.222986612078645,
+                      "d": -0.008760928935858905,
+                      "state": "CONTINUE"
+                    },
+                    "order_status": {
+                      "n_a": 7,
+                      "n_b": 7,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 5.632943854184954,
+                      "stat_b": 5.519229281552335,
+                      "p95_a": 7.866553320491221,
+                      "p95_b": 7.514975344383856,
+                      "p95_ratio": 0.9553072404414326,
+                      "d": -0.020393964926758955,
+                      "state": "CONTINUE"
+                    },
+                    "stock_decrement": {
+                      "n_a": 6,
+                      "n_b": 6,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 5.419357830154088,
+                      "stat_b": 5.874336498285023,
+                      "p95_a": 7.2918609312182525,
+                      "p95_b": 8.82994981839147,
+                      "p95_ratio": 1.2109322848695976,
+                      "d": 0.0806157902796173,
+                      "state": "CONTINUE"
+                    },
+                    "picker_queue_read": {
+                      "n_a": 3,
+                      "n_b": 3,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 37.496271055715624,
+                      "stat_b": 39.95431205597318,
+                      "p95_a": 42.95700242873863,
+                      "p95_b": 40.04635253440938,
+                      "p95_ratio": 0.9322427141149402,
+                      "d": 0.0634951131895292,
+                      "state": "CONTINUE"
+                    }
+                  }
+                },
+                {
+                  "index": 7,
+                  "seed": 3368118920,
+                  "scheduled": 75,
+                  "valid": true,
+                  "a_metadata": {
+                    "valid": true,
+                    "profile": "normal",
+                    "seed": 3368118920,
+                    "scheduled": 75,
+                    "completed": 75,
+                    "created_orders": 26,
+                    "oos": {
+                      "place_order": 7,
+                      "update_status": 0,
+                      "order_status": 0,
+                      "stock_decrement": 0,
+                      "picker_queue_read": 0
+                    },
+                    "workload_lag_ms": 5.063314252765849,
+                    "queue_lag_p95_ms": 5.068835389829474,
+                    "actual_seconds": 2.0217034579982283,
+                    "timeline": null
+                  },
+                  "b_metadata": {
+                    "valid": true,
+                    "profile": "normal",
+                    "seed": 3368118920,
+                    "scheduled": 75,
+                    "completed": 75,
+                    "created_orders": 26,
+                    "oos": {
+                      "place_order": 7,
+                      "update_status": 0,
+                      "order_status": 0,
+                      "stock_decrement": 0,
+                      "picker_queue_read": 0
+                    },
+                    "workload_lag_ms": 5.071508232504129,
+                    "queue_lag_p95_ms": 5.0807944768166635,
+                    "actual_seconds": 2.0231250830038334,
+                    "timeline": null
+                  },
+                  "transactions": {
+                    "place_order": {
+                      "n_a": 33,
+                      "n_b": 33,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 8.647505466245947,
+                      "stat_b": 7.93299544139617,
+                      "p95_a": 13.932265287439805,
+                      "p95_b": 12.772500263235997,
+                      "p95_ratio": 0.9167568948569077,
+                      "d": -0.08624019426599969,
+                      "state": "CONTINUE"
+                    },
+                    "update_status": {
+                      "n_a": 13,
+                      "n_b": 13,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 6.981333478156907,
+                      "stat_b": 7.311855944863055,
+                      "p95_a": 10.716154193505645,
+                      "p95_b": 11.331152677303178,
+                      "p95_ratio": 1.0573898501918013,
+                      "d": 0.0462571915190655,
+                      "state": "CONTINUE"
+                    },
+                    "order_status": {
+                      "n_a": 14,
+                      "n_b": 14,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 3.5375003083442738,
+                      "stat_b": 3.493417027909475,
+                      "p95_a": 6.808579169592121,
+                      "p95_b": 6.9195501564536235,
+                      "p95_ratio": 1.0162986996401704,
+                      "d": -0.012540001824989015,
+                      "state": "CONTINUE"
+                    },
+                    "stock_decrement": {
+                      "n_a": 12,
+                      "n_b": 12,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 6.215380307063849,
+                      "stat_b": 5.168067980169629,
+                      "p95_a": 9.012342194546363,
+                      "p95_b": 8.181580128803033,
+                      "p95_ratio": 0.9078195159693282,
+                      "d": -0.18452799444347476,
+                      "state": "CONTINUE"
+                    },
+                    "picker_queue_read": {
+                      "n_a": 3,
+                      "n_b": 3,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 37.71675217528051,
+                      "stat_b": 37.064502180631585,
+                      "p95_a": 39.632369831088,
+                      "p95_b": 39.21472691799863,
+                      "p95_ratio": 0.9894620757005107,
+                      "d": -0.01744465350366051,
+                      "state": "CONTINUE"
+                    }
+                  }
+                },
+                {
+                  "index": 8,
+                  "seed": 3368118921,
+                  "scheduled": 72,
+                  "valid": true,
+                  "a_metadata": {
+                    "valid": true,
+                    "profile": "normal",
+                    "seed": 3368118921,
+                    "scheduled": 72,
+                    "completed": 72,
+                    "created_orders": 21,
+                    "oos": {
+                      "place_order": 15,
+                      "update_status": 0,
+                      "order_status": 0,
+                      "stock_decrement": 0,
+                      "picker_queue_read": 0
+                    },
+                    "workload_lag_ms": 5.056433037680108,
+                    "queue_lag_p95_ms": 5.0581367660925025,
+                    "actual_seconds": 2.0154927919938928,
+                    "timeline": null
+                  },
+                  "b_metadata": {
+                    "valid": true,
+                    "profile": "normal",
+                    "seed": 3368118921,
+                    "scheduled": 72,
+                    "completed": 72,
+                    "created_orders": 21,
+                    "oos": {
+                      "place_order": 15,
+                      "update_status": 0,
+                      "order_status": 0,
+                      "stock_decrement": 0,
+                      "picker_queue_read": 0
+                    },
+                    "workload_lag_ms": 6.201953241543379,
+                    "queue_lag_p95_ms": 5.0698014681984205,
+                    "actual_seconds": 2.013483874994563,
+                    "timeline": null
+                  },
+                  "transactions": {
+                    "place_order": {
+                      "n_a": 36,
+                      "n_b": 36,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 7.436190540829557,
+                      "stat_b": 7.864329457637116,
+                      "p95_a": 12.049692248183419,
+                      "p95_b": 14.133100641629426,
+                      "p95_ratio": 1.1729013779385193,
+                      "d": 0.055978582743063214,
+                      "state": "CONTINUE"
+                    },
+                    "update_status": {
+                      "n_a": 15,
+                      "n_b": 15,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 4.810513990620772,
+                      "stat_b": 5.007327925219822,
+                      "p95_a": 8.944828562380279,
+                      "p95_b": 8.269620208739068,
+                      "p95_ratio": 0.9245141090259719,
+                      "d": 0.04009848739088462,
+                      "state": "CONTINUE"
+                    },
+                    "order_status": {
+                      "n_a": 10,
+                      "n_b": 10,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 3.3127906499430537,
+                      "stat_b": 3.9881448486994486,
+                      "p95_a": 7.180950410838703,
+                      "p95_b": 7.79401124382275,
+                      "p95_ratio": 1.085373216344554,
+                      "d": 0.18553524173612185,
+                      "state": "CONTINUE"
+                    },
+                    "stock_decrement": {
+                      "n_a": 8,
+                      "n_b": 8,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 4.44918516495818,
+                      "stat_b": 4.825398666071123,
+                      "p95_a": 6.9825432721700045,
+                      "p95_b": 7.5095575106388415,
+                      "p95_ratio": 1.0754759717092386,
+                      "d": 0.08117238605665739,
+                      "state": "CONTINUE"
+                    },
+                    "picker_queue_read": {
+                      "n_a": 3,
+                      "n_b": 3,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 34.93750778822383,
+                      "stat_b": 34.5223547895633,
+                      "p95_a": 38.51565370641765,
+                      "p95_b": 41.66218377649784,
+                      "p95_ratio": 1.081694837482556,
+                      "d": -0.011953894720475759,
+                      "state": "CONTINUE"
+                    }
+                  }
+                },
+                {
+                  "index": 9,
+                  "seed": 3368118922,
+                  "scheduled": 82,
+                  "valid": true,
+                  "a_metadata": {
+                    "valid": true,
+                    "profile": "normal",
+                    "seed": 3368118922,
+                    "scheduled": 82,
+                    "completed": 82,
+                    "created_orders": 26,
+                    "oos": {
+                      "place_order": 13,
+                      "update_status": 0,
+                      "order_status": 0,
+                      "stock_decrement": 1,
+                      "picker_queue_read": 0
+                    },
+                    "workload_lag_ms": 5.038356430304702,
+                    "queue_lag_p95_ms": 5.075051476887893,
+                    "actual_seconds": 2.0177487499968265,
+                    "timeline": null
+                  },
+                  "b_metadata": {
+                    "valid": true,
+                    "profile": "normal",
+                    "seed": 3368118922,
+                    "scheduled": 82,
+                    "completed": 82,
+                    "created_orders": 26,
+                    "oos": {
+                      "place_order": 13,
+                      "update_status": 0,
+                      "order_status": 0,
+                      "stock_decrement": 1,
+                      "picker_queue_read": 0
+                    },
+                    "workload_lag_ms": 5.045536236139014,
+                    "queue_lag_p95_ms": 5.050523093450465,
+                    "actual_seconds": 2.0165471250002156,
+                    "timeline": null
+                  },
+                  "transactions": {
+                    "place_order": {
+                      "n_a": 39,
+                      "n_b": 39,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 8.49283934393241,
+                      "stat_b": 7.183046293973278,
+                      "p95_a": 12.940940308908468,
+                      "p95_b": 11.048376179678598,
+                      "p95_ratio": 0.853753739368766,
+                      "d": -0.16749981031938388,
+                      "state": "CONTINUE"
+                    },
+                    "update_status": {
+                      "n_a": 15,
+                      "n_b": 15,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 6.1802965656776605,
+                      "stat_b": 4.2800267682954045,
+                      "p95_a": 10.256499411480036,
+                      "p95_b": 6.881135928415459,
+                      "p95_ratio": 0.6709049210994393,
+                      "d": -0.3674069944431701,
+                      "state": "CONTINUE"
+                    },
+                    "order_status": {
+                      "n_a": 12,
+                      "n_b": 12,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 4.31764087988995,
+                      "stat_b": 4.230713548774172,
+                      "p95_a": 7.325993000267772,
+                      "p95_b": 6.929647787546855,
+                      "p95_ratio": 0.9458987726706223,
+                      "d": -0.020338493989578453,
+                      "state": "CONTINUE"
+                    },
+                    "stock_decrement": {
+                      "n_a": 12,
+                      "n_b": 12,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 6.161308040342798,
+                      "stat_b": 5.097620123099962,
+                      "p95_a": 9.148609254407347,
+                      "p95_b": 7.242224611763958,
+                      "p95_ratio": 0.7916202791451622,
+                      "d": -0.18951531092572793,
+                      "state": "CONTINUE"
+                    },
+                    "picker_queue_read": {
+                      "n_a": 4,
+                      "n_b": 4,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 25.3890891217452,
+                      "stat_b": 25.537880377669353,
+                      "p95_a": 31.96281932541751,
+                      "p95_b": 30.933536907468806,
+                      "p95_ratio": 0.9677975084904292,
+                      "d": 0.005843335299712878,
+                      "state": "CONTINUE"
+                    }
+                  }
+                },
+                {
+                  "index": 10,
+                  "seed": 3368118923,
+                  "scheduled": 76,
+                  "valid": true,
+                  "a_metadata": {
+                    "valid": true,
+                    "profile": "normal",
+                    "seed": 3368118923,
+                    "scheduled": 76,
+                    "completed": 76,
+                    "created_orders": 24,
+                    "oos": {
+                      "place_order": 13,
+                      "update_status": 0,
+                      "order_status": 0,
+                      "stock_decrement": 3,
+                      "picker_queue_read": 0
+                    },
+                    "workload_lag_ms": 5.083560303319246,
+                    "queue_lag_p95_ms": 5.071726731330273,
+                    "actual_seconds": 2.018431500000588,
+                    "timeline": null
+                  },
+                  "b_metadata": {
+                    "valid": true,
+                    "profile": "normal",
+                    "seed": 3368118923,
+                    "scheduled": 76,
+                    "completed": 76,
+                    "created_orders": 24,
+                    "oos": {
+                      "place_order": 13,
+                      "update_status": 0,
+                      "order_status": 0,
+                      "stock_decrement": 3,
+                      "picker_queue_read": 0
+                    },
+                    "workload_lag_ms": 5.071584018878639,
+                    "queue_lag_p95_ms": 5.090189153634128,
+                    "actual_seconds": 2.0240547499997774,
+                    "timeline": null
+                  },
+                  "transactions": {
+                    "place_order": {
+                      "n_a": 37,
+                      "n_b": 37,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 8.076451848987867,
+                      "stat_b": 8.381568579942403,
+                      "p95_a": 14.666476813727051,
+                      "p95_b": 16.442645451752465,
+                      "p95_ratio": 1.1211039747707516,
+                      "d": 0.03708242986738613,
+                      "state": "CONTINUE"
+                    },
+                    "update_status": {
+                      "n_a": 21,
+                      "n_b": 21,
+                      "unexpected_errors_a": 1,
+                      "unexpected_errors_b": 1,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 6.389042492845052,
+                      "stat_b": 8.044442873575637,
+                      "p95_a": 9.386601304868236,
+                      "p95_b": 10.600076551781967,
+                      "p95_ratio": 1.1292773824626363,
+                      "d": 0.23039711424525705,
+                      "state": "CONTINUE"
+                    },
+                    "order_status": {
+                      "n_a": 8,
+                      "n_b": 8,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 4.462471391889267,
+                      "stat_b": 4.414366642777168,
+                      "p95_a": 7.155301571037853,
+                      "p95_b": 7.177433671313337,
+                      "p95_ratio": 1.0030931051690493,
+                      "d": -0.010838368308542365,
+                      "state": "CONTINUE"
+                    },
+                    "stock_decrement": {
+                      "n_a": 9,
+                      "n_b": 9,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 4.15027299863545,
+                      "stat_b": 5.546800329789726,
+                      "p95_a": 7.477915669733191,
+                      "p95_b": 8.459900501475204,
+                      "p95_ratio": 1.1313179868712064,
+                      "d": 0.2900471294706874,
+                      "state": "CONTINUE"
+                    },
+                    "picker_queue_read": {
+                      "n_a": 1,
+                      "n_b": 1,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 25.547070523316506,
+                      "stat_b": 33.321237526251934,
+                      "p95_a": 25.547070523316506,
+                      "p95_b": 33.321237526251934,
+                      "p95_ratio": 1.3043075720106554,
+                      "d": 0.26567230379828355,
+                      "state": "CONTINUE"
+                    }
+                  }
+                },
+                {
+                  "index": 11,
+                  "seed": 3368118924,
+                  "scheduled": 73,
+                  "valid": true,
+                  "a_metadata": {
+                    "valid": true,
+                    "profile": "normal",
+                    "seed": 3368118924,
+                    "scheduled": 73,
+                    "completed": 73,
+                    "created_orders": 13,
+                    "oos": {
+                      "place_order": 15,
+                      "update_status": 0,
+                      "order_status": 0,
+                      "stock_decrement": 0,
+                      "picker_queue_read": 0
+                    },
+                    "workload_lag_ms": 5.0435761659173295,
+                    "queue_lag_p95_ms": 5.076184113568161,
+                    "actual_seconds": 2.018797083001118,
+                    "timeline": null
+                  },
+                  "b_metadata": {
+                    "valid": true,
+                    "profile": "normal",
+                    "seed": 3368118924,
+                    "scheduled": 73,
+                    "completed": 73,
+                    "created_orders": 13,
+                    "oos": {
+                      "place_order": 15,
+                      "update_status": 0,
+                      "order_status": 0,
+                      "stock_decrement": 0,
+                      "picker_queue_read": 0
+                    },
+                    "workload_lag_ms": 5.063229546067305,
+                    "queue_lag_p95_ms": 5.080765215097927,
+                    "actual_seconds": 2.025647709000623,
+                    "timeline": null
+                  },
+                  "transactions": {
+                    "place_order": {
+                      "n_a": 28,
+                      "n_b": 28,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 6.878481322928565,
+                      "stat_b": 6.709206679910754,
+                      "p95_a": 12.299679280476992,
+                      "p95_b": 11.374910883387201,
+                      "p95_ratio": 0.9248136170056357,
+                      "d": -0.024917175160183994,
+                      "state": "BLOCK"
+                    },
+                    "update_status": {
+                      "n_a": 20,
+                      "n_b": 20,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 5.596406065888004,
+                      "stat_b": 6.372502565136529,
+                      "p95_a": 9.004218106565533,
+                      "p95_b": 10.90237182324927,
+                      "p95_ratio": 1.2108071677317185,
+                      "d": 0.12986764203278556,
+                      "state": "BLOCK"
+                    },
+                    "order_status": {
+                      "n_a": 10,
+                      "n_b": 10,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 5.462752624589484,
+                      "stat_b": 5.175661724206293,
+                      "p95_a": 8.625232175472775,
+                      "p95_b": 7.993195395829388,
+                      "p95_ratio": 0.9267223459281845,
+                      "d": -0.05398560602810205,
+                      "state": "BLOCK"
+                    },
+                    "stock_decrement": {
+                      "n_a": 10,
+                      "n_b": 10,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 4.230833694600733,
+                      "stat_b": 4.518017595546553,
+                      "p95_a": 8.26048072594858,
+                      "p95_b": 7.591460197363629,
+                      "p95_ratio": 0.9190094922098949,
+                      "d": 0.0656742480210293,
+                      "state": "BLOCK"
+                    },
+                    "picker_queue_read": {
+                      "n_a": 5,
+                      "n_b": 5,
+                      "unexpected_errors_a": 0,
+                      "unexpected_errors_b": 0,
+                      "error_rate_delta": 0.0,
+                      "stat_a": 29.592897174006794,
+                      "stat_b": 29.977606174361426,
+                      "p95_a": 40.15918435470667,
+                      "p95_b": 38.90627615473932,
+                      "p95_ratio": 0.9688014530150558,
+                      "d": 0.012916269869593265,
+                      "state": "BLOCK"
+                    }
+                  }
+                }
+              ],
+              "block_seconds": 2,
+              "base_rate_tps": 41,
+              "guard_stat": "mean",
+              "workload": "custom",
+              "prepare": {
+                "a": {
+                  "profile": "normal",
+                  "seed": 3368118913,
+                  "new_products": 0,
+                  "hot_qty": 1000000,
+                  "hot_set_max": 50,
+                  "analyzed": false,
+                  "autovacuum": "left enabled; may analyze asynchronously",
+                  "seconds": 0.01909312499628868
+                },
+                "b": {
+                  "profile": "normal",
+                  "seed": 3368118913,
+                  "new_products": 0,
+                  "hot_qty": 1000000,
+                  "hot_set_max": 50,
+                  "analyzed": false,
+                  "autovacuum": "left enabled; may analyze asynchronously",
+                  "seconds": 0.018563500001619104
+                }
+              },
+              "seconds": 48.4583785419818
+            }
+          },
+          "seconds": 64.81194779199723,
+          "blocks": {
+            "normal": 12
+          },
+          "failed_cell": null
+        }
+      },
+      {
+        "id": "20261030-052119-248f:recent_orders:02",
+        "job_id": "20261030-052119-248f",
+        "shape_id": "recent_orders",
+        "kind": "index",
+        "sql": "CREATE INDEX ON orders(customer_id)",
+        "rationale": "Test report benefit against protected write cost.",
+        "sample_idx": 0,
+        "status": "dropped_race",
+        "reason": "confidently_worse_than_leader",
+        "signature": "d0630ed13884",
+        "plan_before": {
+          "Plan": {
+            "Node Type": "Limit",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Startup Cost": 18796.54,
+            "Total Cost": 18798.88,
+            "Plan Rows": 20,
+            "Plan Width": 26,
+            "Plans": [
+              {
+                "Node Type": "Gather Merge",
+                "Parent Relationship": "Outer",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 18796.54,
+                "Total Cost": 19397.42,
+                "Plan Rows": 5150,
+                "Plan Width": 26,
+                "Workers Planned": 2,
+                "Plans": [
+                  {
+                    "Node Type": "Sort",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Startup Cost": 17796.52,
+                    "Total Cost": 17802.96,
+                    "Plan Rows": 2575,
+                    "Plan Width": 26,
+                    "Sort Key": [
+                      "created_at DESC"
+                    ],
+                    "Plans": [
+                      {
+                        "Node Type": "Seq Scan",
+                        "Parent Relationship": "Outer",
+                        "Parallel Aware": true,
+                        "Async Capable": false,
+                        "Relation Name": "orders",
+                        "Alias": "orders",
+                        "Startup Cost": 0.0,
+                        "Total Cost": 17728.0,
+                        "Plan Rows": 2575,
+                        "Plan Width": 26,
+                        "Filter": "((created_at <= '2026-10-25 12:00:00+00'::timestamp with time zone) AND (customer_id = 1) AND (created_at >= ('2026-10-25 12:00:00+00'::timestamp with time zone - '30 days'::interval)))"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "plan_after": {
+          "Plan": {
+            "Node Type": "Limit",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Startup Cost": 9694.11,
+            "Total Cost": 9694.16,
+            "Plan Rows": 20,
+            "Plan Width": 26,
+            "Plans": [
+              {
+                "Node Type": "Sort",
+                "Parent Relationship": "Outer",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 9694.11,
+                "Total Cost": 9709.56,
+                "Plan Rows": 6179,
+                "Plan Width": 26,
+                "Sort Key": [
+                  "created_at DESC"
+                ],
+                "Plans": [
+                  {
+                    "Node Type": "Bitmap Heap Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Relation Name": "orders",
+                    "Alias": "orders",
+                    "Startup Cost": 119.94,
+                    "Total Cost": 9529.69,
+                    "Plan Rows": 6179,
+                    "Plan Width": 26,
+                    "Recheck Cond": "(customer_id = 1)",
+                    "Filter": "((created_at <= '2026-10-25 12:00:00+00'::timestamp with time zone) AND (created_at >= ('2026-10-25 12:00:00+00'::timestamp with time zone - '30 days'::interval)))",
+                    "Plans": [
+                      {
+                        "Node Type": "Bitmap Index Scan",
+                        "Parent Relationship": "Outer",
+                        "Parallel Aware": false,
+                        "Async Capable": false,
+                        "Index Name": "<13625>btree_orders_customer_id",
+                        "Startup Cost": 0.0,
+                        "Total Cost": 118.4,
+                        "Plan Rows": 6180,
+                        "Plan Width": 0,
+                        "Index Cond": "(customer_id = 1)"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "equiv": null,
+        "speedup": {
+          "n": 3,
+          "mean_rel": -0.779530763867659,
+          "lower": -0.895311094408565,
+          "upper": -0.5357035799908612,
+          "sd_log": 0.16865000871882954,
+          "state": "PASS",
+          "metric": "time",
+          "n_runs": 3
+        },
+        "guard": null
+      },
+      {
+        "id": "20261030-052119-248f:recent_orders:03",
+        "job_id": "20261030-052119-248f",
+        "shape_id": "recent_orders",
+        "kind": "stats",
+        "sql": "ANALYZE orders",
+        "rationale": "Refresh planner statistics.",
+        "sample_idx": 0,
+        "status": "dropped_race",
+        "reason": "confidently_worse_than_leader",
+        "signature": "stats:analyze orders",
+        "plan_before": {
+          "Plan": {
+            "Node Type": "Limit",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Startup Cost": 18796.54,
+            "Total Cost": 18798.88,
+            "Plan Rows": 20,
+            "Plan Width": 26,
+            "Plans": [
+              {
+                "Node Type": "Gather Merge",
+                "Parent Relationship": "Outer",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 18796.54,
+                "Total Cost": 19397.42,
+                "Plan Rows": 5150,
+                "Plan Width": 26,
+                "Workers Planned": 2,
+                "Plans": [
+                  {
+                    "Node Type": "Sort",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Startup Cost": 17796.52,
+                    "Total Cost": 17802.96,
+                    "Plan Rows": 2575,
+                    "Plan Width": 26,
+                    "Sort Key": [
+                      "created_at DESC"
+                    ],
+                    "Plans": [
+                      {
+                        "Node Type": "Seq Scan",
+                        "Parent Relationship": "Outer",
+                        "Parallel Aware": true,
+                        "Async Capable": false,
+                        "Relation Name": "orders",
+                        "Alias": "orders",
+                        "Startup Cost": 0.0,
+                        "Total Cost": 17728.0,
+                        "Plan Rows": 2575,
+                        "Plan Width": 26,
+                        "Filter": "((created_at <= '2026-10-25 12:00:00+00'::timestamp with time zone) AND (customer_id = 1) AND (created_at >= ('2026-10-25 12:00:00+00'::timestamp with time zone - '30 days'::interval)))"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "plan_after": null,
+        "equiv": null,
+        "speedup": {
+          "n": 3,
+          "mean_rel": 0.016608860545422183,
+          "lower": -0.12293468614158998,
+          "upper": 0.17835417614782656,
+          "sd_log": 0.03343409254951402,
+          "state": "CONTINUE",
+          "metric": "time",
+          "n_runs": 3
+        },
+        "guard": null
+      },
+      {
+        "id": "20261030-052119-248f:recent_orders:04",
+        "job_id": "20261030-052119-248f",
+        "shape_id": "recent_orders",
+        "kind": "index",
+        "sql": "CREATE INDEX ON orders(status)",
+        "rationale": "Test report benefit against protected write cost.",
+        "sample_idx": 1,
+        "status": "skipped_noplan",
+        "reason": "plan unchanged",
+        "signature": "a6c916546141",
+        "plan_before": null,
+        "plan_after": null,
+        "equiv": null,
+        "speedup": null,
+        "guard": null
+      },
+      {
+        "id": "20261030-052119-248f:recent_orders:05",
+        "job_id": "20261030-052119-248f",
+        "shape_id": "recent_orders",
+        "kind": "index",
+        "sql": "CREATE INDEX ON orders(customer_id, created_at DESC)",
+        "rationale": "Test report benefit against protected write cost.",
+        "sample_idx": 1,
+        "status": "skipped_duplicate",
+        "reason": "duplicate_of:20261030-052119-248f:recent_orders:01",
+        "signature": null,
+        "plan_before": null,
+        "plan_after": null,
+        "equiv": null,
+        "speedup": null,
+        "guard": null
+      }
+    ],
+    "decision": {
+      "action": "block",
+      "candidate_id": null,
+      "reason": "no candidate proven safe within budget (20261030-052119-248f:recent_orders:01: guard evidence was inconclusive)",
+      "requires_confirmation": false
+    },
+    "budget": {
+      "seconds": 69.0067489159992,
+      "stage_seconds": {
+        "observe": 0.5092994160004309,
+        "propose": 0.011350749999110121,
+        "filter": 0.6903552080038935,
+        "equivalence": 0.0007212080017779954,
+        "race": 2.9528942499964614,
+        "guard_decide": 64.81346470899734
+      },
+      "paired_runs": 9,
+      "llm_calls": 2,
+      "clones_created": 8,
+      "clone_seconds": 3.0428580829975544,
+      "guard_blocks": 12
+    }
+  }
+]

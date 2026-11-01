@@ -512,6 +512,7 @@ class LiveTraffic(threading.Thread):
         self.profile, self.seconds, self.seed = profile, seconds, seed
         self.stop_event = threading.Event()
         self.latest: dict | None = None
+        self.recent: list[dict] = []
         self.error: str | None = None
 
     def start(self) -> None:
@@ -555,7 +556,11 @@ class LiveTraffic(threading.Thread):
                     "dropped": result.dropped,
                     "metadata": result.metadata,
                     "calls": {k: len(v) for k, v in result.latencies.items()},
+                    "mean_ms": {
+                        k: sum(v) / len(v) if v else None for k, v in result.latencies.items()
+                    },
                 }
+                self.recent = (self.recent + [self.latest])[-120:]
                 index += 1
         except Exception as exc:
             self.error = type(exc).__name__

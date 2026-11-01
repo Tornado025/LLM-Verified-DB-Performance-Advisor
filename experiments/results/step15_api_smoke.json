@@ -1,0 +1,31 @@
+{
+  "health": {
+    "status": "ok",
+    "postgres": true,
+    "hypopg": true,
+    "pg_stat_statements": true,
+    "golden_idle": true,
+    "llm": {
+      "provider": "mock",
+      "model": "mock",
+      "ok": true
+    },
+    "version": "0.15.0"
+  },
+  "job_id": "20261101-041102-7e44",
+  "status": "done",
+  "sse_ids": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "sse_end": true,
+  "cards": 1,
+  "openapi_status": 200
+}

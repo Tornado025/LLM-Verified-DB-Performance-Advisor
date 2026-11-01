@@ -1,0 +1,765 @@
+[
+  {
+    "id": 1,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:21:19.863050+00:00",
+    "step": "system",
+    "level": "info",
+    "message": "Job started",
+    "data": {
+      "shape_ids": [
+        "recent_orders",
+        "delivered_yesterday",
+        "payout_report"
+      ],
+      "settings": {
+        "delta": 0.05,
+        "alpha": 0.05,
+        "metric": "time",
+        "profiles": [
+          "normal"
+        ],
+        "llm": "mock",
+        "seed": 1234
+      }
+    }
+  },
+  {
+    "id": 2,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:21:20.372517+00:00",
+    "step": "observe",
+    "level": "info",
+    "message": "Baseline report measured",
+    "data": {
+      "shape_id": "recent_orders",
+      "baseline_ms": 12.6212,
+      "plan_signature": "a6c916546141",
+      "top_node": "Limit"
+    }
+  },
+  {
+    "id": 3,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:21:20.380078+00:00",
+    "step": "propose",
+    "level": "info",
+    "message": "Proposal sample completed",
+    "data": {
+      "sample": 0,
+      "raw": 3,
+      "accepted": 3,
+      "new_plans": 3,
+      "cumulative_distinct": 3,
+      "saturated": false
+    }
+  },
+  {
+    "id": 4,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:21:20.383774+00:00",
+    "step": "propose",
+    "level": "info",
+    "message": "Proposal sample completed",
+    "data": {
+      "sample": 1,
+      "raw": 2,
+      "accepted": 2,
+      "new_plans": 1,
+      "cumulative_distinct": 4,
+      "saturated": false
+    }
+  },
+  {
+    "id": 5,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:21:20.383922+00:00",
+    "step": "propose",
+    "level": "result",
+    "message": "Proposal sampling finished",
+    "data": {
+      "samples": 2,
+      "saturated": false,
+      "distinct_plan_curve": [
+        3,
+        4
+      ]
+    }
+  },
+  {
+    "id": 6,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:21:21.074497+00:00",
+    "step": "filter",
+    "level": "info",
+    "message": "Candidate plans screened",
+    "data": {
+      "shape_id": "recent_orders",
+      "kept": 3,
+      "skipped_noplan": 1,
+      "skipped_duplicate": 1,
+      "invalid_ddl": 0
+    }
+  },
+  {
+    "id": 7,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:21:23.946064+00:00",
+    "step": "race",
+    "level": "info",
+    "message": "Race measurement",
+    "data": {
+      "shape_id": "recent_orders",
+      "round": 1,
+      "alive": [
+        "20261030-052119-248f:recent_orders:01"
+      ],
+      "leader": "20261030-052119-248f:recent_orders:01",
+      "bounds": {
+        "20261030-052119-248f:recent_orders:01": [
+          -0.9998915869210757,
+          -0.981513198808931
+        ],
+        "20261030-052119-248f:recent_orders:02": [
+          -0.895311094408565,
+          -0.5357035799908612
+        ],
+        "20261030-052119-248f:recent_orders:03": [
+          -0.12293468614158998,
+          0.17835417614782656
+        ]
+      },
+      "dropped_now": [
+        "20261030-052119-248f:recent_orders:02",
+        "20261030-052119-248f:recent_orders:03"
+      ]
+    }
+  },
+  {
+    "id": 8,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:21:30.692719+00:00",
+    "step": "guard",
+    "level": "info",
+    "message": "Protected workload measured",
+    "data": {
+      "shape_id": "recent_orders",
+      "candidate_id": "20261030-052119-248f:recent_orders:01",
+      "profile": "normal",
+      "block": 1,
+      "worst_upper": null,
+      "states": {
+        "place_order": "CONTINUE",
+        "update_status": "CONTINUE",
+        "order_status": "CONTINUE",
+        "stock_decrement": "CONTINUE",
+        "picker_queue_read": "CONTINUE"
+      }
+    }
+  },
+  {
+    "id": 9,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:21:35.977761+00:00",
+    "step": "guard",
+    "level": "info",
+    "message": "Protected workload measured",
+    "data": {
+      "shape_id": "recent_orders",
+      "candidate_id": "20261030-052119-248f:recent_orders:01",
+      "profile": "normal",
+      "block": 2,
+      "worst_upper": 1.6075325890114672e+17,
+      "states": {
+        "place_order": "CONTINUE",
+        "update_status": "CONTINUE",
+        "order_status": "CONTINUE",
+        "stock_decrement": "CONTINUE",
+        "picker_queue_read": "CONTINUE"
+      }
+    }
+  },
+  {
+    "id": 10,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:21:41.279399+00:00",
+    "step": "guard",
+    "level": "info",
+    "message": "Protected workload measured",
+    "data": {
+      "shape_id": "recent_orders",
+      "candidate_id": "20261030-052119-248f:recent_orders:01",
+      "profile": "normal",
+      "block": 3,
+      "worst_upper": 28.096265396829548,
+      "states": {
+        "place_order": "CONTINUE",
+        "update_status": "CONTINUE",
+        "order_status": "CONTINUE",
+        "stock_decrement": "CONTINUE",
+        "picker_queue_read": "CONTINUE"
+      }
+    }
+  },
+  {
+    "id": 11,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:21:46.563002+00:00",
+    "step": "guard",
+    "level": "info",
+    "message": "Protected workload measured",
+    "data": {
+      "shape_id": "recent_orders",
+      "candidate_id": "20261030-052119-248f:recent_orders:01",
+      "profile": "normal",
+      "block": 4,
+      "worst_upper": 2.067610502042076,
+      "states": {
+        "place_order": "CONTINUE",
+        "update_status": "CONTINUE",
+        "order_status": "CONTINUE",
+        "stock_decrement": "CONTINUE",
+        "picker_queue_read": "CONTINUE"
+      }
+    }
+  },
+  {
+    "id": 12,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:21:51.832409+00:00",
+    "step": "guard",
+    "level": "info",
+    "message": "Protected workload measured",
+    "data": {
+      "shape_id": "recent_orders",
+      "candidate_id": "20261030-052119-248f:recent_orders:01",
+      "profile": "normal",
+      "block": 5,
+      "worst_upper": 0.8458855874153143,
+      "states": {
+        "place_order": "CONTINUE",
+        "update_status": "CONTINUE",
+        "order_status": "CONTINUE",
+        "stock_decrement": "CONTINUE",
+        "picker_queue_read": "CONTINUE"
+      }
+    }
+  },
+  {
+    "id": 13,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:21:57.117378+00:00",
+    "step": "guard",
+    "level": "info",
+    "message": "Protected workload measured",
+    "data": {
+      "shape_id": "recent_orders",
+      "candidate_id": "20261030-052119-248f:recent_orders:01",
+      "profile": "normal",
+      "block": 6,
+      "worst_upper": 0.8318298588949278,
+      "states": {
+        "place_order": "CONTINUE",
+        "update_status": "CONTINUE",
+        "order_status": "CONTINUE",
+        "stock_decrement": "CONTINUE",
+        "picker_queue_read": "CONTINUE"
+      }
+    }
+  },
+  {
+    "id": 14,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:22:02.382672+00:00",
+    "step": "guard",
+    "level": "info",
+    "message": "Protected workload measured",
+    "data": {
+      "shape_id": "recent_orders",
+      "candidate_id": "20261030-052119-248f:recent_orders:01",
+      "profile": "normal",
+      "block": 7,
+      "worst_upper": 0.6021274121474136,
+      "states": {
+        "place_order": "CONTINUE",
+        "update_status": "CONTINUE",
+        "order_status": "CONTINUE",
+        "stock_decrement": "CONTINUE",
+        "picker_queue_read": "CONTINUE"
+      }
+    }
+  },
+  {
+    "id": 15,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:22:07.687187+00:00",
+    "step": "guard",
+    "level": "info",
+    "message": "Protected workload measured",
+    "data": {
+      "shape_id": "recent_orders",
+      "candidate_id": "20261030-052119-248f:recent_orders:01",
+      "profile": "normal",
+      "block": 8,
+      "worst_upper": 0.4806463919036123,
+      "states": {
+        "place_order": "CONTINUE",
+        "update_status": "CONTINUE",
+        "order_status": "CONTINUE",
+        "stock_decrement": "CONTINUE",
+        "picker_queue_read": "CONTINUE"
+      }
+    }
+  },
+  {
+    "id": 16,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:22:12.979870+00:00",
+    "step": "guard",
+    "level": "info",
+    "message": "Protected workload measured",
+    "data": {
+      "shape_id": "recent_orders",
+      "candidate_id": "20261030-052119-248f:recent_orders:01",
+      "profile": "normal",
+      "block": 9,
+      "worst_upper": 0.4016552250979973,
+      "states": {
+        "place_order": "CONTINUE",
+        "update_status": "CONTINUE",
+        "order_status": "CONTINUE",
+        "stock_decrement": "CONTINUE",
+        "picker_queue_read": "CONTINUE"
+      }
+    }
+  },
+  {
+    "id": 17,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:22:18.241800+00:00",
+    "step": "guard",
+    "level": "info",
+    "message": "Protected workload measured",
+    "data": {
+      "shape_id": "recent_orders",
+      "candidate_id": "20261030-052119-248f:recent_orders:01",
+      "profile": "normal",
+      "block": 10,
+      "worst_upper": 0.3373519488545618,
+      "states": {
+        "place_order": "CONTINUE",
+        "update_status": "CONTINUE",
+        "order_status": "CONTINUE",
+        "stock_decrement": "CONTINUE",
+        "picker_queue_read": "CONTINUE"
+      }
+    }
+  },
+  {
+    "id": 18,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:22:23.527658+00:00",
+    "step": "guard",
+    "level": "info",
+    "message": "Protected workload measured",
+    "data": {
+      "shape_id": "recent_orders",
+      "candidate_id": "20261030-052119-248f:recent_orders:01",
+      "profile": "normal",
+      "block": 11,
+      "worst_upper": 0.3520659594081003,
+      "states": {
+        "place_order": "CONTINUE",
+        "update_status": "CONTINUE",
+        "order_status": "CONTINUE",
+        "stock_decrement": "CONTINUE",
+        "picker_queue_read": "CONTINUE"
+      }
+    }
+  },
+  {
+    "id": 19,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:22:28.787554+00:00",
+    "step": "guard",
+    "level": "info",
+    "message": "Protected workload measured",
+    "data": {
+      "shape_id": "recent_orders",
+      "candidate_id": "20261030-052119-248f:recent_orders:01",
+      "profile": "normal",
+      "block": 12,
+      "worst_upper": 0.315707740765197,
+      "states": {
+        "place_order": "BLOCK",
+        "update_status": "BLOCK",
+        "order_status": "BLOCK",
+        "stock_decrement": "BLOCK",
+        "picker_queue_read": "BLOCK"
+      }
+    }
+  },
+  {
+    "id": 20,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:22:28.869892+00:00",
+    "step": "decide",
+    "level": "result",
+    "message": "Advisory decision recorded",
+    "data": {
+      "shape_id": "recent_orders",
+      "action": "block",
+      "candidate_id": null,
+      "reason": "no candidate proven safe within budget (20261030-052119-248f:recent_orders:01: guard evidence was inconclusive)",
+      "ranking": [
+        "20261030-052119-248f:recent_orders:01",
+        "20261030-052119-248f:recent_orders:02",
+        "20261030-052119-248f:recent_orders:03"
+      ]
+    }
+  },
+  {
+    "id": 21,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:22:28.873098+00:00",
+    "step": "system",
+    "level": "result",
+    "message": "Shape evidence saved",
+    "data": {
+      "shape_id": "recent_orders",
+      "decision": "block"
+    }
+  },
+  {
+    "id": 22,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:22:29.399376+00:00",
+    "step": "observe",
+    "level": "info",
+    "message": "Baseline report measured",
+    "data": {
+      "shape_id": "delivered_yesterday",
+      "baseline_ms": 25.6886,
+      "plan_signature": "5990b66b1d77",
+      "top_node": "Aggregate"
+    }
+  },
+  {
+    "id": 23,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:22:29.409743+00:00",
+    "step": "propose",
+    "level": "info",
+    "message": "Proposal sample completed",
+    "data": {
+      "sample": 0,
+      "raw": 1,
+      "accepted": 1,
+      "new_plans": 1,
+      "cumulative_distinct": 1,
+      "saturated": false
+    }
+  },
+  {
+    "id": 24,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:22:29.419225+00:00",
+    "step": "propose",
+    "level": "info",
+    "message": "Proposal sample completed",
+    "data": {
+      "sample": 1,
+      "raw": 2,
+      "accepted": 2,
+      "new_plans": 1,
+      "cumulative_distinct": 2,
+      "saturated": false
+    }
+  },
+  {
+    "id": 25,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:22:29.419362+00:00",
+    "step": "propose",
+    "level": "result",
+    "message": "Proposal sampling finished",
+    "data": {
+      "samples": 2,
+      "saturated": false,
+      "distinct_plan_curve": [
+        1,
+        2
+      ]
+    }
+  },
+  {
+    "id": 26,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:22:29.432868+00:00",
+    "step": "filter",
+    "level": "info",
+    "message": "Candidate plans screened",
+    "data": {
+      "shape_id": "delivered_yesterday",
+      "kept": 1,
+      "skipped_noplan": 1,
+      "skipped_duplicate": 1,
+      "invalid_ddl": 0
+    }
+  },
+  {
+    "id": 27,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:22:30.732074+00:00",
+    "step": "equivalence",
+    "level": "info",
+    "message": "Rewrite checked",
+    "data": {
+      "shape_id": "delivered_yesterday",
+      "candidate_id": "20261030-052119-248f:delivered_yesterday:01",
+      "label": "tested",
+      "tier_reached": 3,
+      "reason": "tiers 0-3 completed; human approval required",
+      "rewrite_class": 1
+    }
+  },
+  {
+    "id": 28,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:22:31.438353+00:00",
+    "step": "race",
+    "level": "info",
+    "message": "Race measurement",
+    "data": {
+      "shape_id": "delivered_yesterday",
+      "round": 1,
+      "alive": [],
+      "leader": null,
+      "bounds": {
+        "20261030-052119-248f:delivered_yesterday:01": [
+          0.1508203973274108,
+          0.19479383902587827
+        ]
+      },
+      "dropped_now": [
+        "20261030-052119-248f:delivered_yesterday:01"
+      ]
+    }
+  },
+  {
+    "id": 29,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:22:31.460916+00:00",
+    "step": "decide",
+    "level": "result",
+    "message": "Advisory decision recorded",
+    "data": {
+      "shape_id": "delivered_yesterday",
+      "action": "block",
+      "candidate_id": null,
+      "reason": "no candidate improves the report",
+      "ranking": [
+        "20261030-052119-248f:delivered_yesterday:01"
+      ]
+    }
+  },
+  {
+    "id": 30,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:22:31.462477+00:00",
+    "step": "system",
+    "level": "result",
+    "message": "Shape evidence saved",
+    "data": {
+      "shape_id": "delivered_yesterday",
+      "decision": "block"
+    }
+  },
+  {
+    "id": 31,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:22:32.099370+00:00",
+    "step": "observe",
+    "level": "info",
+    "message": "Baseline report measured",
+    "data": {
+      "shape_id": "payout_report",
+      "baseline_ms": 50.1916,
+      "plan_signature": "6e5f440d00ce",
+      "top_node": "Sort"
+    }
+  },
+  {
+    "id": 32,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:22:32.106307+00:00",
+    "step": "propose",
+    "level": "info",
+    "message": "Proposal sample completed",
+    "data": {
+      "sample": 0,
+      "raw": 1,
+      "accepted": 1,
+      "new_plans": 1,
+      "cumulative_distinct": 1,
+      "saturated": false
+    }
+  },
+  {
+    "id": 33,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:22:32.115618+00:00",
+    "step": "propose",
+    "level": "info",
+    "message": "Proposal sample completed",
+    "data": {
+      "sample": 1,
+      "raw": 2,
+      "accepted": 2,
+      "new_plans": 1,
+      "cumulative_distinct": 2,
+      "saturated": false
+    }
+  },
+  {
+    "id": 34,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:22:32.115695+00:00",
+    "step": "propose",
+    "level": "result",
+    "message": "Proposal sampling finished",
+    "data": {
+      "samples": 2,
+      "saturated": false,
+      "distinct_plan_curve": [
+        1,
+        2
+      ]
+    }
+  },
+  {
+    "id": 35,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:22:32.124114+00:00",
+    "step": "filter",
+    "level": "info",
+    "message": "Candidate plans screened",
+    "data": {
+      "shape_id": "payout_report",
+      "kept": 2,
+      "skipped_noplan": 0,
+      "skipped_duplicate": 1,
+      "invalid_ddl": 0
+    }
+  },
+  {
+    "id": 36,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:22:33.367770+00:00",
+    "step": "equivalence",
+    "level": "info",
+    "message": "Rewrite checked",
+    "data": {
+      "shape_id": "payout_report",
+      "candidate_id": "20261030-052119-248f:payout_report:01",
+      "label": "tested",
+      "tier_reached": 3,
+      "reason": "tiers 0-3 completed; human approval required",
+      "rewrite_class": 3
+    }
+  },
+  {
+    "id": 37,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:22:33.392294+00:00",
+    "step": "equivalence",
+    "level": "info",
+    "message": "Rewrite checked",
+    "data": {
+      "shape_id": "payout_report",
+      "candidate_id": "20261030-052119-248f:payout_report:02",
+      "label": "rejected",
+      "tier_reached": 1,
+      "reason": "outside allowed classes",
+      "rewrite_class": null
+    }
+  },
+  {
+    "id": 38,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:22:34.148716+00:00",
+    "step": "race",
+    "level": "info",
+    "message": "Race measurement",
+    "data": {
+      "shape_id": "payout_report",
+      "round": 1,
+      "alive": [
+        "20261030-052119-248f:payout_report:01"
+      ],
+      "leader": "20261030-052119-248f:payout_report:01",
+      "bounds": {
+        "20261030-052119-248f:payout_report:01": [
+          -0.6755143643354772,
+          -0.5617832869618136
+        ]
+      },
+      "dropped_now": []
+    }
+  },
+  {
+    "id": 39,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:22:34.167794+00:00",
+    "step": "decide",
+    "level": "result",
+    "message": "Advisory decision recorded",
+    "data": {
+      "shape_id": "payout_report",
+      "action": "apply_rewrite",
+      "candidate_id": "20261030-052119-248f:payout_report:01",
+      "reason": "verified rewrite within 0.80 of the best option; zero write cost",
+      "ranking": [
+        "20261030-052119-248f:payout_report:01"
+      ]
+    }
+  },
+  {
+    "id": 40,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:22:34.169584+00:00",
+    "step": "system",
+    "level": "result",
+    "message": "Shape evidence saved",
+    "data": {
+      "shape_id": "payout_report",
+      "decision": "apply_rewrite"
+    }
+  },
+  {
+    "id": 41,
+    "job_id": "20261030-052119-248f",
+    "ts": "2026-10-30T05:22:34.169858+00:00",
+    "step": "system",
+    "level": "result",
+    "message": "Job finished",
+    "data": {
+      "shape_ids": [
+        "recent_orders",
+        "delivered_yesterday",
+        "payout_report"
+      ],
+      "settings": {
+        "delta": 0.05,
+        "alpha": 0.05,
+        "metric": "time",
+        "profiles": [
+          "normal"
+        ],
+        "llm": "mock",
+        "seed": 1234
+      },
+      "status": "done"
+    }
+  }
+]

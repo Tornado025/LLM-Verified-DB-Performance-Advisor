@@ -19,5 +19,20 @@ services:
       interval: 5s
       timeout: 3s
       retries: 20
+  backend:
+    build: ./backend
+    env_file: .env
+    environment:
+      PG_HOST: db
+      PG_PORT: 5432
+      META_DB_PATH: /app/data/meta.sqlite
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./backend/data:/app/data
+      - ./experiments:/experiments
+      - ./docs:/docs:ro
+    ports: ["8000:8000"]
 volumes:
   pgdata: {}

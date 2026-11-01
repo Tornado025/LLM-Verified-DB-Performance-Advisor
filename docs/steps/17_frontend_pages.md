@@ -98,6 +98,6 @@ Sentence case; specific verbs ("Start verification", "Approve and apply", "Rever
 * Fixture files in `src/test/fixtures/{events.json,evidence.json,experiments.json}` generated from real backend output.
 
 ## 17.13 Done checklist
-- [ ] All pages usable against the real API; screenshots saved to `docs/paper/figures/ui_*.png`
-- [ ] `npm run build && npm run test` green; Lighthouse notes in `PROGRESS.md`
+- [x] All pages usable against the real API; screenshots saved to `docs/paper/figures/ui_*.png`
+- [x] `npm run build && npm run test` green; Lighthouse notes in `PROGRESS.md`
 - [ ] Commit `step 17: frontend pages`

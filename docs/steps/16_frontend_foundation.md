@@ -98,7 +98,7 @@ export function fmtPct(x: number, digits?: number): string      // 0.0123 -> "+1
 * Smoke test rendering `<App/>` with mocked fetch: nav present, health chips render.
 
 ## 16.9 Done checklist
-- [ ] `npm run build`, `npm run typecheck`, `npm run test` pass
-- [ ] `npm run gen:api` produces types with the backend running
-- [ ] Tokens and fonts applied; dark mode works; keyboard focus visible
+- [x] `npm run build`, `npm run typecheck`, `npm run test` pass
+- [x] `npm run gen:api` produces types with the backend running
+- [x] Tokens and fonts applied; dark mode works; keyboard focus visible
 - [ ] Commit `step 16: frontend foundation`

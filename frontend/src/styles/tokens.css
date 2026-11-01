@@ -1,0 +1,32 @@
+:root {
+  color-scheme: light dark;
+  --bg: #eef1f3;
+  --surface: #ffffff;
+  --surface-2: #e3e8eb;
+  --ink: #14202b;
+  --ink-2: #51606c;
+  --line: #cbd3d9;
+  --pass: #0e7c5a;
+  --fail: #b3261e;
+  --hold: #8b5b15;
+  --accent: #0e5e7c;
+  --heading: "Bricolage Grotesque", system-ui, sans-serif;
+  --body: "Instrument Sans", system-ui, sans-serif;
+  --mono: "JetBrains Mono", monospace;
+  --radius: 6px;
+  --card-radius: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1519;
+    --surface: #172027;
+    --surface-2: #1f2a32;
+    --ink: #e6edf1;
+    --ink-2: #9baab5;
+    --line: #2c3a44;
+    --pass: #3dcf9b;
+    --fail: #ff7a70;
+    --hold: #f2b75b;
+    --accent: #5cc3e8;
+  }
+}

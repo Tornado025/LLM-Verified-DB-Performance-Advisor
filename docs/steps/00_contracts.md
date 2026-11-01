@@ -247,6 +247,7 @@ API error body: `{"error": {"code": "...", "message": "...", "detail": {...}}}`.
 | `workload` | `load_profiles() -> dict[str, ProfileSpec]`; `load_pools(dbname, profile) -> dict`; `build_schedule(profile, seconds, seed, base_rate, pools) -> list[Arrival]` (list-compatible `Schedule` preserves duration/profile/seed/pools); `run_block(dbname, schedule, workers, *, stop_event=None, record_timeline=False) -> BlockResult`; `prepare_clone(dbname, profile, seed) -> dict` (sandbox only) |
 | `benchbase` | `load_ch(db, scale) -> None`; `run_profile(db, profile, out_dir, seconds, active_warehouses=None) -> dict`; `parse_results(out_dir) -> dict[str, dict]` (per transaction, latencies in ms); `parse_summary(out_dir) -> dict` (elapsed time, requests, throughput and goodput; missing values remain null) |
 | `pipeline` | `run_job(job_id, params, store)` (blocking; call from a thread) |
+| `main` | `create_app() -> FastAPI`; `JobRunner(store).submit(params) -> str`, `.cancel(job_id)`, `.is_cancelled(job_id)`; one clone job at a time |
 | `monitor` | `apply(store, candidate_id, approver="human", *, confirm=False) -> dict`; `revert(store, applied_id, reason, actor="human") -> dict`; `MonitorThread(store, interval_s=60, min_calls=30, consecutive=2, *, z_gate=False)` with `start()`, `stop()`, `evaluate()`; `LiveTraffic(profile="normal", *, seconds=60, seed=1234)` with `start()`, `stop()`, `latest`, `error`; `snapshot(shape_id) -> dict` and pure `evaluate_window(...) -> dict` (statement latency, not transaction latency) |
 | `simulate` | `run_rq2(trials, seed, noise_levels, ...) -> dict` and `python -m app.simulate` |
 
@@ -312,3 +313,11 @@ primary key, value text)` under key `as_of` (ISO UTC). Shapes render it as a lit
 
 * [ ] You can list every enum and signature above from memory of the file (re-read before each step).
 * [ ] `.env.example` (step 01) contains every variable in 0.2.
+
+### Candidate review response (Step 17)
+
+`GET /api/candidates/{id}` extends the stored candidate JSON with
+`apply_preview: str | null` and `target_database: str`. Preview is the exact
+statement used by the apply path (including `CONCURRENTLY` for indexes), and is
+only present for selected/approved/applied candidates. Rewrites are registered
+for application adoption rather than executing their SELECT on approval.

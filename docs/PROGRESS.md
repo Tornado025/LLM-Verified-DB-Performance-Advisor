@@ -1457,3 +1457,102 @@ relative change above 5%; CPU is measured whole-host utilization, not worker dut
   invalid-build cleanup, rewrite with no index changes, weak confirmation, and the
   controlled auto-revert demo. Ruff and mypy passed. No commit or push was made;
   Step 13 changes remain uncommitted separately in the same working tree.
+
+## 2026-11-01 step 15 — API layer
+
+- Added FastAPI application lifecycle, request models and response schemas,
+  OpenAPI examples, CORS, masked settings, consistent error envelopes, and all
+  Step 15 routes. REST covers health, observation, shapes/profiles, jobs,
+  candidates/approval/blocking, evidence, applied changes/revert, live traffic,
+  and whitelisted experiment files. RQ5 aggregates only measured normal-PASS
+  to flash-FAIL transitions and preserves BLOCK separately. Missing experiment
+  files return unavailable instead of invented results.
+- Added a two-thread executor with a single-job semaphore: further jobs remain
+  visibly queued, and cancelled queued work never starts. Startup marks stale
+  work failed and cleans orphan clones; shutdown cancels jobs and waits for
+  clone cleanup before closing metadata. SSE supports ordered IDs, resume via
+  Last-Event-ID or after, heartbeat comments, disconnects, and a terminal end
+  event. Live traffic exposes bounded recent summaries including mean latency.
+- Added the backend Docker image and Compose service, excluding external data
+  from the build context. Compose supplies PG_HOST=db and mounts metadata,
+  experiments, and the evidence schema. It has no Docker socket or Java runtime;
+  BenchBase remains a host/separate-runtime integration, documented in docs/api.md.
+  Corrected the quoted empty FREE_DISK_GB example after Compose interpreted its
+  inline comment as a numeric value during the first container startup.
+- Validation: Ruff and mypy passed; 214 non-DB/non-LLM tests passed, including
+  API validation, settings masking, SSE resume/order, errors, serial queue and
+  cancellation. Two PostgreSQL API tests passed (health and mock lifecycle).
+  The installed Starlette TestClient emits an httpx deprecation warning; tests
+  still pass and no dependency change was required for this step.
+- Container acceptance passed: health status ok, PostgreSQL/HypoPG/statements
+  available, golden idle; POST mock dry-run job returned 202 and finished done.
+  curl -N consumed IDs 1–9 in increasing order followed by event:end. One card
+  was saved and OpenAPI returned 200. Logged smoke evidence is in
+  experiments/results/step15_api_smoke.json. No real LLM call, candidate apply,
+  or live traffic generation was performed by the API smoke test. The backend
+  remains available locally on port 8000. No commit or push was made.
+
+## 2026-11-01 step 16 — frontend foundation
+
+- Built the Vite/React/TypeScript foundation with routes for Overview, New run,
+  Runs, Run detail, Applied, Experiments, and Not found. The workspace shell
+  displays real backend health, responsive navigation, breadcrumbs, accessible
+  labelled status chips, error messaging, and an aria-live toast provider.
+  Route contents are explicitly foundation placeholders; full pages belong to
+  Step 17. Light/dark CSS tokens, requested Google Fonts with fallbacks,
+  reduced-motion handling, 40px targets, and visible keyboard focus are present.
+- Added the JSON API client with structured/network errors, typed endpoint
+  wrappers, generated OpenAPI request/response declarations, abortable API hook,
+  visibility-aware polling, job polling, and an SSE hook with ID deduplication,
+  2000-event retention, native reconnect and polling fallback after three errors.
+  Added confidence-interval geometry/formatting helpers with fail-closed handling
+  of nonfinite bounds. The Nginx frontend Dockerfile includes SPA fallback and
+  an SSE-safe /api proxy; the Vite dev server proxies /api to port 8000.
+- Validation: npm run gen:api succeeded against the running backend; npm run
+  build and npm run typecheck passed; all 10 tests in four files passed (CI
+  boundaries/geometry, API error parsing and abort, SSE dedupe/end/fallback,
+  and shell health/navigation). Browser checks at narrow and 1280px widths
+  verified the dark theme, healthy service chips, navigation reflow and visible
+  keyboard focus. The frontend remains running at http://localhost:5173/.
+- Installed Node 24-compatible packages and pinned TypeScript ~5.9.3 to match
+  openapi-typescript's peer requirement after the latest TypeScript version
+  broke generation. npm reported three moderate development-tool advisories
+  through the development generator openapi-typescript → Redocly → minimatch.
+  No forced major downgrade or untested override was applied.
+  Step 15 and Step 16 work is uncommitted; no push was made.
+
+
+### 2026-11-01 — Step 17 frontend pages and browser acceptance
+
+- Added Overview, New run, Runs/detail, Applied, and Experiments against the real
+  API. Included confidence intervals, comparable guard grids, event-derived
+  stepper, filtered event log, candidate selection, SQL/plan line highlighting,
+  evidence review, exact-statement approval preview, native modal confirmation,
+  weak-equivalence gating, traffic controls, and confirmed revert.
+- Charts include CSV export and text tables. RQ2 reads real simulation output;
+  missing RQ4/real equivalence studies remain explicitly pending. Optional
+  saturation_k and equivalence rows are rendered when supplied by result files.
+  BLOCK is labelled uncertainty and is never reported as a measured FAIL flip.
+- Browser dry run 20261101-043550-9c5e completed through the real API with mock
+  LLM; evidence visible, approval disabled for the dry-run decision. Approval
+  explicit-confirm behavior is also tested with a mocked API.
+- Validation: npm run build and npm run test passed (17 tests, five files);
+  backend API unit tests passed (13); PATH=.venv/bin:$PATH make lint passed
+  (ruff, formatting, mypy). Lazy-loaded chart pages remove the >500KB chunk
+  warning. npm audit --omit=dev reports zero vulnerabilities; installation
+  reports seven moderate development-tool advisories including audit tooling.
+- Lighthouse accessibility scores: Overview 100, Run detail 100, Experiments
+  100. Audit summary: experiments/results/step17_ui_checks.json. Browser
+  screenshots: docs/paper/figures/ui_{overview,run_detail,experiments}.png.
+  Verified 360px and 1600px layouts; fixed grid minimum sizing so wide tables
+  scroll inside their containers. Viewport override restored. Light theme HOLD
+  token darkened for text contrast; dark theme retained.
+- Subsequent real-stack keyboard verification: job 20261101-093343-5d7b
+  (mock provider, payout report, one sample, one-minute budget) completed in
+  3.2 seconds. Its rewrite passed equivalence and six report pairs, was selected,
+  then approved via the exact-SQL modal using keyboard controls. Applied showed
+  the healthy rewrite record. Confirmed keyboard revert succeeded; final state
+  reverted and live traffic stopped. No index DDL was needed for this UI check.
+  Additional screenshots ui_approval.png and ui_applied.png capture the flow.
+  Step 17 implementation and acceptance checks passed. Commit remains pending
+  per the user's established request to provide commit messages. No push made.

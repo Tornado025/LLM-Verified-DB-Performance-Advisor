@@ -1,0 +1,36 @@
+{
+  "date": "2026-11-01",
+  "accessibility": {
+    "overview": {
+      "score": 100,
+      "url": "http://localhost:5173/",
+      "lighthouse_version": "13.6.0",
+      "failed_audits": []
+    },
+    "experiments": {
+      "score": 100,
+      "url": "http://localhost:5173/experiments",
+      "lighthouse_version": "13.6.0",
+      "failed_audits": []
+    },
+    "run": {
+      "score": 100,
+      "url": "http://localhost:5173/runs/20261101-043550-9c5e",
+      "lighthouse_version": "13.6.0",
+      "failed_audits": []
+    }
+  },
+  "frontend_tests": 17,
+  "api_unit_tests": 13,
+  "dry_run_job": "20261101-043550-9c5e",
+  "responsive_widths": [
+    360,
+    1600
+  ],
+  "limitations": [
+    "Future RQ4 and per-tier equivalence experiment files are not generated yet."
+  ],
+  "keyboard_run_job": "20261101-093343-5d7b",
+  "keyboard_flow": "form submission, selected rewrite, modal confirmation, Applied, confirmed revert",
+  "test_change_final_state": "reverted"
+}
